@@ -1,4 +1,4 @@
-import logo from './umm/logo.svg';
+import logo from '.umm/logo.svg';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Main from './Main';
