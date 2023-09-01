@@ -1,0 +1,72 @@
+
+  
+  .top-menu {
+    display: flex;
+    align-items: center;
+    /* 수직 정렬 */
+    justify-content: space-between;
+    /* 가로 정렬을 설정합니다. Flexbox 컨테이너 내에서 자식 요소들 사이에 공간을 균등하게 분배하여 양 끝에 정렬 */
+    padding: 2px 30px;
+    background-color: #fafafa;
+    box-shadow: 30px 5px 10px rgba(0, 0, 0, 0.4);
+    /* 가로 세로 흐림반경 색 투명도*/
+  }
+  
+  .logo-container {
+    display: flex; /* 이미지와 텍스트를 나란히 정렬 */
+    align-items: center; /* 수직 정렬 */
+  }
+  
+  .logo {
+    width: 60px;
+    height: auto;
+    margin-right: 10px; /* 이미지와 텍스트 사이 간격 */
+  }
+  
+  .menu-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .menu-links a {
+    color: #1a0dab;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .Main-body{
+    margin-top:90px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* 위로 정렬 */
+    height: 100vh;
+  }
+  .search-container{
+    width: 850px;
+    display: flex;
+    align-items: flex-start;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 45px;
+  
+  }
+  .search-icon {
+    margin-top: 2px;
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    padding-right: 10px;
+    background-color: white;
+  }
+  
+  .search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 5px;
+    border-radius: 20px;
+  }
+  
