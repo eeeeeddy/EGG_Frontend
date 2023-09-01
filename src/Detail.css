@@ -68,6 +68,27 @@ button:hover {
   color: white; /* 마우스를 올렸을 때 텍스트 색상을 흰색으로 변경 */
 }
 
+.page {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  /* 페이지를 수평으로 배치하고, 왼쪽, 가운데, 오른쪽으로 정렬합니다. */
+  height: 100vh;
+  /* 페이지의 높이를 화면 높이로 설정합니다. */
+  overflow: hidden;
+  /* 내용이 페이지 영역을 넘어갈 경우 스크롤바를 숨깁니다. */
+}
+
+.left-page {
+  flex: 1;
+  /* 왼쪽 1/3 공간을 차지합니다. */
+  transition: transform 0.3s ease;
+  /* 트랜지션을 사용하여 부드러운 확장/축소 애니메이션을 적용합니다. */
+}
+.left-page.closed {
+  transform: translateX(-100%);
+  /* left-page를 왼쪽으로 이동하여 숨깁니다. */
+}
 .left-page-box {
   border: 2px solid #ccc;
   border-radius: 10px;
@@ -75,4 +96,15 @@ button:hover {
   margin-bottom: 5px;
   width: 80%;
   max-width: 300px;
+}
+
+.middle-page {
+  flex: 1;
+  margin: 0 20px;
+  /* middle-page의 좌우 여백을 설정합니다. */
+}
+
+.right-page {
+  flex: 1;
+  /* right-page를 늘어난 공간만큼 확장시킵니다. */
 }

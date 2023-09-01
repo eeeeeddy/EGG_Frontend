@@ -31,10 +31,7 @@ function Detail() {
           abstract: 'Abstract of paper 3...',
         },
       ];
-    
-      const TextStyle = {
-        textAlign: 'center',
-      };   
+      
       const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
 
       const toggleLeftPage = () => {
@@ -79,13 +76,13 @@ function Detail() {
         </header> 
 
         <div className="page">
-        <div className={`left-page ${isLeftPageOpen ? '' : 'closed'}`}>
-          <button onClick={toggleLeftPage}>
-            {isLeftPageOpen ? '접기' : '펼치기'}
+        <button onClick={toggleLeftPage}>
+            {isLeftPageOpen ? '◀' : '▶'}
           </button>
+        <div className={`left-page ${isLeftPageOpen ? '' : 'closed'}`}>
           <h3>논문 리스트</h3>
             {papers.map((paper) => (
-              <div className="left-page-box">
+              <div className="left-page-box" key={paper.id}>
                 <p><b>{paper.title}</b><br/>
                 Author: {paper.author}<br/>
                 Year: {paper.year}<br/>
@@ -94,7 +91,9 @@ function Detail() {
             ))}
         </div>
 
-        <div className="middle-page"></div>
+        <div className="middle-page">
+            <h3>그래프자리</h3>
+        </div>
         <div className="right-page">
           <h3>논문 상세 내용</h3>
           {/* 논문 상세 내용을 이곳에 표시 */}
