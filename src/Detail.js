@@ -35,9 +35,28 @@ function Detail() {
       const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
 
       const toggleLeftPage = () => {
-        setIsLeftPageOpen(!isLeftPageOpen);
+        console.log(isLeftPageOpen); // 상태 확인
+        if (isLeftPageOpen) {
+          // 현재 열려있다면 닫기
+          setIsLeftPageOpen(false);
+        } else {
+          // 현재 닫혀있다면 열기
+          setIsLeftPageOpen(true);
+        }
       };
-    
+      const [isRightPageOpen, setIsRightPageOpen] = useState(true);
+
+      const toggleRightPage = () => {
+        console.log(isRightPageOpen); // 상태 확인
+        if (isRightPageOpen) {
+          // 현재 열려있다면 닫기
+          setIsRightPageOpen(false);
+        } else {
+          // 현재 닫혀있다면 열기
+          setIsRightPageOpen(true);
+        }
+      };
+
     return (
         <div>
         <header>
@@ -55,7 +74,7 @@ function Detail() {
            autoComplete='off' spellCheck="false"
            role='combobox' aria-controls='matches' 
            placeholder='논문제목,저자,키워드를 입력하세요'
-           aria-expanded='false' aria-aria-live='polite'/>
+           aria-expanded='false' aria-live='polite'/>
         </div>
         </div>
         <div className="menu-links3">
@@ -79,7 +98,7 @@ function Detail() {
         <button onClick={toggleLeftPage}>
             {isLeftPageOpen ? '◀' : '▶'}
           </button>
-        <div className={`left-page ${isLeftPageOpen ? '' : 'closed'}`}>
+        <div className={`left-page ${isLeftPageOpen ? 'closed' : 'open'}`}>
           <h3>논문 리스트</h3>
             {papers.map((paper) => (
               <div className="left-page-box" key={paper.id}>
@@ -94,7 +113,10 @@ function Detail() {
         <div className="middle-page">
             <h3>그래프자리</h3>
         </div>
-        <div className="right-page">
+        <button onClick={toggleRightPage}>
+            {isRightPageOpen ? '▶' : '◀'}
+          </button>
+        <div className={`right-page ${isRightPageOpen ? 'closed' : 'open'}`}>
           <h3>논문 상세 내용</h3>
           {/* 논문 상세 내용을 이곳에 표시 */}
         </div>
