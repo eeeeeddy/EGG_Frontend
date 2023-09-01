@@ -31,7 +31,7 @@ function Main() {
         {/* <a href="./Search">About</a> */}
         <a href="#">About</a>
         <a href="#">Pricing</a>
-        <a href="#">menu1</a>
+        <a href="https://www.naver.com">Naver</a>
         <a href="#">menu2</a>
       </div>
       </div>
