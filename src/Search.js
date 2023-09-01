@@ -60,7 +60,6 @@ function Search() {
         </div>
         </header>
 
-
         <div className="paper-container">
         <div className="paper-text" style={{float: 'left'}}>
         <p style={TextStyle}>'Data'에 대한 논문 검색 결과</p>
@@ -68,14 +67,15 @@ function Search() {
         <br/>
         </div>
         {papers.map((paper) => (
-          <div key={paper.id} className="paper-box">
+          <Link to={`/Detail/`} key={paper.id} className="paper-box">
+          {/* ↓리스트별 페이지 다르게 넘길 때 */}
+          {/* <Link to={`/Detail/${paper.id}`} key={paper.id} className="paper-box"></Link> */}
             <h2>{paper.title}</h2>
             <p>Author: {paper.author}</p>
             <p>Year: {paper.year}</p>
             <p>Abstract: {paper.abstract}</p>
-          </div>))}
+          </Link>))}
         </div>
-        
 
         </div>
     );
