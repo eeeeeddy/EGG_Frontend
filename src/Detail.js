@@ -111,7 +111,11 @@ function Detail() {
         </div>
 
         <div className="middle-page">
+<<<<<<< HEAD
             <h3>그래프 넣을 자리????</h3>
+=======
+            <h3>그래프 넣을 자리</h3>
+>>>>>>> 5419a22b26148c06a5d1e33d8b4e4fe42024ece6
         </div>
         <button onClick={toggleRightPage}>
             {isRightPageOpen ? '▶' : '◀'}

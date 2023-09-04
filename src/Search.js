@@ -62,8 +62,13 @@ function Search() {
 
         <div className="paper-container">
         <div className="paper-text" style={{float: 'left'}}>
+<<<<<<< HEAD
         <p style={TextStyle}>'Data'에 대한 논문 검색 결과</p>
         <b><p style={TextStyle}>그래프를 그릴 논문을 골라주세요 :::: </p></b>
+=======
+        <p style={TextStyle}>'Data'에 대한 논문 검색 결과!</p>
+        <b><p style={TextStyle}>그래프를 그릴 논문을 골라주세요 : </p></b>
+>>>>>>> 5419a22b26148c06a5d1e33d8b4e4fe42024ece6
         <br/>
         </div>
         {papers.map((paper) => (
