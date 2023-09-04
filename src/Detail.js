@@ -105,7 +105,19 @@ function Detail() {
             {isRightPageOpen ? '▶' : '◀'}
           </button>
           <h3>논문 상세 내용</h3>
-          {/* 논문 상세 내용을 이곳에 표시 */}
+          {papers.map((paper) => {
+            if (paper.id === 1) {
+              return (
+                <div className="right-page-box" key={paper.id}>
+                  <p><b>{paper.title}</b><br/>
+                  Author: {paper.author}<br/>
+                  Year: {paper.year}<br/>
+                  Abstract: {paper.abstract}</p>
+                </div>
+              );
+            }
+            return ''; // 나머지는 표시하지 않음
+            })}
           </div>
     </div>
     </div>
