@@ -33,29 +33,16 @@ function Detail() {
       ];
       
       const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
-
-      const toggleLeftPage = () => {
-        console.log(isLeftPageOpen); // 상태 확인
-        if (isLeftPageOpen) {
-          // 현재 열려있다면 닫기
-          setIsLeftPageOpen(false);
-        } else {
-          // 현재 닫혀있다면 열기
-          setIsLeftPageOpen(true);
-        }
-      };
       const [isRightPageOpen, setIsRightPageOpen] = useState(true);
 
-      const toggleRightPage = () => {
-        console.log(isRightPageOpen); // 상태 확인
-        if (isRightPageOpen) {
-          // 현재 열려있다면 닫기
-          setIsRightPageOpen(false);
-        } else {
-          // 현재 닫혀있다면 열기
-          setIsRightPageOpen(true);
-        }
+      const toggleLeftPage = () => {
+        setIsLeftPageOpen(!isLeftPageOpen);
       };
+
+      const toggleRightPage = () => {
+        setIsRightPageOpen(!isRightPageOpen);
+      };
+
 
     return (
         <div>
@@ -88,17 +75,17 @@ function Detail() {
         <div className="second-menu">
           <p>멀티 프로세서 시스템-온-칩(MPSoC)을 위한 버스 매트릭스 구조의 빠르고 정확한 성능 예측 기법</p>
           <div className='button-container'>
-          <button>저자 관계</button>
-          <button>연구 기관 관계</button>
+          <button className='button-bar'>저자 관계</button>
+          <button className='button-bar'>연구 기관 관계</button>
           </div>
         </div>
         </header> 
 
         <div className="page">
-        <button onClick={toggleLeftPage}>
+        <div className={`left-page ${isLeftPageOpen ? 'closed' : 'open'}`}>
+          <button onClick={toggleLeftPage} className='left-button'>
             {isLeftPageOpen ? '◀' : '▶'}
           </button>
-        <div className={`left-page ${isLeftPageOpen ? 'closed' : 'open'}`}>
           <h3>논문 리스트</h3>
             {papers.map((paper) => (
               <div className="left-page-box" key={paper.id}>
@@ -109,18 +96,17 @@ function Detail() {
               </div>
             ))}
         </div>
-
         <div className="middle-page">
-            <h3>그래프 넣을 자리↓</h3>
+        <h3>그래프 넣을 자리↓</h3>
         </div>
-        <button onClick={toggleRightPage}>
+
+        <div className={`right-page ${isRightPageOpen ? 'open' : 'closed'}`}>
+          <button onClick={toggleRightPage} className='rignt-button'>
             {isRightPageOpen ? '▶' : '◀'}
           </button>
-        <div className={`right-page ${isRightPageOpen ? 'closed' : 'open'}`}>
           <h3>논문 상세 내용</h3>
           {/* 논문 상세 내용을 이곳에 표시 */}
-        </div>
-      
+          </div>
     </div>
     </div>
     );
