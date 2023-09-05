@@ -42,8 +42,7 @@ function Main() {
         <br></br>
         {/* 검색창 */}
         <div className='search-container'>
-          <img src='/search_icon.png' alr='돋보기 아이콘' className='search-icon'/>
-          
+          <img src='/search_icon2.png' alr='돋보기 아이콘' className='search-icon'/>
           <input 
           className='search-input' type='search'
           autoComplete='off' spellCheck="false"

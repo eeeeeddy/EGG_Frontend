@@ -40,14 +40,21 @@ html, body {
     font-size: 14px;
   }
   .search-container3{
-    margin-left: 30px;
     width: 450px;
     display: flex;
-    align-items: flex-start;
-    padding: 12px;
+    align-items: center;
+    padding: 7px;
     border: 1px solid #ccc;
-    border-radius: 45px;}
-    
+    border-radius: 45px;
+    margin: 5px 30px 5px 30px;
+  }
+    .search-icon{
+      height: 35px;
+      width: 35px;
+    }
+    .search-input{
+      background-color: #fafafa;
+    }  
 /* 두번째 메뉴 바 */
     .second-menu {
     display: flex;
@@ -86,6 +93,7 @@ html, body {
 }
 
 .left-page {
+  padding-top: 10px;
   /* height: 100%; */
   background-color: antiquewhite;
   border-right: 2px solid #ccc;
@@ -100,7 +108,21 @@ html, body {
   transform: translateX(0%);
   /* left-page를 왼쪽으로 이동하여 숨기지만, 다시 열 때 원래 위치로 돌아오도록 transform 초기화 필요 */
 }
-
+.leftpage-Search-container{
+  width: 100%px;
+  display: flex;
+  align-items: center;
+  padding: 7px;
+  margin: 15px 5px 15px 5px;  
+}
+.leftpage-search-icon{
+  height: 35px;
+  width: 35px; 
+}
+.leftpage-search-input{
+  width: 80%;
+  border-bottom: 1px solid #ccc;
+}
 .left-page-box {
   font-size: small;
   border-top: 2px solid #ccc;
@@ -148,6 +170,7 @@ html, body {
 }
 
 .right-page {
+  padding-top: 10px;
   /* height: 100%; */
   border-left: 2px solid #ccc;
   /* background-color: #ccc; */
