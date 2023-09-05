@@ -1,3 +1,9 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 /* 메뉴 바 */
 .top-menu3 {
     display: flex;
@@ -73,14 +79,16 @@
   justify-content: space-between;
   /* align-items: flex-start; */
   /* 페이지를 수평으로 배치하고, 왼쪽, 가운데, 오른쪽으로 정렬합니다. */
-  height: 100vh;
+  height: 100%;
   /* 페이지의 높이를 화면 높이로 설정합니다. */
-  /* overflow: hidden; */
+  overflow: hidden;
   /* 내용이 페이지 영역을 넘어갈 경우 스크롤바를 숨깁니다. */
 }
 
 .left-page {
-  border: 2px solid #ccc;
+  /* height: 100%; */
+  background-color: antiquewhite;
+  border-right: 2px solid #ccc;
   flex: 0.8;
   /* 왼쪽 1/3 공간을 차지합니다. */
   transition: transform 0.3s ease;
@@ -95,12 +103,12 @@
 
 .left-page-box {
   font-size: small;
-  border-bottom: 2px solid #ccc;
+  border-top: 2px solid #ccc;
   border-radius: 0px;
-  padding: 3px;
-  margin-left: 1.5%;
+  padding: 5px 15px 5px 15px;
   margin-bottom: 5px;
-  width: 95%;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184);
+  /* 가로 세로 흐림반경 색 투명도*/
   /* max-width: 300px; */
 }
 .left-page-author{
@@ -140,7 +148,8 @@
 }
 
 .right-page {
-  border: 2px solid #ccc;
+  /* height: 100%; */
+  border-left: 2px solid #ccc;
   /* background-color: #ccc; */
   flex: 0.8;
   /* right-page를 늘어난 공간만큼 확장시킵니다. */

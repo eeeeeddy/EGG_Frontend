@@ -87,7 +87,11 @@ function Detail() {
           <button onClick={toggleLeftPage} className='left-button'>
             {isLeftPageOpen ? '◀' : '▶'}
           </button>
-          <h3>논문 리스트</h3>
+          <input className='leftpage-search-input' type='search' 
+           autoComplete='off' spellCheck="false"
+           role='combobox' aria-controls='matches' 
+          //  placeholder='논문제목,저자,키워드를 입력하세요'
+           aria-expanded='false' aria-live='polite'/>
             {papers.map((paper) => (
               <div className="left-page-box" key={paper.id}>
                 <p><b>{paper.title}</b><br/>
