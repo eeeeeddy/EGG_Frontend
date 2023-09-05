@@ -8,7 +8,7 @@
     /* 가로 정렬을 설정합니다. Flexbox 컨테이너 내에서 자식 요소들 사이에 공간을 균등하게 분배하여 양 끝에 정렬 */
     padding: 2px 30px;
     background-color: #fafafa;
-    box-shadow: 30px 5px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
     /* 가로 세로 흐림반경 색 투명도*/
   }
   

@@ -7,7 +7,7 @@
     /* 가로 정렬을 설정합니다. Flexbox 컨테이너 내에서 자식 요소들 사이에 공간을 균등하게 분배하여 양 끝에 정렬 */
     padding: 2px 30px;
     background-color: #fafafa;
-    box-shadow: 30px 5px 10px rgba(0, 0, 0, 0.184);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.184);
     /* 가로 세로 흐림반경 색 투명도*/
     margin-bottom: 5px;
   }
@@ -95,14 +95,22 @@
 
 .left-page-box {
   font-size: small;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  padding: 1px;
+  border-bottom: 2px solid #ccc;
+  border-radius: 0px;
+  padding: 3px;
   margin-left: 1.5%;
   margin-bottom: 5px;
   width: 95%;
-  max-width: 300px;
+  /* max-width: 300px; */
 }
+.left-page-author{
+  color: #818080;
+}
+.left-page-year{
+  float: right; /* 오른쪽으로 정렬 */
+  color: #818080;
+}
+
 .left-button {
   position: absolute;
   top: 5px;
@@ -139,8 +147,9 @@
   transition: transform 0.5s ease;
   /* 트랜지션을 사용하여 부드러운 확장/축소 애니메이션을 적용합니다. */
   transform: translateX(0%);
+  padding-left: 20px;
 }
-ght-page.open {
+right-page.open {
   transform: translateX(0%);
 }
 .right-page.closed {
