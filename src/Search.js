@@ -48,7 +48,7 @@ function Search() {
 								autoComplete='off' spellCheck="false"
 								role='combobox' aria-controls='matches'
 								placeholder='논문제목,저자,키워드를 입력하세요'
-								aria-expanded='false' aria-aria-live='polite' />
+								aria-expanded='false' aria-live='polite' />
 						</div>
 					</div>
 					<div className="menu-links2">

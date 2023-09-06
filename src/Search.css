@@ -36,13 +36,13 @@
 }
 
 .search-container2 {
-    margin-left: 30px;
     width: 450px;
     display: flex;
     align-items: center;
-    padding: 12px;
+    padding: 7px;
     border: 1px solid #ccc;
     border-radius: 45px;
+    margin: 5px 30px 5px 30px;
 }
 
 .search-icon {
@@ -52,7 +52,7 @@
 
 .search-input {
     background-color: #fafafa;
-    text-align: center;
+    /* text-align: center; */
     font-size: large;
     margin-top: 2px;
 }

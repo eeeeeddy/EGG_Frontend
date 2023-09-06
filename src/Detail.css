@@ -1,8 +1,7 @@
 html,
 body {
     height: 100%;
-    margin: 0;
-    padding: 0;
+    background-color: darkkhaki;
 }
 
 /* 메뉴 바 */
@@ -18,32 +17,27 @@ body {
     /* 가로 세로 흐림반경 색 투명도*/
     margin-bottom: 5px;
 }
-
 .logo-container3 {
     display: flex;
     /* 이미지와 텍스트를 나란히 정렬 */
     align-items: center;
     /* 수직 정렬 */
 }
-
 .logo3 {
     width: 60px;
     height: auto;
     margin-right: 10px;
     /* 이미지와 텍스트 사이 간격 */
 }
-
 .menu-links3 {
     display: flex;
     gap: 20px;
 }
-
 .menu-links3 a {
     color: #1a0dab;
     text-decoration: none;
     font-size: 14px;
 }
-
 .search-container3 {
     width: 450px;
     display: flex;
@@ -53,14 +47,14 @@ body {
     border-radius: 45px;
     margin: 5px 30px 5px 30px;
 }
-
 .search-icon {
     height: 35px;
     width: 35px;
 }
-
 .search-input {
     background-color: #fafafa;
+    font-size: large;
+    margin-top: 2px;
 }
 
 /* 두번째 메뉴 바 */
@@ -114,38 +108,39 @@ body {
     /* height: 100%; */
     background-color: antiquewhite;
     border-right: 2px solid #ccc;
-    flex: 0.8;
+    flex: 0.6;
     /* 왼쪽 1/3 공간을 차지합니다. */
-    transition: transform 0.3s ease;
+    transition: transform 0.5s ease;
     /* 트랜지션을 사용하여 부드러운 확장/축소 애니메이션을 적용합니다. */
     transform: translateX(-100%);
     /* margin-bottom: calc(100vh - 2px);  */
 }
-
 .left-page.closed {
     transform: translateX(0%);
     /* left-page를 왼쪽으로 이동하여 숨기지만, 다시 열 때 원래 위치로 돌아오도록 transform 초기화 필요 */
 }
-
 .leftpage-Search-container {
     width: 100%px;
     display: flex;
     align-items: center;
-    padding: 7px;
-    margin: 15px 5px 15px 5px;
+    padding: 5px;
+    margin: 15px 0px 15px 0px;
 }
-
 .leftpage-search-icon {
     height: 35px;
     width: 35px;
 }
-
 .leftpage-search-input {
     width: 80%;
     border: none;
     border-bottom: 1px solid #525252;
+    background-color: rgba(0, 0, 0, 0); 
 }
-
+.leftpage-search-button{
+    border: none;
+    color:  rgba(19, 158, 244, 0.862);
+    background-color: rgba(0, 0, 0, 0); 
+}
 .left-page-box {
     font-size: small;
     border-top: 2px solid #ccc;
@@ -156,20 +151,17 @@ body {
     /* 가로 세로 흐림반경 색 투명도*/
     /* max-width: 300px; */
 }
-
 .left-page-author {
     color: #818080;
 }
-
 .left-page-year {
     float: right;
     /* 오른쪽으로 정렬 */
     color: #818080;
 }
-
 .left-button {
     position: absolute;
-    top: 5px;
+    top: 9px;
     left: calc(100%);
     width: 30px;
     height: 70px;
@@ -185,7 +177,6 @@ body {
     font-size: 24px;
     transition: background-color 0.5s ease;
 }
-
 .left-button:hover {
     background-color: rgba(19, 158, 244, 1);
     /* 호버 시 배경색 변경 */
@@ -198,29 +189,26 @@ body {
 }
 
 .right-page {
-    padding-top: 10px;
+    padding: 10px 10px 0px 20px;
     /* height: 100%; */
     border-left: 2px solid #ccc;
     /* background-color: #ccc; */
-    flex: 0.8;
+    flex: 1;
     /* right-page를 늘어난 공간만큼 확장시킵니다. */
     transition: transform 0.5s ease;
     /* 트랜지션을 사용하여 부드러운 확장/축소 애니메이션을 적용합니다. */
     transform: translateX(0%);
-    padding-left: 20px;
 }
 
 right-page.open {
     transform: translateX(0%);
 }
-
 .right-page.closed {
     transform: translateX(100%);
 }
-
 .rignt-button {
     position: absolute;
-    top: 5px;
+    top: 9px;
     right: 100%;
     width: 30px;
     height: 70px;
@@ -236,7 +224,6 @@ right-page.open {
     font-size: 24px;
     transition: background-color 0.5s ease;
 }
-
 .right-button:hover {
     background-color: rgba(19, 158, 244, 1);
     /* 호버 시 배경색 변경 */
