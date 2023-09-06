@@ -30,7 +30,7 @@ function Main() {
                         <a href="#">About</a>
                         <a href="#">Pricing</a>
                         <a href="https://www.naver.com">Naver</a>
-                        <a href="#">menu2</a>
+                        <a href="https://www.google.co.kr">Google</a>
                     </div>
                 </div>
             </header>
