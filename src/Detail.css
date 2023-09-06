@@ -142,7 +142,8 @@ body {
 
 .leftpage-search-input {
     width: 80%;
-    border-bottom: 1px solid #ccc;
+    border: none;
+    border-bottom: 1px solid #525252;
 }
 
 .left-page-box {

@@ -92,6 +92,7 @@ function Detail() {
                             autoComplete='off' spellCheck="false"
                             role='combobox' aria-controls='matches'
                             aria-expanded='false' aria-live='polite' />
+                        <button></button>
                     </div>
                     {papers.map((paper) => (
                         <div className="left-page-box" key={paper.id}>
