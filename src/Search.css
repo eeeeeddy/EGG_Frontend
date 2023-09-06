@@ -8,30 +8,34 @@
     background-color: #fafafa;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
     /* 가로 세로 흐림반경 색 투명도*/
-  }
-  
-  .logo-container2 {
-    display: flex; /* 이미지와 텍스트를 나란히 정렬 */
-    align-items: center; /* 수직 정렬 */
-  }
-  
-  .logo2 {
+}
+
+.logo-container2 {
+    display: flex;
+    /* 이미지와 텍스트를 나란히 정렬 */
+    align-items: center;
+    /* 수직 정렬 */
+}
+
+.logo2 {
     width: 60px;
     height: auto;
-    margin-right: 10px; /* 이미지와 텍스트 사이 간격 */
-  }
-  
-  .menu-links2 {
+    margin-right: 10px;
+    /* 이미지와 텍스트 사이 간격 */
+}
+
+.menu-links2 {
     display: flex;
     gap: 20px;
-  }
-  
-  .menu-links2 a {
+}
+
+.menu-links2 a {
     color: #1a0dab;
     text-decoration: none;
     font-size: 14px;
-  }
-  .search-container2{
+}
+
+.search-container2 {
     margin-left: 30px;
     width: 450px;
     display: flex;
@@ -39,34 +43,40 @@
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 45px;
-  }
-    .search-icon{
-      height: 35px;
-      width: 35px;
-    }
-    .search-input{
-      background-color: #fafafa;
-    }  
-    .paper-text{
-      float: 'left'
-    }
+}
 
-    .paper-container {
-      margin-top:90px;
-      background-color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      /* 위로 정렬 */
-      height: 100vh;
-    }
+.search-icon {
+    height: 35px;
+    width: 35px;
+}
 
-    .paper-box {
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 20px;
-      width: 80%;
-      max-width: 600px;
-    }
+.search-input {
+    background-color: #fafafa;
+    text-align: center;
+    font-size: large;
+    margin-top: 2px;
+}
+
+.paper-text {
+    float: 'left'
+}
+
+.paper-container {
+    margin-top: 90px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* 위로 정렬 */
+    height: 100vh;
+}
+
+.paper-box {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 80%;
+    max-width: 600px;
+}
