@@ -104,6 +104,7 @@ function Detail() {
                 </div>
                 <div className="middle-page">
                     <h3>그래프 넣을 자리↓</h3>
+                    <img src='/connected.PNG' alr='임시 이미지' className='middle-img' />
                 </div>
 
                 <div className={`right-page ${isRightPageOpen ? 'open' : 'closed'}`}>
