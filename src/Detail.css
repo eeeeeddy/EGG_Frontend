@@ -3,8 +3,8 @@ body{
     /* background-color: darkkhaki; */
 }
 
-/* 메뉴 바 */
 .top-menu3 {
+    top: 0;
     display: flex;
     align-items: center;
     /* 수직 정렬 */
@@ -58,6 +58,7 @@ body{
 
 /* 두번째 메뉴 바 */
 .second-menu {
+    top: 100px;
     display: flex;
     align-items: center;
     /* 수직 정렬 */
@@ -89,6 +90,12 @@ body{
     /* 마우스를 올렸을 때 텍스트 색상을 흰색으로 변경 */
 }
 
+.page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .page {
     display: flex;
     justify-content: space-between;
@@ -97,11 +104,13 @@ body{
     /* 페이지의 높이를 화면 높이로 설정합니다. */
     overflow: hidden;
     /* 내용이 페이지 영역을 넘어갈 경우 스크롤바를 숨깁니다. */
-    background-color: antiquewhite;
+    
 }
 
-.left-page, .right-page {
-    position: absolute;
+.left-page, 
+.right-page {
+    position: fixed;
+    /* position: relative; */
     top: 0;
     bottom: 0;
     height: 100%;
@@ -109,33 +118,33 @@ body{
     /* 트랜지션을 사용하여 부드러운 확장/축소 애니메이션을 적용합니다. */
     /* overflow-y: auto;  */
     /* 페이지 내용이 넘칠 경우 스크롤 허용 */
-    z-index: 1; /* middle-page 위에 위치하도록 설정 */
+    z-index: 1; 
+    /* middle-page 위에 위치하도록 설정 */
 }
 
 .middle-page {
-    /* background-color: lightblue;*/
-    /* flex: 1; */
-    /* margin: 0 10px;  */
-    /* middle-page의 좌우 여백을 설정합니다. */
-    position: absolute;
+    padding-top: 10px;
+    position: relative;
     left: 0;
     right: 0;
-    background-color: white;
+    /* background-color: white; */
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    margin-top: 0%;
+    background-color:lightpink;
+    flex: 1; 
 }
 
 .left-page {
-    padding-top: 10px;
+    /* height: 100%; */
+    /* padding-top: 10px; */
     background-color: white;
     border-right: 2px solid #ccc;
     transform: translateX(-100%);
     /* margin-bottom: calc(100vh - 2px);  */
-    width: 30%;
-    margin-top: 6.5%;
+    width: 20%;
+    
 }
 .left-page.closed {
     transform: translateX(0%);
@@ -153,6 +162,7 @@ body{
     width: 35px;
 }
 .leftpage-search-input {
+    outline: none;
     width: 80%;
     border: none;
     border-bottom: 1px solid #525252;
@@ -206,13 +216,13 @@ body{
 
 .right-page {
     background-color: white;
-    padding: 10px 10px 0px 20px;
+    padding: 0px 10px 0px 20px;
     border-left: 2px solid #ccc;
     right: 0;
     /* background-color: #ccc; */
     transform: translateX(0%);
     width: 25%;
-    margin-top: 6.5%;
+    /* position: fixed; */
 }
 
 right-page.open {
