@@ -48,6 +48,7 @@ function Detail() {
     return (
         <div>
             <header>
+                <div className='menu'>
                 <div className="top-menu3">
                     <div className="logo-container3">
                         <Link to="/">
@@ -71,6 +72,7 @@ function Detail() {
                         <a href="#">menu2</a>
                     </div>
                 </div>
+                </div>
 
                 <div className="second-menu">
                     <p>멀티 프로세서 시스템-온-칩(MPSoC)을 위한 버스 매트릭스 구조의 빠르고 정확한 성능 예측 기법</p>
@@ -81,6 +83,7 @@ function Detail() {
                 </div>
             </header>
 
+            <div className="page-container">
             <div className="page">
                 <div className={`left-page ${isLeftPageOpen ? 'closed' : 'open'}`}>
                     <button onClick={toggleLeftPage} className='left-button'>
@@ -125,6 +128,7 @@ function Detail() {
                         return ''; // 나머지는 표시하지 않음
                     })}
                 </div>
+            </div>
             </div>
         </div>
     );
