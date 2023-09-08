@@ -35,7 +35,7 @@ function Main() {
                         <a href="#">About</a>
                         <a href="#">Pricing</a>
                         <a href="https://www.google.co.kr">google</a>
-                        <a href="https://www.google.co.kr">google</a>
+                        <a href="https://www.naver.com">Naver</a>
                     </div>
                 </div>
             </header>
