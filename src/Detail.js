@@ -31,6 +31,13 @@ function Detail() {
             year: 2008,
             abstract: 'Abstract of paper 3...',
         },
+        {
+            id: 4,
+            title: '멀티 프로세서 시스템-온-칩(MPSoC)을 위한 버스매트릭스 구조의 빠르고 정확한 예측 기법',
+            author: '김성찬 / kim, Sungchan 1, 하순희 / Ha, Soonhoi',
+            year: 2008,
+            abstract: 'Abstract of paper 4...',
+        },
     ];
 
     const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
