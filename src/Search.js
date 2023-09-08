@@ -1,9 +1,11 @@
 import './Search.css';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams  } from 'react-router-dom';
 import Main from './Main';
 
 function Search() {
+	// useParams 훅을 사용하여 URL에서 검색어를 가져옵니다.
+    const { searchQuery } = useParams();
 	const papers = [
 		{
 			id: 1,
@@ -62,7 +64,7 @@ function Search() {
 
 			<div className="paper-container">
 				<div className="paper-text" style={{ float: 'left' }}>
-					<p style={TextStyle}>'Data'에 대한 논문 검색 결과</p>
+					<p style={TextStyle}> {searchQuery ? `${searchQuery}에 대한 논문 검색 결과` : '에 대한 논문 검색 결과'}</p>
 					<b><p style={TextStyle}>그래프를 그릴 논문을 골라주세요 : </p></b>
 					<br />
 				</div>

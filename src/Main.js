@@ -1,21 +1,26 @@
 import './Main.css';
 import React, { useState } from 'react';
 import Search from './Search';
-import { Link } from 'react-router-dom';
+import { useNavigate  } from 'react-router-dom';
 
 function Main() {
     const [searchQuery, setSearchQuery] = useState('');
     // 검색어 상태 관리
+    const navigate = useNavigate();
+     // useNavigate 훅을 사용하여 네비게이션 함수를 가져옵니다.
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            // console.log('검색어:', searchQuery);
-            console.log('Enter 키가 눌렸습니다.');
-            // 검색어가 입력되었을 때 또는 입력하지 않았을 때 모두 Search.js로 이동
-            window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
+            console.log('검색어가 입력되었습니다.');
+            navigate(`/search/${encodeURIComponent(searchQuery)}`);
+            // 검색어를 포함하여 Search 페이지로 이동합니다.
         }
     };
-
+    const handleSearchClick = () => {
+        navigate(`/search/${encodeURIComponent(searchQuery)}`);
+        // 검색어를 포함하여 Search 페이지로 이동합니다.
+    };
+   
     return (
         <div className="Main">
             <header>
@@ -49,14 +54,15 @@ function Main() {
                             aria-controls='matches'
                             aria-expanded='false'
                             placeholder='논문제목,저자,키워드를 입력하세요'
-                            aria-live='polite' value={searchQuery}
+                            aria-live='polite'
+                            value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
                         />
                     </div>
-                    <div className='search-button'>
+                    <button className='search-button'onClick={handleSearchClick}>
                         검색
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>
