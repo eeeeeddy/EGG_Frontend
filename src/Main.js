@@ -1,11 +1,15 @@
 import './Main.css';
-import React, { useState } from 'react';
+import React, { useState, onSubmit} from 'react';
 import Search from './Search';
-import { useNavigate  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Main() {
     const [searchQuery, setSearchQuery] = useState('');
     // 검색어 상태 관리
+    const onSubmit = async () => {
+        window.location.href = "/search/" + searchQuery;
+      };
     const navigate = useNavigate();
      // useNavigate 훅을 사용하여 네비게이션 함수를 가져옵니다.
 
@@ -60,7 +64,7 @@ function Main() {
                             onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
                         />
                     </div>
-                    <button className='search-button'onClick={handleSearchClick}>
+                    <button className='search-button' type='button' onClick={handleSearchClick}>
                         검색
                     </button>
                 </div>

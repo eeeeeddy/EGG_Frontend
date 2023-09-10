@@ -7,17 +7,30 @@ import React from 'react';
 import Detail from './Detail';
 
 function App() {
+    // const{ createProxyMiddleware } = require("http-proxy-middleware")
+
+    // module.exports = function(app) {
+    //     app.use(
+    //         "/api",
+    //         createProxyMiddleware({
+    //             target:"http://localhost:8080",
+    //             changeOrigin:true
+    //         })
+    //     )
+    // }
+
     return (
         <BrowserRouter>
             <div className='container my-1'>
                 <Routes>
                     <Route path="/" element={<Main />} />
                     <Route path="/search" element={<Search />} />
-                    <Route path="/Search" element={<Main />} />
-                    <Route path="/Search" element={<Detail />} />
+                    {/* <Route path="/Search" element={<Main />} />
+                    <Route path="/Search" element={<Detail />} /> */}
                     <Route path="/Detail" element={<Detail />} />
-                    <Route path="/Detail" element={<Main />} />
-                    <Route path="/Detail" element={<Search />} />
+                    {/* <Route path="/Detail" element={<Main />} />
+                    <Route path="/Detail" element={<Search />} /> */}
+                    <Route path="/search/:searchQuery" element={<Search />} /> 
                 </Routes>
             </div>
         </BrowserRouter>
