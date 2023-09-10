@@ -9,7 +9,7 @@ function Main() {
     // 검색어 상태 관리
     const onSubmit = async () => {
         window.location.href = "/search/" + searchQuery;
-      };
+    };
     const navigate = useNavigate();
      // useNavigate 훅을 사용하여 네비게이션 함수를 가져옵니다.
 
@@ -24,7 +24,7 @@ function Main() {
         navigate(`/search/${encodeURIComponent(searchQuery)}`);
         // 검색어를 포함하여 Search 페이지로 이동합니다.
     };
-   
+
     return (
         <div className="Main">
             <header>
@@ -64,9 +64,7 @@ function Main() {
                             onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
                         />
                     </div>
-                    <button className='search-button' type='button' onClick={handleSearchClick}>
-                        검색
-                    </button>
+                    <button className='search-button' type='button' onClick={handleSearchClick}>검색</button>
                 </div>
             </div>
         </div>
