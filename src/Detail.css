@@ -91,7 +91,8 @@ body{
 }
 
 .page-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
     flex-direction: column;
     height: 100%;
 }
@@ -106,24 +107,16 @@ body{
     /* 내용이 페이지 영역을 넘어갈 경우 스크롤바를 숨깁니다. */
     
 }
-.middle-page {
-    padding-top: 10px;
-    position: relative;
-    left: 0;
-    right: 0;
-    /* background-color: white; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    background-color:lightpink;
-    flex: 1; 
+
+.graph {
+    margin-top: 10px;
 }
 
 .left-page, 
 .right-page {
-    position: fixed;
-    /* position: relative; */
+    /* position: fixed; */
+    position: relative;
+    flex: 1;
     top: 0;
     bottom: 0;
     height: 100%;
@@ -131,7 +124,7 @@ body{
     /* 트랜지션을 사용하여 부드러운 확장/축소 애니메이션을 적용합니다. */
     /* overflow-y: auto;  */
     /* 페이지 내용이 넘칠 경우 스크롤 허용 */
-    z-index: 1; 
+    z-index: 1;
     /* middle-page 위에 위치하도록 설정 */
 }
 
@@ -142,8 +135,7 @@ body{
     border-right: 2px solid #ccc;
     transform: translateX(-100%);
     /* margin-bottom: calc(100vh - 2px);  */
-    width: 20%;
-    
+    /* width: 20%; */
 }
 .left-page.closed {
     transform: translateX(0%);
@@ -220,11 +212,11 @@ body{
     right: 0;
     /* background-color: #ccc; */
     transform: translateX(0%);
-    width: 25%;
+    /* width: 25%; */
     /* position: fixed; */
 }
 
-right-page.open {
+.right-page.open {
     transform: translateX(0%);
 }
 .right-page.closed {

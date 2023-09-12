@@ -56,86 +56,91 @@ function Detail() {
         <div>
             <header>
                 <div className='menu'>
-                <div className="top-menu3">
-                    <div className="logo-container3">
-                        <Link to="/">
-                            <img src="/ditto_logo.jpg" alt="로고" className="logo3" />
-                        </Link>
-                        <h3>Ditto Graph</h3>
-                        {/* 미니 검색창 */}
-                        <div className='search-container3'>
-                            <img src='/search_icon.png' alr='돋보기 아이콘' className='search-icon' />
-                            <input className='search-input' type='search'
-                                autoComplete='off' spellCheck="false"
-                                role='combobox' aria-controls='matches'
-                                placeholder='논문제목,저자,키워드를 입력하세요'
-                                aria-expanded='false' aria-live='polite' />
+                    <div className="top-menu3">
+                        <div className="logo-container3">
+                            <Link to="/">
+                                <img src="/ditto_logo.jpg" alt="로고" className="logo3" />
+                            </Link>
+                            <h3>Ditto Graph</h3>
+                            {/* 미니 검색창 */}
+                            <div className='search-container3'>
+                                <img src='/search_icon.png' alr='돋보기 아이콘' className='search-icon' />
+                                <input className='search-input' type='search'
+                                    autoComplete='off' spellCheck="false"
+                                    role='combobox' aria-controls='matches'
+                                    placeholder='논문제목,저자,키워드를 입력하세요'
+                                    aria-expanded='false' aria-live='polite' />
+                            </div>
                         </div>
-                    </div>
-                    <div className="menu-links3">
-                        <a href="#">About</a>
-                        <a href="#">Pricing</a>
-                        <a href="#">menu1</a>
-                        <a href="#">menu2</a>
-                    </div>
-                </div>
-                </div>
-
-                <div className="second-menu">
-                    <p>멀티 프로세서 시스템-온-칩(MPSoC)을 위한 버스 매트릭스 구조의 빠르고 정확한 성능 예측 기법</p>
-                    <div className='button-container'>
-                        <button className='button-bar'>저자 관계</button>
-                        <button className='button-bar'>연구 기관 관계</button>
                     </div>
                 </div>
             </header>
 
-            <div className="page-container">
-            <div className="page">
-                <div className={`left-page ${isLeftPageOpen ? 'closed' : 'open'}`}>
-                    <button onClick={toggleLeftPage} className='left-button'>
-                        {isLeftPageOpen ? '◀' : '▶'}
-                    </button>
-                    <div className='leftpage-Search-container'>
-                        <img src='/search_icon.png' alr='돋보기 아이콘' className='leftpage-search-icon' />
-                        <input className='leftpage-search-input' type='search'
-                            autoComplete='off' spellCheck="false"
-                            role='combobox' aria-controls='matches'
-                            aria-expanded='false' aria-live='polite' />
-                        <button className='leftpage-search-button'>EXPAND</button>
-                    </div>
-                    {papers.map((paper) => (
-                        <div className="left-page-box" key={paper.id}>
-                            <p><b>{paper.title}</b><br />
-                                <span className='left-page-author'>{paper.author} </span>
-                                <span className='left-page-year'>{paper.year}</span></p>
-                        </div>
-                    ))}
-                </div>
-                <div className="middle-page">
-                    <img src='/connected.PNG' alr='임시 이미지' className='middle-img' />
-                </div>
-
-                <div className={`right-page ${isRightPageOpen ? 'open' : 'closed'}`}>
-                    <button onClick={toggleRightPage} className='rignt-button'>
-                        {isRightPageOpen ? '▶' : '◀'}
-                    </button>
-                    <h3>논문 상세 내용</h3>
-                    {papers.map((paper) => {
-                        if (paper.id === 1) {
-                            return (
-                                <div className="right-page-box" key={paper.id}>
-                                    <p><b>{paper.title}</b><br />
-                                        Author: {paper.author}<br />
-                                        Year: {paper.year}<br />
-                                        Abstract: {paper.abstract}</p>
-                                </div>
-                            );
-                        }
-                        return ''; // 나머지는 표시하지 않음
-                    })}
+            <div className="second-menu">
+                <p>멀티 프로세서 시스템-온-칩(MPSoC)을 위한 버스 매트릭스 구조의 빠르고 정확한 성능 예측 기법</p>
+                <div className='button-container'>
+                    <button className='button-bar'>저자 관계</button>
+                    <button className='button-bar'>연구 기관 관계</button>
                 </div>
             </div>
+
+            <div className="page-container">
+                <div className="page">
+                    <div className={`left-page ${isLeftPageOpen ? 'closed' : 'open'} w-25`}>
+                        <button onClick={toggleLeftPage} className='left-button'>
+                            {isLeftPageOpen ? '◀' : '▶'}
+                        </button>
+                        <div className='leftpage-Search-container'>
+                            <img src='/search_icon.png' alr='돋보기 아이콘' className='leftpage-search-icon' />
+                            <input className='leftpage-search-input' type='search'
+                                autoComplete='off' spellCheck="false"
+                                role='combobox' aria-controls='matches'
+                                aria-expanded='false' aria-live='polite' />
+                            <button className='leftpage-search-button'>EXPAND</button>
+                        </div>
+                        {papers.map((paper) => (
+                            <div className="left-page-box" key={paper.id}>
+                                <p><b>{paper.title}</b><br />
+                                    <span className='left-page-author'>{paper.author} </span>
+                                    <span className='left-page-year'>{paper.year}</span></p>
+                            </div>
+                        ))}
+                    </div>
+
+
+                    <div><img src='/connected.PNG' alr='임시 이미지' className='graph' /></div>
+
+
+                    <div className={`right-page ${isRightPageOpen ? 'open' : 'closed'}`}>
+                        <button onClick={toggleRightPage} className='rignt-button'>
+                            {isRightPageOpen ? '▶' : '◀'}
+                        </button>
+                        <div>
+                            <ul className="nav nav-tabs">
+                                <li className="active"><a href="#home" data-toggle="tab">Article</a></li>
+                                <li><a href="#profile" data-toggle="tab">저자-연구기관</a></li>
+                            </ul>
+                            <div className="tab-content">
+                                <div className="tab-pane fade in active" id="home">Home 메뉴</div>
+                                <div className="tab-pane fade" id="profile">Profile 메뉴</div>
+                            </div>
+                        </div>
+                        <h3>논문 상세 내용</h3>
+                        {papers.map((paper) => {
+                            if (paper.id === 1) {
+                                return (
+                                    <div className="right-page-box" key={paper.id}>
+                                        <p><b>{paper.title}</b><br />
+                                            Author: {paper.author}<br />
+                                            Year: {paper.year}<br />
+                                            Abstract: {paper.abstract}</p>
+                                    </div>
+                                );
+                            }
+                            return ''; // 나머지는 표시하지 않음
+                        })}
+                    </div>
+                </div>
             </div>
         </div>
     );
