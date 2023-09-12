@@ -1,12 +1,10 @@
 import './Main.css';
 import React, { useState, onSubmit} from 'react';
-import Search from './Search';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Main() {
     const [searchQuery, setSearchQuery] = useState('');
-    // 검색어 상태 관리
     const onSubmit = async () => {
         window.location.href = "/search/" + searchQuery;
     };
@@ -15,18 +13,26 @@ function Main() {
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
+            if (searchQuery.trim() === '') {
+                window.alert('검색어를 입력하세요.'); 
+            } else {
             console.log('검색어가 입력되었습니다.');
             navigate(`/search/${encodeURIComponent(searchQuery)}`);
             // 검색어를 포함하여 Search 페이지로 이동합니다.
+            }
         }
     };
     const handleSearchClick = () => {
+        if (searchQuery.trim() === '') {
+            window.alert('검색어를 입력하세요.'); 
+        } else {
         navigate(`/search/${encodeURIComponent(searchQuery)}`);
-        // 검색어를 포함하여 Search 페이지로 이동합니다.
+        }// 검색어를 포함하여 Search 페이지로 이동합니다.
     };
 
     return (
         <div className="Main">
+            
             <header>
                 <div className="top-menu">
                     <div className="logo-container">
