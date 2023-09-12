@@ -1,14 +1,14 @@
 import './Search.css';
 import React,{useState, useEffect} from 'react';
-import { Link, useParams} from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Main from './Main';
 import axios from 'axios';
 
 
 function Search() {
-	const [searchQuery, setSearchQuery] = useState([]);
 	const [searchResult, setSearchResult] = useState([]);
 	const params = useParams();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		// URL 파라미터로부터 검색어를 가져옵니다.
@@ -20,7 +20,6 @@ function Search() {
 			// API 응답으로 받은 데이터를 검색 결과로 설정합니다.
 			setSearchResult(response.data);
 			console.log(response.data);
-			// console.log(searchResults);
 		})
 		.catch((error) => {
 			console.error('API 요청 중 오류 발생:', error);
@@ -30,6 +29,10 @@ function Search() {
 	const TextStyle = {
 		textAlign: 'center'
 	};
+	 // paper-box를 클릭했을 때 detail 페이지로 이동하는 함수
+	 const handlePaperBoxClick = (articleId) => {
+        navigate(`/Detail/${articleId}`);
+    };
 
 	return (
 		<div>
@@ -72,7 +75,9 @@ function Search() {
 				</div>
 				{searchResult.map((result) => (
                     // 검색 결과를 여기서 필요한대로 렌더링하세요.
-                    <div key={result.article_id} to={`/Detail/`} className="paper-box">
+                    <div key={result.article_id}
+					className="paper-box"
+					onClick={() => handlePaperBoxClick(result.article_id)}>
                         <h2>{result.title_ko}</h2>
                         <p>저자: {result.author_name}</p>
                         <p>발행년도: {result.pub_year}</p>
