@@ -1,7 +1,6 @@
 import './Search.css';
 import React,{useState, useEffect} from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import Main from './Main';
 import axios from 'axios';
 
 
@@ -10,12 +9,28 @@ function Search() {
 	const params = useParams();
 	const navigate = useNavigate();
 
+	const [searchQuery, setSearchQuery] = useState('');
+    const onSubmit = async () => {
+        window.location.href = "/search/" + searchQuery;
+    };
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            if (searchQuery.trim() === '') {
+                window.alert('검색어를 입력하세요.'); 
+            } else {
+            console.log('검색어가 입력되었습니다.');
+            navigate(`/search/${encodeURIComponent(searchQuery)}`);
+            // 검색어를 포함하여 Search 페이지로 이동합니다.
+            }
+        }
+    };
+
 	useEffect(() => {
 		// URL 파라미터로부터 검색어를 가져옵니다.
 		const { searchQuery } = params;
 	
 		// Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
-		axios.get(`http://localhost:8080/search/?searchKeyword=${searchQuery}`)
+		axios.get(`/search/?searchKeyword=${searchQuery}`)
 		.then((response) => {
 			// API 응답으로 받은 데이터를 검색 결과로 설정합니다.
 			setSearchResult(response.data);
@@ -24,7 +39,7 @@ function Search() {
 		.catch((error) => {
 			console.error('API 요청 중 오류 발생:', error);
 		});
-	}, [setSearchResult]);
+	}, [setSearchResult, params]);
 
 	const TextStyle = {
 		textAlign: 'center'
@@ -51,7 +66,10 @@ function Search() {
 								autoComplete='off' spellCheck="false"
 								role='combobox' aria-controls='matches'
 								placeholder='논문제목,저자,키워드를 입력하세요'
-								aria-expanded='false' aria-live='polite' />
+								aria-expanded='false' aria-live='polite' 
+								onChange={(e) => setSearchQuery(e.target.value)}
+                            	onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
+							/>
 						</div>
 					</div>
 					<div className="menu-links2">
@@ -76,8 +94,8 @@ function Search() {
 				{searchResult.map((result) => (
                     // 검색 결과를 여기서 필요한대로 렌더링하세요.
                     <div key={result.article_id}
-					className="paper-box"
-					onClick={() => handlePaperBoxClick(result.article_id)}>
+						className="paper-box"
+						onClick={() => handlePaperBoxClick(result.article_id)}>
                         <h2>{result.title_ko}</h2>
                         <p>저자: {result.author_name}</p>
                         <p>발행년도: {result.pub_year}</p>

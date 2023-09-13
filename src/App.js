@@ -20,7 +20,9 @@ function App() {
                     {/* <Route path="/Detail" element={<Main />} />
                     <Route path="/Detail" element={<Search />} /> */}
                     <Route path="/search/:searchQuery" element={<Search />} /> 
+                    <Route path="/Detail/:article_id" element={<Detail />} />
                 </Routes>
+                
             </div>
         </BrowserRouter>
 
