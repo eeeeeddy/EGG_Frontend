@@ -63,20 +63,13 @@ function Search() {
 							<img src='/search_icon.png' alr='돋보기 아이콘' className='search-icon' />
 
 							<input className='search-input' type='search'
-								autoComplete='off' spellCheck="false"
-								role='combobox' aria-controls='matches'
-								placeholder='논문제목,저자,키워드를 입력하세요'
-								aria-expanded='false' aria-live='polite' 
+                            	autoComplete='off' aria-expanded='false'
+                            	aria-live='polite'
+                           		placeholder='검색어를 입력하세요'
 								onChange={(e) => setSearchQuery(e.target.value)}
                             	onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
 							/>
 						</div>
-					</div>
-					<div className="menu-links2">
-						<a href="#">About</a>
-						<a href="#">Pricing</a>
-						<a href="#">menu1</a>
-						<a href="#">menu2</a>
 					</div>
 				</div>
 			</header>
@@ -96,10 +89,10 @@ function Search() {
                     <div key={result.article_id}
 						className="paper-box"
 						onClick={() => handlePaperBoxClick(result.article_id)}>
-                        <h2>{result.title_ko}</h2>
-                        <p>저자: {result.author_name}</p>
-                        <p>발행년도: {result.pub_year}</p>
-                        <p>요약: {result.abstract_ko}</p>
+                        <h4>{result.title_ko}</h4>
+                        <p>{result.author_name}<br/>
+                        {result.pub_year}<br/><br/>
+                        <span className='paperbox-p'>{result.abstract_ko}</span></p>
                     </div>
                 ))}
 			</div>

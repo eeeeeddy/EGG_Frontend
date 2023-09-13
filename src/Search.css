@@ -1,83 +1,72 @@
 .top-menu2 {
     display: flex;
     align-items: center;
-    /* 수직 정렬 */
     justify-content: space-between;
-    /* 가로 정렬을 설정합니다. Flexbox 컨테이너 내에서 자식 요소들 사이에 공간을 균등하게 분배하여 양 끝에 정렬 */
-    padding: 2px 30px;
-    background-color: #fafafa;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
-    /* 가로 세로 흐림반경 색 투명도*/
 }
 
 .logo-container2 {
     display: flex;
-    /* 이미지와 텍스트를 나란히 정렬 */
     align-items: center;
-    /* 수직 정렬 */
 }
-
 .logo2 {
     width: 60px;
     height: auto;
     margin-right: 10px;
-    /* 이미지와 텍스트 사이 간격 */
-}
-
-.menu-links2 {
-    display: flex;
-    gap: 20px;
-}
-
-.menu-links2 a {
-    color: #1a0dab;
-    text-decoration: none;
-    font-size: 14px;
 }
 
 .search-container2 {
-    width: 450px;
+    width: 280px;
+    height: 40px;
     display: flex;
     align-items: center;
-    padding: 7px;
     border: 1px solid #ccc;
     border-radius: 45px;
-    margin: 5px 30px 5px 30px;
+    margin-left: 20px;
 }
-
 .search-icon {
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width: 30px;
 }
-
 .search-input {
-    background-color: #fafafa;
-    /* text-align: center; */
-    font-size: large;
-    margin-top: 2px;
+    height: 35px;
+    border-radius: 45px;
 }
 
 .paper-text {
-    float: 'left'
+    float: 'left';
+    font-size: medium;
 }
-
 .paper-container {
-    margin-top: 90px;
+    margin-top: 5%;
     background-color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     /* 위로 정렬 */
-    height: 100vh;
 }
 
 .paper-box {
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 20px;
-    width: 80%;
-    max-width: 600px;
+    border: none;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    margin-bottom: 30px;
+    max-width: 60%;
     cursor: pointer;
+    justify-content: center;
+}
+.paper-box p{
+    font-size: 15px;
+    word-wrap: break-word;
+    color: gray;
+}
+.paperbox-p {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* 최대 표시 줄 수 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    color: black;
 }

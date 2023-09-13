@@ -1,15 +1,9 @@
-.Main {
-    background-color: #fafafa;
-}
-
 .top-menu {
     display: flex;
     align-items: center;
     /* 수직 정렬 */
     justify-content: space-between;
     /* 가로 정렬을 설정합니다. Flexbox 컨테이너 내에서 자식 요소들 사이에 공간을 균등하게 분배하여 양 끝에 정렬 */
-    padding: 2px 30px;
-    background-color: #fafafa;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
     /* 가로 세로 흐림반경 색 투명도*/
 }
@@ -25,10 +19,9 @@
     width: 60px;
     height: auto;
     margin-right: 10px;
-    /* 이미지와 텍스트 사이 간격 */
 }
 
-.menu-links {
+/* .menu-links {
     display: flex;
     gap: 20px;
 }
@@ -37,47 +30,44 @@
     color: #1a0dab;
     text-decoration: none;
     font-size: 14px;
-}
+} */
 
 .Main-body {
-    margin-top: 90px;
-    background-color: #fafafa;
+    /* height: 70vh;  */
+    margin-top: 10%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    /* 위로 정렬 */
-    height: 100vh;
+    /* max-width: 100%;  */
 }
 
+.search {
+    display: flex;
+    max-width: 100%;
+}
 .search-container {
-    width: 700px;
-    height: 20px;
+    width: 600px;
     display: flex;
     float: left;
     align-items: center;
-    padding: 14px;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 45px;
-    /* background-color: pink; */
     align-items: center;
+    justify-content: center;
 }
 
 .search-button {
-    margin-left: 10px;
-    background-color: #007bff;
+    margin: 4px 8px;
+    background-color: #007bffc5;
     color: #fff;
-    padding: 10px, 20px;
     border: none;
     cursor: pointer;
-    flex-shrink: 0;
     float: right;
     width: 100px;
     height: 47px;
-    border: 1px solid;
     border-radius: 45px;
-    text-align: center;
-    line-height: 47px;
 }
 
 .search-icon {
@@ -85,17 +75,16 @@
     margin-left: 10px;
     width: 30px;
     height: 30px;
-    margin-right: 10px;
-    /* background-color: white; */
-
+    margin-right: 5px;
 }
 
 .search-input {
-    height: 30px;
     width: 100%;
+    padding: 10px;
+    margin-right: 10px;
     border: none;
     outline: none;
-    margin-right: 5px;
-    border-radius: 20px;
-    /* background-color: white; */
+    background-color: #ffffff !important; 
+    /* 배경색 적용이 안되어 강제적용 */
+
 }
