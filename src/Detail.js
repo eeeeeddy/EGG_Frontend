@@ -117,7 +117,7 @@ function Detail() {
                     </div>
 
 
-                    <div><img src='/connected.PNG' alr='임시 이미지' className='graph' /></div>
+                    <div><img src='/connected.PNG' alt='임시 이미지' className='graph' /></div>
 
 
                     <div className={`right-page ${isRightPageOpen ? 'open' : 'closed'}`}>
