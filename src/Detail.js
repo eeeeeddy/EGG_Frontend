@@ -1,6 +1,6 @@
 import './Detail.css';
 import React, { useState, useEffect } from 'react';
-import { Link, useParams,useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // function handleClick() {
@@ -9,7 +9,7 @@ import axios from 'axios';
 
 function Detail() {
     const [detailResult, setDetailResult] = useState([]);
-	const params = useParams();
+    const params = useParams();
 
     const [searchQuery, setSearchQuery] = useState('');
     const onSubmit = async () => {
@@ -19,30 +19,30 @@ function Detail() {
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             if (searchQuery.trim() === '') {
-                window.alert('검색어를 입력하세요.'); 
+                window.alert('검색어를 입력하세요.');
             } else {
-            console.log('검색어가 입력되었습니다.');
-            navigate(`/search/${encodeURIComponent(searchQuery)}`);
-            // 검색어를 포함하여 Search 페이지로 이동합니다.
+                console.log('검색어가 입력되었습니다.');
+                navigate(`/search/${encodeURIComponent(searchQuery)}`);
+                // 검색어를 포함하여 Search 페이지로 이동합니다.
             }
         }
     };
 
     useEffect(() => {
-		
-		const { article_id  } = params;
-	
-		// Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
-		axios.get(`/search/${article_id}`)
-		.then((response) => {
-			// API 응답으로 받은 데이터를 검색 결과로 설정합니다.
-			setDetailResult([response.data]);
-			console.log(response.data);
-		})
-		.catch((error) => {
-			console.error('API 요청 중 오류 발생:', error);
-		});
-	}, [setDetailResult,params]);
+
+        const { article_id } = params;
+
+        // Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
+        axios.get(`/search/${article_id}`)
+            .then((response) => {
+                // API 응답으로 받은 데이터를 검색 결과로 설정합니다.
+                setDetailResult([response.data]);
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.error('API 요청 중 오류 발생:', error);
+            });
+    }, [setDetailResult, params]);
 
     const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
     const [isRightPageOpen, setIsRightPageOpen] = useState(true);
@@ -74,8 +74,8 @@ function Detail() {
                                     placeholder='논문제목,저자,키워드를 입력하세요'
                                     aria-expanded='false' aria-live='polite'
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                            	    onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
-                                    />
+                                    onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
+                                />
                             </div>
                         </div>
                     </div>
@@ -104,15 +104,17 @@ function Detail() {
                             <button className='leftpage-search-button'>EXPAND</button>
                         </div>
                         {detailResult.map((result) => {
-                            if(result.article_id){
-                                return(
+                            if (result.article_id) {
+                                return (
                                     <div className="left-page-box" key={result.article_id}>
-                                    <p><b>{result.title_ko}</b><br />
-                                        <span className='left-page-author'>{result.author_name}</span>
-                                        <span className='left-page-year'>{result.pub_year}</span></p>
-                                     </div>
-                                     );}
-                            return null;}
+                                        <p><b>{result.title_ko}</b><br />
+                                            <span className='left-page-author'>{result.author_name}</span>
+                                            <span className='left-page-year'>{result.pub_year}</span></p>
+                                    </div>
+                                );
+                            }
+                            return null;
+                        }
                         )}
                     </div>
 
@@ -143,9 +145,10 @@ function Detail() {
                                             발행년도: {result.pub_year}<br />
                                             요약: {result.abstract_ko}</p>
                                     </div>
-                                );}
-                                return ''; // 나머지는 표시하지 않음
-                             })}
+                                );
+                            }
+                            return ''; // 나머지는 표시하지 않음
+                        })}
                     </div>
                 </div>
             </div>
