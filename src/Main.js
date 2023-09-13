@@ -5,9 +5,9 @@ import axios from 'axios';
 
 function Main() {
     const [searchQuery, setSearchQuery] = useState('');
-    const onSubmit = async () => {
-        window.location.href = "/search/" + searchQuery;
-    };
+    // const onSubmit = async () => {
+    //     window.location.href = "/search/" + searchQuery;
+    // };
     const navigate = useNavigate();
      // useNavigate 훅을 사용하여 네비게이션 함수를 가져옵니다.
 
@@ -39,14 +39,12 @@ function Main() {
                         <img src="/ditto_logo.jpg" alt="로고" className="logo" />
                         <h3>Ditto Graph</h3>
                     </div>
-                    <div className="menu-links">
-                        {/* <Link to='/search'>About</Link> */}
-                        {/* <a href="./Search">About</a> */}
+                    {/* <div className="menu-links">
                         <a href="#">About</a>
                         <a href="#">Pricing</a>
                         <a href="https://www.google.co.kr">google</a>
                         <a href="https://www.naver.com">Naver</a>
-                    </div>
+                    </div> */}
                 </div>
             </header>
             <div className='Main-body'>
@@ -59,18 +57,16 @@ function Main() {
                         <img src='/search_icon2.png' alr='돋보기 아이콘' className='search-icon' />
                         <input
                             className='search-input' type='search'
-                            autoComplete='off' spellCheck="false"
-                            role='combobox'
-                            aria-controls='matches'
+                            autoComplete='off'
                             aria-expanded='false'
-                            placeholder='논문제목,저자,키워드를 입력하세요'
                             aria-live='polite'
+                            placeholder='논문제목, 저자, 키워드를 입력하세요'
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
                         />
                     </div>
-                    <button className='search-button' type='button' onClick={handleSearchClick}>검색</button>
+                    <button className='search-button' type='button' onClick={handleSearchClick}><b>검색</b></button>
                 </div>
             </div>
         </div>
