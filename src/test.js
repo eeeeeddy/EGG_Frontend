@@ -171,7 +171,7 @@ function Test() {
                                     {detailResult.map((result) => {
                                         if (result.article_id) {
                                             return (
-                                                <div className="right-page-box" key={result.article_id} >
+                                                <div className="right-page-box" key={result.article_id} style={{ width: '370px' }}>
                                                     <h5><strong>{result.title_ko}</strong></h5><br />
                                                     <span>저자: {result.author_name}</span><br /> <br />
                                                     <span>발행년도: {result.pub_year}</span><br /> <br />

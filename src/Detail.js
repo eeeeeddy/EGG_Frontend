@@ -91,7 +91,7 @@ function Detail() {
 
             <div className="page-container">
                 <div className="page">
-                    <div className={`left-page ${isLeftPageOpen ? 'closed' : 'open'} w-25`}>
+                    <div className={`left-page ${isLeftPageOpen ? 'closed' : 'open'}`}>
                         <button onClick={toggleLeftPage} className='left-button'>
                             {isLeftPageOpen ? '◀' : '▶'}
                         </button>
@@ -118,7 +118,6 @@ function Detail() {
                         )}
                     </div>
 
-
                     <div><img src='/connected.PNG' alt='임시 이미지' className='graph' /></div>
 
 
@@ -140,10 +139,10 @@ function Detail() {
                             if (result.article_id) {
                                 return (
                                     <div className="right-page-box" key={result.article_id}>
-                                        <p><b>{result.title_ko}</b><br />
-                                            저자: {result.author_name}<br />
-                                            발행년도: {result.pub_year}<br />
-                                            요약: {result.abstract_ko}</p>
+                                        <h5><strong>{result.title_ko}</strong></h5><br />
+                                        <span>저자: {result.author_name}</span><br /> <br />
+                                        <span>발행년도: {result.pub_year}</span><br /> <br />
+                                        <span>요약: {result.abstract_ko}</span>
                                     </div>
                                 );
                             }
@@ -152,6 +151,14 @@ function Detail() {
                     </div>
                 </div>
             </div>
+
+            <div>
+                <div>도움말모달</div>
+                <div>그래프 시점 초기화</div>
+                <div>컬러바</div>
+            </div>
+
+
         </div>
     );
 }

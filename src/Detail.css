@@ -1,4 +1,4 @@
-body{
+body {
     height: 100%;
     /* background-color: darkkhaki; */
 }
@@ -16,27 +16,32 @@ body{
     /* 가로 세로 흐림반경 색 투명도*/
     margin-bottom: 5px;
 }
+
 .logo-container3 {
     display: flex;
     /* 이미지와 텍스트를 나란히 정렬 */
     align-items: center;
     /* 수직 정렬 */
 }
+
 .logo3 {
     width: 60px;
     height: auto;
     margin-right: 10px;
     /* 이미지와 텍스트 사이 간격 */
 }
+
 .menu-links3 {
     display: flex;
     gap: 20px;
 }
+
 .menu-links3 a {
     color: #1a0dab;
     text-decoration: none;
     font-size: 14px;
 }
+
 .search-container3 {
     width: 450px;
     display: flex;
@@ -46,13 +51,15 @@ body{
     border-radius: 45px;
     margin: 5px 30px 5px 30px;
 }
+
 .search-icon {
     height: 35px;
     width: 35px;
 }
+
 .search-input {
     background-color: #fafafa;
-    font-size:medium;
+    font-size: medium;
     margin-top: 2px;
 }
 
@@ -68,6 +75,7 @@ body{
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.4);
     /* 가로 세로 흐림반경 색 투명도*/
 }
+
 .button-bar {
     background-color: white;
     /* 배경색을 흰색으로 설정 */
@@ -82,6 +90,7 @@ body{
     margin-right: 10px;
     border-radius: 45px;
 }
+
 /* 버튼에 호버 효과 추가 */
 .button-bar:hover {
     background-color: rgba(19, 158, 244, 0.862);
@@ -105,14 +114,14 @@ body{
     /* 페이지의 높이를 화면 높이로 설정합니다. */
     overflow: hidden;
     /* 내용이 페이지 영역을 넘어갈 경우 스크롤바를 숨깁니다. */
-    
+
 }
 
 .graph {
     margin-top: 10px;
 }
 
-.left-page, 
+.left-page,
 .right-page {
     /* position: fixed; */
     position: relative;
@@ -137,10 +146,12 @@ body{
     /* margin-bottom: calc(100vh - 2px);  */
     /* width: 20%; */
 }
+
 .left-page.closed {
     transform: translateX(0%);
     /* left-page를 왼쪽으로 이동하여 숨기지만, 다시 열 때 원래 위치로 돌아오도록 transform 초기화 필요 */
 }
+
 .leftpage-Search-container {
     width: 100%px;
     display: flex;
@@ -148,22 +159,26 @@ body{
     padding: 5px;
     margin: 15px 0px 15px 0px;
 }
+
 .leftpage-search-icon {
     height: 35px;
     width: 35px;
 }
+
 .leftpage-search-input {
     outline: none;
     width: 80%;
     border: none;
     border-bottom: 1px solid #525252;
-    background-color: rgba(0, 0, 0, 0); 
+    background-color: rgba(0, 0, 0, 0);
 }
-.leftpage-search-button{
+
+.leftpage-search-button {
     border: none;
-    color:  rgba(19, 158, 244, 0.862);
-    background-color: rgba(0, 0, 0, 0); 
+    color: rgba(19, 158, 244, 0.862);
+    background-color: rgba(0, 0, 0, 0);
 }
+
 .left-page-box {
     font-size: small;
     border-top: 2px solid #ccc;
@@ -174,14 +189,17 @@ body{
     /* 가로 세로 흐림반경 색 투명도*/
     /* max-width: 300px; */
 }
+
 .left-page-author {
     color: #818080;
 }
+
 .left-page-year {
     float: right;
     /* 오른쪽으로 정렬 */
     color: #818080;
 }
+
 .left-button {
     position: absolute;
     top: 9px;
@@ -200,6 +218,7 @@ body{
     font-size: 24px;
     transition: background-color 0.5s ease;
 }
+
 .left-button:hover {
     background-color: rgba(19, 158, 244, 1);
     /* 호버 시 배경색 변경 */
@@ -219,9 +238,11 @@ body{
 .right-page.open {
     transform: translateX(0%);
 }
+
 .right-page.closed {
     transform: translateX(100%);
 }
+
 .rignt-button {
     position: absolute;
     top: 9px;
@@ -240,6 +261,7 @@ body{
     font-size: 24px;
     transition: background-color 0.5s ease;
 }
+
 .right-button:hover {
     background-color: rgba(19, 158, 244, 1);
     /* 호버 시 배경색 변경 */

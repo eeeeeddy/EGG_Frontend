@@ -11,7 +11,7 @@ function App() {
 
     return (
         <BrowserRouter>
-            <div className='container my-1'>
+            <div className='my-1'>
                 <Routes>
                     <Route path="/" element={<Main />} />
                     <Route path="/search" element={<Search />} />
