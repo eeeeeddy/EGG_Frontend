@@ -8,11 +8,12 @@ function Search() {
 	const [searchResult, setSearchResult] = useState([]);
 	const params = useParams();
 	const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(true);
 
 	const [searchQuery, setSearchQuery] = useState('');
-	const onSubmit = async () => {
-		window.location.href = "/search/" + searchQuery;
-	};
+	// const onSubmit = async () => {
+	// 	window.location.href = "/search/" + searchQuery;
+	// };
 	const handleKeyDown = (event) => {
 		if (event.key === 'Enter') {
 			if (searchQuery.trim() === '') {
@@ -29,17 +30,25 @@ function Search() {
 		// URL 파라미터로부터 검색어를 가져옵니다.
 		const { searchQuery } = params;
 
+		if (searchQuery === 'loading') {
+            setIsLoading(true);
+            return; // 데이터를 불러오지 않고 로딩 상태로 남김
+        }else{
+
 		// Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
 		axios.get(`/search/?searchKeyword=${searchQuery}`)
 			.then((response) => {
+				// 데이터 불러오기 완료 후 로딩 상태 변경
+				setIsLoading(false); 
 				// API 응답으로 받은 데이터를 검색 결과로 설정합니다.
 				setSearchResult(response.data);
 				console.log(response.data);
 			})
 			.catch((error) => {
+				setIsLoading(false);
 				console.error('API 요청 중 오류 발생:', error);
 			});
-	}, [setSearchResult, params]);
+	}}, [setSearchResult,searchQuery, setIsLoading,params]);
 
 	const TextStyle = {
 		textAlign: 'center'
@@ -50,6 +59,7 @@ function Search() {
 	};
 
 	return (
+		
 		<div>
 			<header>
 				<div className="top-menu2">
@@ -73,7 +83,6 @@ function Search() {
 					</div>
 				</div>
 			</header>
-
 			<div className="paper-container">
 				<div className="paper-text" style={{ float: 'left' }}>
 					<p style={TextStyle}>
@@ -84,19 +93,24 @@ function Search() {
 					<b><h3 style={TextStyle}>Choose Article for Graph : </h3></b>
 					<br />
 				</div>
-				{searchResult.map((result) => (
-					// 검색 결과를 여기서 필요한대로 렌더링하세요.
-					<div key={result.article_id}
-						className="paper-box"
-						onClick={() => handlePaperBoxClick(result.article_id)}>
-						<h4>{result.title_ko}</h4>
-						<p>{result.author_name}<br />
-							{result.pub_year}<br /><br />
-							<span className='paperbox-p'>{result.abstract_ko}</span></p>
-					</div>
-				))}
+				<div class="spinner-border text-info" role="status">
+                 <span class="visually-hidden">Loading...</span>
+				 </div>
+						<div>
+						{searchResult.map((result) => (
+							// 검색 결과를 여기서 필요한대로 렌더링하세요.
+							<div key={result.article_id}
+							className="paper-box"
+							onClick={() => handlePaperBoxClick(result.article_id)}>
+							<h4>{result.title_ko}</h4>
+							<p>{result.author_name}<br />
+								{result.pub_year}<br /><br />
+								<span className='paperbox-p'>{result.abstract_ko}</span></p>
+							</div>
+							))}						
+						</div>
 			</div>
-		</div>
+		</div>  
 	);
 }
 export default Search;

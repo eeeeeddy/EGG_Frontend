@@ -14,13 +14,10 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Main />} />
                     <Route path="/search" element={<Search />} />
-                    {/* <Route path="/Search" element={<Main />} />
-                    <Route path="/Search" element={<Detail />} /> */}
                     <Route path="/Detail" element={<Detail />} />
-                    {/* <Route path="/Detail" element={<Main />} />
-                    <Route path="/Detail" element={<Search />} /> */}
                     <Route path="/search/:searchQuery" element={<Search />} /> 
                     <Route path="/Detail/:article_id" element={<Detail />} />
+                    <Route path='/test' element={<test />} />
                 </Routes>
                 
             </div>
