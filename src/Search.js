@@ -9,11 +9,8 @@ function Search() {
 	const params = useParams();
 	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(true);
-
 	const [searchQuery, setSearchQuery] = useState('');
-	// const onSubmit = async () => {
-	// 	window.location.href = "/search/" + searchQuery;
-	// };
+
 	const handleKeyDown = (event) => {
 		if (event.key === 'Enter') {
 			if (searchQuery.trim() === '') {
@@ -33,7 +30,8 @@ function Search() {
 		if (searchQuery === 'loading') {
             setIsLoading(true);
             return; // 데이터를 불러오지 않고 로딩 상태로 남김
-        }else{
+        }
+		setIsLoading(true);
 
 		// Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
 		axios.get(`/search/?searchKeyword=${searchQuery}`)
@@ -48,7 +46,7 @@ function Search() {
 				setIsLoading(false);
 				console.error('API 요청 중 오류 발생:', error);
 			});
-	}}, [setSearchResult,searchQuery, setIsLoading,params]);
+	}, [setSearchResult,searchQuery, setIsLoading,params]);
 
 	const TextStyle = {
 		textAlign: 'center'
@@ -59,7 +57,7 @@ function Search() {
 	};
 
 	return (
-		
+
 		<div>
 			<header>
 				<div className="top-menu2">
@@ -88,27 +86,29 @@ function Search() {
 					<p style={TextStyle}>
 						{params.searchQuery
 							? `'${decodeURIComponent(params.searchQuery)}' 에 대한 논문 검색 결과`
-							: '에 대한 논문 검색 결과'}
-					</p>
-					<b><h3 style={TextStyle}>Choose Article for Graph : </h3></b>
-					<br />
+							: '에 대한 논문 검색 결과'}</p>
+					<h3 style={TextStyle}><b>Choose Article for Graph :</b></h3>
+					<br/>
 				</div>
-				<div class="spinner-border text-info" role="status">
-                 <span class="visually-hidden">Loading...</span>
-				 </div>
-						<div>
+				<div>
+				{isLoading ? ( 
+					<div className="spinner-border text-info" role="status">
+                		{/* <span className="visually-hidden">Loading...</span> */}
+					</div>
+				 ) : (
+					<div className="paper-box-container">
 						{searchResult.map((result) => (
 							// 검색 결과를 여기서 필요한대로 렌더링하세요.
-							<div key={result.article_id}
-							className="paper-box"
+							<div key={result.article_id} className="paper-box"
 							onClick={() => handlePaperBoxClick(result.article_id)}>
 							<h4>{result.title_ko}</h4>
-							<p>{result.author_name}<br />
-								{result.pub_year}<br /><br />
+							<p>{result.author_name}<br/>
+								{result.pub_year}<br/><br/>
 								<span className='paperbox-p'>{result.abstract_ko}</span></p>
 							</div>
 							))}						
-						</div>
+					</div>
+					)} </div>
 			</div>
 		</div>  
 	);
