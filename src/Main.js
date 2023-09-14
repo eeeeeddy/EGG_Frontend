@@ -47,9 +47,9 @@ function Main() {
                 </div>
             </header>
             <div className='Main-body'>
-                <h1>Explore academic papers</h1>
-                <h1>in a visual graph</h1>
-                <br></br>
+                <h1>Explore academic papers in a visual graph</h1><br/>
+                <h3>To start, enter a paper identifier</h3><br/>
+                
                 {/* 검색창 */}
                 <div className='search'>
                     <div className='search-container'>
@@ -68,9 +68,9 @@ function Main() {
                     <button className='search-button' type='button' onClick={handleSearchClick}><b>검색</b></button>
                 </div>
                 <div className='separator-container'>
-                    <div className="separator">
-                        <button className="show-button" type="button">사이트 이용 방법</button>
-                    </div>
+                    {/* <div className="separator"> */}
+                        <button className="show-button" type="button">사이트 이용 방법 ▽ </button>
+                    {/* </div> */}
                 </div>
             </div>
         </div>
