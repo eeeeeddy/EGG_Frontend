@@ -3,10 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// function handleClick() {
-//     alert('버튼이 클릭되었습니다!');
-//   }
-
 function Detail() {
     const [detailResult, setDetailResult] = useState([]);
     const params = useParams();
@@ -118,7 +114,7 @@ function Detail() {
                         )}
                     </div>
 
-                    <div><img src='/connected.PNG' alt='임시 이미지' className='graph' /></div>
+                    <div className='graph'><img src='/connected.PNG' alt='임시 이미지'/></div>
 
 
                     <div className={`right-page ${isRightPageOpen ? 'open' : 'closed'}`}>
