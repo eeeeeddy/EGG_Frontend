@@ -32,7 +32,6 @@ function Main() {
 
     return (
         <div className="Main">
-            
             <header>
                 <div className="top-menu">
                     <div className="logo-container">
@@ -68,8 +67,10 @@ function Main() {
                     </div>
                     <button className='search-button' type='button' onClick={handleSearchClick}><b>검색</b></button>
                 </div>
-                <div className="separator">
-                    <button className="show-button" type="button">사이트 이용 방법</button>
+                <div className='separator-container'>
+                    <div className="separator">
+                        <button className="show-button" type="button">사이트 이용 방법</button>
+                    </div>
                 </div>
             </div>
         </div>

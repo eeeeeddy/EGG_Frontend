@@ -1,3 +1,10 @@
+.Main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; 
+    min-height: 100vh; 
+}
 .top-menu {
     display: flex;
     align-items: center;
@@ -6,6 +13,9 @@
     /* 가로 정렬을 설정합니다. Flexbox 컨테이너 내에서 자식 요소들 사이에 공간을 균등하게 분배하여 양 끝에 정렬 */
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
     /* 가로 세로 흐림반경 색 투명도*/
+    position: sticky;
+    top: 0;
+    z-index: 1; 
 }
 
 .logo-container {
@@ -33,13 +43,14 @@
 } */
 
 .Main-body {
-    /* height: 70vh;  */
     margin-top: 10%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    /* max-width: 100%;  */
+    max-width: 100%; 
+    position: relative;
+    flex: 1; 
 }
 
 .search {
@@ -57,7 +68,6 @@
     align-items: center;
     justify-content: center;
 }
-
 .search-button {
     margin: 4px 8px;
     background-color: #007bffc5;
@@ -69,7 +79,6 @@
     height: 47px;
     border-radius: 45px;
 }
-
 .search-icon {
     margin-top: 2px;
     margin-left: 10px;
@@ -77,7 +86,6 @@
     height: 30px;
     margin-right: 5px;
 }
-
 .search-input {
     width: 100%;
     padding: 10px;
@@ -88,18 +96,25 @@
     /* 배경색 적용이 안되어 강제적용 */
 }
 
+.separator-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;    
+    z-index: 0; 
+}
 .separator {
     width: 100%;
     height: 1px;
     background-color: #ccc;
-    margin-top: 20px; /* 구분선과 위 요소 사이 여백 조정 */
 }
 .show-button {
-    background-color: #007bffc5;
-    color: #fff;
+    background-color: transparent ;
+    color: #717070;
     border: none;
     cursor: pointer;
-    width: 100px;
+    width: 150px;
     height: 40px;
-    margin-top: 20px; /* 버튼과 구분선 사이 여백 조정 */
 }
