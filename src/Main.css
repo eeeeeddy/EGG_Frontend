@@ -86,5 +86,20 @@
     outline: none;
     background-color: #ffffff !important; 
     /* 배경색 적용이 안되어 강제적용 */
+}
 
+.separator {
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    margin-top: 20px; /* 구분선과 위 요소 사이 여백 조정 */
+}
+.show-button {
+    background-color: #007bffc5;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    margin-top: 20px; /* 버튼과 구분선 사이 여백 조정 */
 }
