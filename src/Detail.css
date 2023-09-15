@@ -222,6 +222,12 @@
     background-color: rgba(19, 158, 244, 1);
     /* 호버 시 배경색 변경 */
 }
+
 .loading-screen{
     margin-top: 300px;
+}
+
+.highlighted  {
+    background-color: yellow; /* 원하는 하이라이팅 색상 지정 */
+    font-weight: bold; /* 원하는 스타일 지정 */
 }

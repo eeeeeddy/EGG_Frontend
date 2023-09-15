@@ -55,13 +55,16 @@ function Detail() {
         setIsRightPageOpen(!isRightPageOpen);
     };
 
+    const [highlightedText, setHighlightedText] = useState('');
+
+   
     return (
         <div>
             <header>
                 <div className='menu'>
                     <div className="top-menu3">
                         <div className="logo-container3">
-                            <Link to="/">
+                            <Link to="/" rel="noopener noreferrer">
                                 <img src="/ditto_logo.jpg" alt="로고" className="logo3" />
                             </Link>
                             <h3>Ditto Graph</h3>
@@ -71,7 +74,8 @@ function Detail() {
                                 <input className='search-input' type='search'
                                     autoComplete='off' spellCheck="false"
                                     role='combobox' aria-controls='matches'
-                                    placeholder='논문제목,저자,키워드를 입력하세요'
+                                    id='search_input' name='search_input'
+                                    placeholder='검색어를 입력하세요'
                                     aria-expanded='false' aria-live='polite'
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
@@ -96,25 +100,38 @@ function Detail() {
                             {isLeftPageOpen ? '◀' : '▶'}
                         </button>
                         <div className='leftpage-Search-container'>
-                            <img src='/search_icon.png' alr='돋보기 아이콘' className='leftpage-search-icon' />
+                            <img src='/search_icon.png' alt='돋보기 아이콘' className='leftpage-search-icon' />
                             <input className='leftpage-search-input' type='search'
                                 autoComplete='off' spellCheck="false"
-                                role='combobox' aria-controls='matches'
-                                aria-expanded='false' aria-live='polite' />
+                                role='combobox' aria-controls='matches' id='leftpage-search-input'
+                                aria-expanded='false' aria-live='polite' name='leftpage-search-input'
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value);
+                                    setHighlightedText(e.target.value);
+                                  }} />
                             <button className='leftpage-search-button'>EXPAND</button>
                         </div>
-                        {detailResult.map((result) => {
-                            if (result.article_id) {
-                                return (
-                                    <div className="left-page-box" key={result.article_id}>
+                        <div className='leftpage-box-container'>
+                            {detailResult.map((result) => {
+                                if (result.article_id) {
+                                    const regex = new RegExp(`(${searchQuery})`, 'gi');
+                                    const abstractWithHighlight = result.abstract_ko.replace(
+                                    regex,
+                                    (match) => `<span class="highlighted">${match}</span>`
+                                );
+                                    return (
+                                        <div className="left-page-box" key={result.article_id}>
+                                        <span dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span>
                                         <p><b>{result.title_ko}</b><br />
                                             <span className='left-page-author'>{result.author_name}</span>
-                                            <span className='left-page-year'>{result.pub_year}</span></p>
-                                    </div>
-                                );
-                            }
-                            return null;
-                        })}
+                                            <span className='left-page-year'>{result.pub_year}</span><br />
+                                            <span className='paperbox-p'>{result.abstract_ko}</span></p>
+                                        </div>
+                                    );
+                                }
+                                return null;
+                            })} 
+                        </div>
                     </div>
                     {isLoading ? (
                         <div className="loading-screen">
