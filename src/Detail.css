@@ -1,102 +1,61 @@
-body {
-    height: 100%;
-    /* background-color: darkkhaki; */
-}
 
 .top-menu3 {
-    top: 0;
     display: flex;
     align-items: center;
-    /* 수직 정렬 */
     justify-content: space-between;
-    /* 가로 정렬을 설정합니다. Flexbox 컨테이너 내에서 자식 요소들 사이에 공간을 균등하게 분배하여 양 끝에 정렬 */
-    padding: 2px 30px;
-    background-color: #fafafa;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.184);
-    /* 가로 세로 흐림반경 색 투명도*/
-    margin-bottom: 5px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.307);
 }
 
 .logo-container3 {
     display: flex;
-    /* 이미지와 텍스트를 나란히 정렬 */
     align-items: center;
-    /* 수직 정렬 */
 }
 
 .logo3 {
     width: 60px;
     height: auto;
     margin-right: 10px;
-    /* 이미지와 텍스트 사이 간격 */
 }
-
-.menu-links3 {
-    display: flex;
-    gap: 20px;
-}
-
-.menu-links3 a {
-    color: #1a0dab;
-    text-decoration: none;
-    font-size: 14px;
-}
-
 .search-container3 {
-    width: 450px;
+    width: 280px;
+    height: 40px;
     display: flex;
     align-items: center;
-    padding: 7px;
     border: 1px solid #ccc;
     border-radius: 45px;
-    margin: 5px 30px 5px 30px;
+    margin-left: 20px;
 }
-
 .search-icon {
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width: 30px;
 }
-
 .search-input {
-    background-color: #fafafa;
-    font-size: medium;
-    margin-top: 2px;
+    height: 35px;
+    border-radius: 45px;
 }
 
 /* 두번째 메뉴 바 */
 .second-menu {
-    top: 100px;
+    margin-top: 2px;
     display: flex;
     align-items: center;
-    /* 수직 정렬 */
     justify-content: space-between;
-    padding: 2px 30px;
-    background-color: #fafafa;
+    padding: 2px 10px;
+    background-color: white;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.4);
-    /* 가로 세로 흐림반경 색 투명도*/
 }
 
 .button-bar {
-    background-color: white;
-    /* 배경색을 흰색으로 설정 */
     color: rgba(19, 158, 244, 0.862);
-    /* 텍스트 색상을 파란색으로 설정 */
     border: 2px solid rgba(19, 158, 244, 0.862);
-    /* 테두리를 파란색으로 설정 */
     padding: 10px 20px;
-    /* 내부 여백 설정 (위아래 10px, 좌우 20px) */
     cursor: pointer;
-    /* 커서 모양을 포인터로 변경하여 클릭 가능한 상태로 표시 */
     margin-right: 10px;
     border-radius: 45px;
 }
-
-/* 버튼에 호버 효과 추가 */
 .button-bar:hover {
     background-color: rgba(19, 158, 244, 0.862);
-    /* 마우스를 올렸을 때 배경색을 파란색으로 변경 */
     color: white;
-    /* 마우스를 올렸을 때 텍스트 색상을 흰색으로 변경 */
 }
 
 .page-container {
@@ -111,10 +70,7 @@ body {
     justify-content: space-between;
     align-items: stretch;
     height: 100%;
-    /* 페이지의 높이를 화면 높이로 설정합니다. */
     overflow: hidden;
-    /* 내용이 페이지 영역을 넘어갈 경우 스크롤바를 숨깁니다. */
-
 }
 
 .graph {
@@ -126,6 +82,7 @@ body {
 
 .left-page,
 .right-page {
+    padding-top: 5px;
     /* position: fixed; */
     position: relative;
     flex: 1;
@@ -133,16 +90,12 @@ body {
     bottom: 0;
     height: 100%;
     transition: transform 0.5s ease;
-    /* 트랜지션을 사용하여 부드러운 확장/축소 애니메이션을 적용합니다. */
     /* overflow-y: auto;  */
     /* 페이지 내용이 넘칠 경우 스크롤 허용 */
     z-index: 1;
-    /* middle-page 위에 위치하도록 설정 */
 }
 
 .left-page {
-    /* height: 100%; */
-    /* padding-top: 10px; */
     background-color: white;
     border-right: 2px solid #ccc;
     transform: translateX(-100%);
@@ -161,6 +114,7 @@ body {
     align-items: center;
     padding: 5px;
     margin: 15px 0px 15px 0px;
+    background-color: transparent;
 }
 
 .leftpage-search-icon {
@@ -232,7 +186,6 @@ body {
     padding: 0px 10px 0px 20px;
     border-left: 2px solid #ccc;
     right: 0;
-    /* background-color: #ccc; */
     transform: translateX(0%);
     /* width: 25%; */
     /* position: fixed; */
@@ -268,4 +221,7 @@ body {
 .right-button:hover {
     background-color: rgba(19, 158, 244, 1);
     /* 호버 시 배경색 변경 */
+}
+.loading-screen{
+    margin-top: 300px;
 }

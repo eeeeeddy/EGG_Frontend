@@ -6,12 +6,9 @@ import axios from 'axios';
 function Detail() {
     const [detailResult, setDetailResult] = useState([]);
     const params = useParams();
-
     const [searchQuery, setSearchQuery] = useState('');
-    const onSubmit = async () => {
-        window.location.href = "/search/" + searchQuery;
-    };
     const navigate = useNavigate();
+
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             if (searchQuery.trim() === '') {
@@ -25,9 +22,7 @@ function Detail() {
     };
 
     useEffect(() => {
-
         const { article_id } = params;
-
         // Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
         axios.get(`/search/${article_id}`)
             .then((response) => {
@@ -40,13 +35,22 @@ function Detail() {
             });
     }, [setDetailResult, params]);
 
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+        // detailResult 데이터가 로드되면 isLoading을 false로 설정
+        // 그래프 생성되면 detailResult부분 수정 필요
+        if (detailResult.length > 0) {
+            setIsLoading(false);
+        }
+    }, [detailResult]);
+    // 로딩화면 확인용
+    // const isLoading = true;
+
     const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
     const [isRightPageOpen, setIsRightPageOpen] = useState(true);
-
     const toggleLeftPage = () => {
         setIsLeftPageOpen(!isLeftPageOpen);
     };
-
     const toggleRightPage = () => {
         setIsRightPageOpen(!isRightPageOpen);
     };
@@ -83,8 +87,8 @@ function Detail() {
                 <div className='button-container'>
                     <button className='button-bar'>저자<b>·</b>연구기관 관계</button>
                 </div>
-            </div>
-
+            </div> 
+            
             <div className="page-container">
                 <div className="page">
                     <div className={`left-page ${isLeftPageOpen ? 'closed' : 'open'}`}>
@@ -110,13 +114,17 @@ function Detail() {
                                 );
                             }
                             return null;
-                        }
-                        )}
+                        })}
                     </div>
-
-                    <div className='graph'><img src='/connected.PNG' alt='임시 이미지'/></div>
-
-
+                    {isLoading ? (
+                        <div className="loading-screen">
+                            <div className="spinner-border text-info" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className='graph'><img src='/connected.PNG' alt='임시 이미지'/></div>
+                    )}
                     <div className={`right-page ${isRightPageOpen ? 'open' : 'closed'}`}>
                         <button onClick={toggleRightPage} className='rignt-button'>
                             {isRightPageOpen ? '▶' : '◀'}
@@ -152,10 +160,10 @@ function Detail() {
                 <div>도움말모달</div>
                 <div>그래프 시점 초기화</div>
                 <div>컬러바</div>
-            </div>
-
-
-        </div>
+            </div> 
+           
+   </div>
+        
     );
 }
 export default Detail;
