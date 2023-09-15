@@ -116,5 +116,20 @@
     cursor: pointer;
     width: 180px;
     height: 40px;
-    
+    position: relative; 
+}
+
+.show-info{
+    position: absolute;
+    width: 500px; 
+    max-height: 200px; 
+    background-color: #d8e7f558;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.114); 
+    padding: 10px;
+    overflow-y: auto;
+    border-radius: 10px;
+    z-index: 2; 
+    top: 100%; /* show-button 바로 아래로 위치하도록 설정 */
+    left: 50%; /* 가로 가운데 정렬 */
+    transform: translateX(-50%); /* 수평 가운데 정렬 */
 }

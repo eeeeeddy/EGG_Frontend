@@ -1,15 +1,18 @@
 import './Main.css';
-import React, { useState, onSubmit} from 'react';
+import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Main() {
     const [searchQuery, setSearchQuery] = useState('');
-    // const onSubmit = async () => {
-    //     window.location.href = "/search/" + searchQuery;
-    // };
+    const [isShowInfo, setIsShowInfo] = useState(false); 
     const navigate = useNavigate();
      // useNavigate 훅을 사용하여 네비게이션 함수를 가져옵니다.
+
+     const handleShowButtonClick = () => {
+        setIsShowInfo(!isShowInfo);
+         // 작은 페이지 가시성 상태를 토글
+    };
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
@@ -69,7 +72,17 @@ function Main() {
                 </div>
                 <div className='separator-container'>
                     {/* <div className="separator"> */}
-                        <button className="show-button" type="button">사이트 이용 방법 ▽ </button>
+                        <button className="show-button" type="button" onClick={handleShowButtonClick}>
+                        {isShowInfo ? '사이트 이용 방법 △' : '사이트 이용 방법 ▽'} </button>
+                        {isShowInfo && (
+                            <div className="show-info">
+                                <h5> 사이트 설명서 </h5>
+                                <p>이 곳은 사이트의 설명이 들어갈 자리입니다. 
+                                    아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ
+                                    아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ
+                                    아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ
+                                    아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</p>
+                             </div>)}
                     {/* </div> */}
                 </div>
             </div>
