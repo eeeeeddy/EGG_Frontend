@@ -57,7 +57,7 @@ function Detail() {
 
     const [highlightedText, setHighlightedText] = useState('');
 
-   
+
     return (
         <div>
             <header>
@@ -70,7 +70,7 @@ function Detail() {
                             <h3>Ditto Graph</h3>
                             {/* 미니 검색창 */}
                             <div className='search-container3'>
-                                <img src='/search_icon.png' alr='돋보기 아이콘' className='search-icon' />
+                                <img src='/search_icon.png' alt='돋보기 아이콘' className='search-icon' />
                                 <input className='search-input' type='search'
                                     autoComplete='off' spellCheck="false"
                                     role='combobox' aria-controls='matches'
@@ -91,8 +91,8 @@ function Detail() {
                 <div className='button-container'>
                     <button className='button-bar'>저자<b>·</b>연구기관 관계</button>
                 </div>
-            </div> 
-            
+            </div>
+
             <div className="page-container">
                 <div className="page">
                     <div className={`left-page ${isLeftPageOpen ? 'closed' : 'open'}`}>
@@ -108,7 +108,7 @@ function Detail() {
                                 onChange={(e) => {
                                     setSearchQuery(e.target.value);
                                     setHighlightedText(e.target.value);
-                                  }} />
+                                }} />
                             <button className='leftpage-search-button'>EXPAND</button>
                         </div>
                         <div className='leftpage-box-container'>
@@ -116,21 +116,21 @@ function Detail() {
                                 if (result.article_id) {
                                     const regex = new RegExp(`(${searchQuery})`, 'gi');
                                     const abstractWithHighlight = result.abstract_ko.replace(
-                                    regex,
-                                    (match) => `<span class="highlighted">${match}</span>`
-                                );
+                                        regex,
+                                        (match) => `<span class="highlighted">${match}</span>`
+                                    );
                                     return (
                                         <div className="left-page-box" key={result.article_id}>
-                                        <span dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span>
-                                        <p><b>{result.title_ko}</b><br />
-                                            <span className='left-page-author'>{result.author_name}</span>
-                                            <span className='left-page-year'>{result.pub_year}</span><br />
-                                            <span className='paperbox-p'>{result.abstract_ko}</span></p>
+                                            <span dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span>
+                                            <p><b>{result.title_ko}</b><br />
+                                                <span className='left-page-author'>{result.author_name}</span>
+                                                <span className='left-page-year'>{result.pub_year}</span><br />
+                                                <span className='paperbox-p'>{result.abstract_ko}</span></p>
                                         </div>
                                     );
                                 }
                                 return null;
-                            })} 
+                            })}
                         </div>
                     </div>
                     {isLoading ? (
@@ -140,7 +140,7 @@ function Detail() {
                             </div>
                         </div>
                     ) : (
-                        <div className='graph'><img src='/connected.PNG' alt='임시 이미지'/></div>
+                        <div className='graph'><img src='/connected.PNG' alt='임시 이미지' /></div>
                     )}
                     <div className={`right-page ${isRightPageOpen ? 'open' : 'closed'}`}>
                         <button onClick={toggleRightPage} className='rignt-button'>
@@ -177,10 +177,10 @@ function Detail() {
                 <div>도움말모달</div>
                 <div>그래프 시점 초기화</div>
                 <div>컬러바</div>
-            </div> 
-           
-   </div>
-        
+            </div>
+
+        </div>
+
     );
 }
 export default Detail;

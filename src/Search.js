@@ -68,10 +68,10 @@ function Search() {
 						<h3>Ditto Graph</h3>
 						{/* 미니 검색창 */}
 						<div className='search-container2'>
-							<img src='/search_icon.png' alr='돋보기 아이콘' className='search-icon' />
+							<img src='/search_icon.png' alt='돋보기 아이콘' className='search-icon' />
 
 							<input className='search-input' type='search'
-								autoComplete='off' aria-expanded='false'
+								autoComplete='off'
 								aria-live='polite'
 								placeholder='검색어를 입력하세요'
 								onChange={(e) => setSearchQuery(e.target.value)}

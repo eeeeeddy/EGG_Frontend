@@ -4,10 +4,6 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Collapse } from 'bootstrap';
 
-// function handleClick() {
-//     alert('버튼이 클릭되었습니다!');
-//   }
-
 function Test() {
     const [detailResult, setDetailResult] = useState([]);
     const params = useParams();
