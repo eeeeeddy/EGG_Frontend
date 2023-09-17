@@ -115,17 +115,28 @@ function Detail() {
                             {detailResult.map((result) => {
                                 if (result.article_id) {
                                     const regex = new RegExp(`(${searchQuery})`, 'gi');
+                                    const titleWithHighlight = result.title_ko.replace(
+                                        regex,
+                                        (match) => `<span class="highlighted">${match}</span>`
+                                    );
+                                    const authorWithHighlight = result.author_name.replace(
+                                        regex,
+                                        (match) => `<span class="highlighted">${match}</span>`
+                                    );
+                                    const yearWithHighlight = result.pub_year.toString().replace( // pub_year를 문자열로 변환
+                                    regex,
+                                    (match) => `<span class="highlighted">${match}</span>`
+                                      );
                                     const abstractWithHighlight = result.abstract_ko.replace(
                                         regex,
                                         (match) => `<span class="highlighted">${match}</span>`
                                     );
                                     return (
                                         <div className="left-page-box" key={result.article_id}>
-                                            <span dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span>
-                                            <p><b>{result.title_ko}</b><br />
-                                                <span className='left-page-author'>{result.author_name}</span>
-                                                <span className='left-page-year'>{result.pub_year}</span><br />
-                                                <span className='paperbox-p'>{result.abstract_ko}</span></p>
+                                           <p><b> <span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br/>
+                                                <span className='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span><br />
+                                                <span className='left-page-year' dangerouslySetInnerHTML={{ __html: yearWithHighlight }}></span><br />
+                                                <span className='paperbox-p' dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span></p>
                                         </div>
                                     );
                                 }

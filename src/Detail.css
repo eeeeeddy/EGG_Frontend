@@ -99,8 +99,6 @@
     background-color: white;
     border-right: 2px solid #ccc;
     transform: translateX(-100%);
-    /* margin-bottom: calc(100vh - 2px);  */
-    /* width: 20%; */
 }
 
 .left-page.closed {
