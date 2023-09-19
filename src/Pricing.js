@@ -19,7 +19,7 @@ function Pricing() {
                 <div className="d-flex flex-row justify-content-around mt-5">
                     <div style={{ width: "16em" }}></div> {/* 좌우 여백을 위한 div 태그 */}
                     <div className="">
-                        <div className="card" style={{ width: "18em" }}>
+                        <div className="card" style={{ width: "18em", height: "24em"  }}>
                             <div className="card-body text-center">
                                 <h5 className="card-title">KRW 0</h5>
                                 <h3 className='card-usage'>Free</h3>
@@ -34,7 +34,7 @@ function Pricing() {
                         </div>
                     </div>
                     <div className="a">
-                        <div className="card" style={{ width: "18em" }}>
+                        <div className="card" style={{ width: "18em", height: "24em"  }}>
                             <div className="card-body text-center">
                                 <h5 className="card-title">KRW 5000 / month</h5>
                                 <h3 className='card-usage'>Academic</h3>
@@ -50,7 +50,7 @@ function Pricing() {
                         </div>
                     </div>
                     <div className="a">
-                        <div className="card" style={{ width: "18em" }}>
+                        <div className="card" style={{ width: "18em", height: "24em" }}>
                             <div className="card-body text-center">
                                 <h5 className="card-title">KRW 14000 / month</h5>
                                 <h3 className='card-usage'>Business</h3>

@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './umm/reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // 부트스트랩의 JavaScript 파일을 로드
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
