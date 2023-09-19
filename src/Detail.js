@@ -1,4 +1,4 @@
-import './Detail.css';
+import './css/Detail.css';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -49,7 +49,7 @@ function Test() {
 
                 {/* left-page */}
                 <div className='col-md-2 z-1'>
-                    <div className={`card left-page ${isLeftPageOpen ? 'closed' : 'open'}`} style={{ width: "350px", height: "100%" }}>
+                    <div className={`card leftPage ${isLeftPageOpen ? 'closed' : 'open'}`} style={{ width: "350px", height: "100%" }}>
                         <div className='card-body pt-1'>
                             <div className='d-flex'>
                                 {/* 돋보기 이미지 */}
@@ -75,7 +75,7 @@ function Test() {
                                 </div>
                             </div>
                             {/* 그래프 그려진 논문 리스트 */}
-                            <div className='mt-2'>
+                            <div className='mt-2' >
                                 {detailResult.map((result) => {
                                     if (result.article_id) {
                                         const regex = new RegExp(`(${searchQuery})`, 'gi');
@@ -92,7 +92,7 @@ function Test() {
                                             regex,
                                             (match) => `<span class="highlighted">${match}</span>`);
                                         return (
-                                            <div className="left-page-box" key={result.article_id}>
+                                            <div className="articleList" key={result.article_id}>
                                                 <p><b><span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
                                                     <span className='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span><br />
                                                     <span className='left-page-year' dangerouslySetInnerHTML={{ __html: yearWithHighlight }}></span><br />
@@ -104,7 +104,7 @@ function Test() {
                                 })}
                             </div>
                         </div>
-                        <button className='left-button' onClick={toggleLeftPage}>
+                        <button className='leftButton' onClick={toggleLeftPage}>
                             {isLeftPageOpen ? '◀' : '▶'}
                         </button>
                     </div>

@@ -1,4 +1,4 @@
-.left-page {
+.leftPage {
     background-color: white;
     border-right: 2px solid #ccc;
     padding-top: 5px;
@@ -12,12 +12,23 @@
     transform: translateX(-100%);
 }
 
-.left-page.closed {
+.leftPage.closed {
     transform: translateX(0%);
     /* left-page를 왼쪽으로 이동하여 숨기지만, 다시 열 때 원래 위치로 돌아오도록 transform 초기화 필요 */
 }
 
-.left-button {
+.articleList {
+    font-size: small;
+    border-top: 2px solid #ccc;
+    border-radius: 0px;
+    padding: 5px 15px 5px 15px;
+    margin-bottom: 5px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184);
+    /* 가로 세로 흐림반경 색 투명도*/
+    /* max-width: 300px; */
+}
+
+.leftButton {
     position: absolute;
     top: 9px;
     left: calc(100%);
@@ -36,7 +47,12 @@
     transition: background-color 0.5s ease;
 }
 
-.left-button:hover {
+.leftButton:hover {
     background-color: rgba(021, 115, 071, 1);
     /* 호버 시 배경색 변경 */
+}
+
+.highlighted  {
+    background-color: yellow; /* 원하는 하이라이팅 색상 지정 */
+    font-weight: bold; /* 원하는 스타일 지정 */
 }
