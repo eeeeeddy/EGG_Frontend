@@ -70,10 +70,10 @@ function Pricing() {
 
                 <div className='w-50 mt-5 mx-auto'>
                     <h1>Upgrade to Premium</h1>
-                    <p>Unlock unlimited graphs by joining the Academic or Business plans.</p> <br />
+                    <p>Unlock unlimited graphs by joining the Academic or Business plans.</p> <br/>
                     <p>We support all payment methods including credit/debit cards, PayPal, Alipay, wire transfers and many others. We use automatic renewal but you can cancel the subscription at any time.</p>
                     <p>To learn more, read our announcement blog post.</p>
-                    <br />
+                    <br/>
                     <h3>All plans include</h3>
                     <ul>
                         <li>Connected Papers similarity graphs</li>
@@ -82,6 +82,7 @@ function Pricing() {
                         <li>Saved papers</li>
                         <li>Graph history</li>
                     </ul>
+                    <br/><br/>
                 </div>
             </div>
         </div>
