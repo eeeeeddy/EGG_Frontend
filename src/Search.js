@@ -1,6 +1,6 @@
 import './Search.css';
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import EggNavbar from './Navbar';
 
