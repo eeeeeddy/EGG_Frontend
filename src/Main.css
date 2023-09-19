@@ -1,40 +1,4 @@
-
-.top-menu {
-    display: flex;
-    align-items: center;
-    /* 수직 정렬 */
-    justify-content: space-between;
-    /* 가로 정렬을 설정합니다. Flexbox 컨테이너 내에서 자식 요소들 사이에 공간을 균등하게 분배하여 양 끝에 정렬 */
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
-    /*  가로 이동, 세로 이동, 흐림 효과 반경, 그림자 색을 의미*/
-    position: sticky;
-    top: 0;
-    z-index: 1; 
-}
-.logo-container {
-    display: flex;
-    /* 이미지와 텍스트를 나란히 정렬 */
-    align-items: center;
-    /* 수직 정렬 */
-}
-.logo {
-    width: 60px;
-    height: auto;
-    margin-right: 10px;
-}
-
-/* .menu-links {
-    display: flex;
-    gap: 20px;
-}
-
-.menu-links a {
-    color: #1a0dab;
-    text-decoration: none;
-    font-size: 14px;
-} */
-
-.Main-body {
+.MainBody {
     margin-top: 10%;
     display: flex;
     flex-direction: column;
@@ -44,11 +8,11 @@
     position: relative;
     flex: 1; 
 }
-.Main-body h1 {
+.MainBody h1 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.Main-body h3 {
+.MainBody h3 {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -56,7 +20,7 @@
     display: flex;
     max-width: 100%;
 }
-.search-container {
+.searchInput {
     width: 600px;
     display: flex;
     float: left;
@@ -67,7 +31,7 @@
     align-items: center;
     justify-content: center;
 }
-.search-button {
+.searchButton {
     margin: 4px 8px;
     background-color: #007bffc5;
     color: #fff;
@@ -78,7 +42,7 @@
     height: 47px;
     border-radius: 45px;
 }
-.search-icon {
+.searchIcon {
     margin-top: 2px;
     margin-left: 10px;
     width: 30px;
@@ -95,7 +59,7 @@
     /* 배경색 적용이 안되어 강제적용 */
 }
 
-.separator-container{
+.descript{
     /* position: fixed; */
     margin-top: 3%;
     bottom: 5%;
@@ -104,11 +68,8 @@
     justify-content: center;
     align-items: center;
 }
-.separator {
-    height: 1px;
-    background-color: #ccc;
-}
-.show-button {
+
+.descriptShowButton {
     background-color: transparent ;
     color: #3f3e3e;
     background-color:  #e5e5e584;
@@ -119,7 +80,7 @@
     position: relative; 
 }
 
-.show-info{
+.showDescript{
     position: absolute;
     width: 500px; 
     max-height: 200px; 

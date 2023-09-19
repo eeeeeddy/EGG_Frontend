@@ -4,6 +4,8 @@ import Main from './Main';
 import Search from './Search';
 import React from 'react';
 import Detail from './Detail';
+import About from './About';
+import Pricing from './Pricing';
 // import Test from './Test';
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
                     <Route path="/Detail" element={<Detail />} />
                     <Route path="/search/:searchQuery" element={<Search />} /> 
                     <Route path="/Detail/:article_id" element={<Detail />} />
+                    <Route path="/About" element={<About />} />
+                    <Route path="/Pricing" element={<Pricing />} />
                     {/* <Route path="/Test" element={<Test />} /> */}
                     {/* <Route path="/Test/:article_id" element={<Test />} /> */}
                 </Routes>

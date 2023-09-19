@@ -2,7 +2,7 @@ import './Search.css';
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import EggNavbar from './Navbar';
 
 function Search() {
 	const [searchResult, setSearchResult] = useState([]);
@@ -10,18 +10,6 @@ function Search() {
 	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(true);
 	const [searchQuery, setSearchQuery] = useState('');
-
-	const handleKeyDown = (event) => {
-		if (event.key === 'Enter') {
-			if (searchQuery.trim() === '') {
-				window.alert('검색어를 입력하세요.');
-			} else {
-				console.log('검색어가 입력되었습니다.');
-				navigate(`/search/${encodeURIComponent(searchQuery)}`);
-				// 검색어를 포함하여 Search 페이지로 이동합니다.
-			}
-		}
-	};
 
 	useEffect(() => {
 		// URL 파라미터로부터 검색어를 가져옵니다.
@@ -59,28 +47,10 @@ function Search() {
 	return (
 
 		<div>
-			<header>
-				<div className="top-menu2">
-					<div className="logo-container2">
-						<Link to="/">
-							<img src="/ditto_logo.jpg" alt="로고" className="logo2" />
-						</Link>
-						<h3>Ditto Graph</h3>
-						{/* 미니 검색창 */}
-						<div className='search-container2'>
-							<img src='/search_icon.png' alt='돋보기 아이콘' className='search-icon' />
-
-							<input className='search-input' type='search'
-								autoComplete='off'
-								aria-live='polite'
-								placeholder='검색어를 입력하세요'
-								onChange={(e) => setSearchQuery(e.target.value)}
-								onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
-							/>
-						</div>
-					</div>
-				</div>
-			</header>
+			<div className='App'>
+				<EggNavbar />
+			</div>
+			
 			<div className="paper-container">
 				<div className="paper-text" style={{ float: 'left' }}>
 					<p style={TextStyle}>

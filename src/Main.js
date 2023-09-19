@@ -2,6 +2,7 @@ import './Main.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import EggMainNavbar from './MainNavbar';
 
 function Main() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -34,29 +35,20 @@ function Main() {
     };
 
     return (
-        <div className="Main">
-            <header>
-                <div className="top-menu">
-                    <div className="logo-container">
-                        <img src="/ditto_logo.jpg" alt="로고" className="logo" />
-                        <h3>Ditto Graph</h3>
-                    </div>
-                    {/* <div className="menu-links">
-                        <a href="#">About</a>
-                        <a href="#">Pricing</a>
-                        <a href="https://www.google.co.kr">google</a>
-                        <a href="https://www.naver.com">Naver</a>
-                    </div> */}
-                </div>
-            </header>
-            <div className='Main-body'>
+        <div>
+
+            <div className='Navbar'>
+                <EggMainNavbar />
+            </div>
+
+            <div className='MainBody'>
                 <h1>Explore academic papers in a visual graph</h1><br />
                 <h3>To start, enter a paper identifier</h3><br />
 
                 {/* 검색창 */}
                 <div className='search'>
-                    <div className='search-container'>
-                        <img src='/search_icon2.png' alt='돋보기 아이콘' className='search-icon' />
+                    <div className='searchInput'>
+                        <img src='/search_icon2.png' alt='돋보기 아이콘' className='searchIcon' />
                         <input
                             className='search-input' type='search'
                             autoComplete='off'
@@ -67,17 +59,16 @@ function Main() {
                             onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
                         />
                     </div>
-                    <button className='search-button' type='button' onClick={handleSearchClick}><b>검색</b></button>
+                    <button className='searchButton' type='button' onClick={handleSearchClick}><b>검색</b></button>
                 </div>
-                <div className='separator-container'>
-                    {/* <div className="separator"> */}
-                    <button className="show-button" type="button" onClick={handleShowButtonClick}>
+
+
+                <div className='descript'>
+                    <button className="descriptShowButton" type="button" onClick={handleShowButtonClick}>
                         {isShowInfo ? '사이트 이용 방법 △' : '사이트 이용 방법 ▽'} </button>
                     {isShowInfo && (
-                        <div className="show-info">
-                            <h5> 사이트 설명서 </h5>
-                            <p>이 곳은 사이트의 설명이 들어갈 자리입니다.
-                                아아아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ</p>
+                        <div className="showDescript">
+                            <p style={{textAlign: 'center'}}><h2>사이트 설명</h2></p>
                         </div>)}
                     {/* </div> */}
                 </div>

@@ -2,24 +2,13 @@ import './Detail.css';
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import EggNavbar from './Navbar';
 
 function Detail() {
     const [detailResult, setDetailResult] = useState([]);
     const params = useParams();
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
-
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            if (searchQuery.trim() === '') {
-                window.alert('검색어를 입력하세요.');
-            } else {
-                console.log('검색어가 입력되었습니다.');
-                navigate(`/search/${encodeURIComponent(searchQuery)}`);
-                // 검색어를 포함하여 Search 페이지로 이동합니다.
-            }
-        }
-    };
 
     useEffect(() => {
         const { article_id } = params;
@@ -60,31 +49,10 @@ function Detail() {
 
     return (
         <div>
-            <header>
-                <div className='menu'>
-                    <div className="top-menu3">
-                        <div className="logo-container3">
-                            <Link to="/" rel="noopener noreferrer">
-                                <img src="/ditto_logo.jpg" alt="로고" className="logo3" />
-                            </Link>
-                            <h3>Ditto Graph</h3>
-                            {/* 미니 검색창 */}
-                            <div className='search-container3'>
-                                <img src='/search_icon.png' alt='돋보기 아이콘' className='search-icon' />
-                                <input className='search-input' type='search'
-                                    autoComplete='off' spellCheck="false"
-                                    role='combobox' aria-controls='matches'
-                                    id='search_input' name='search_input'
-                                    placeholder='검색어를 입력하세요'
-                                    aria-expanded='false' aria-live='polite'
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <div className='Navbar'>
+                <EggNavbar />
+            </div>
+
 
             <div className="second-menu">
                 <p>{detailResult.length > 0 ? detailResult[0].title_ko : '논문 제목이 없습니다.'}</p>
@@ -129,7 +97,7 @@ function Detail() {
                                         (match) => `<span class="highlighted">${match}</span>`);
                                     return (
                                         <div className="left-page-box" key={result.article_id}>
-                                           <p><b><span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br/>
+                                            <p><b><span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
                                                 <span className='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span><br />
                                                 <span className='left-page-year' dangerouslySetInnerHTML={{ __html: yearWithHighlight }}></span><br />
                                                 <span className='paperbox-p' dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span></p>
