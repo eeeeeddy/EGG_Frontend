@@ -39,7 +39,7 @@ function SignUp({ email: initialEmail }) {
                 />
             </Form.Group>
 
-            <Form.Group controlId="name">
+            <Form.Group controlId="name" className='mt-2'>
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                     type="text"
@@ -49,7 +49,7 @@ function SignUp({ email: initialEmail }) {
                 />
             </Form.Group>
 
-            <Form.Group controlId="password">
+            <Form.Group controlId="password" className='mt-2'>
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                     type="password"
@@ -60,7 +60,7 @@ function SignUp({ email: initialEmail }) {
                 />
             </Form.Group>
 
-            <Form.Group controlId="confirmPassword">
+            <Form.Group controlId="confirmPassword" className='mt-2'>
                 <Form.Label>Confirm Password</Form.Label>
                 <Form.Control
                     type="password"
@@ -71,9 +71,11 @@ function SignUp({ email: initialEmail }) {
                 />
             </Form.Group>
 
-            <Form.Group controlId="birthDate">
+            <Form.Group controlId="birthDate" className='mt-2'>
                 <Form.Label>Birth Date</Form.Label>
+                <br />
                 <DatePicker
+                    className='form-control'
                     selected={birthDate}
                     onChange={(date) => setBirthDate(date)}
                     dateFormat="MM/dd/yyyy"
@@ -81,7 +83,7 @@ function SignUp({ email: initialEmail }) {
                 />
             </Form.Group>
 
-            <Form.Group controlId="gender">
+            <Form.Group controlId="gender" className='mt-2'>
                 <Form.Label>Gender</Form.Label>
                 <Form.Control
                     as="select"
@@ -94,7 +96,7 @@ function SignUp({ email: initialEmail }) {
                 </Form.Control>
             </Form.Group>
 
-            <Button variant="primary" onClick={handleSignUp}>
+            <Button className='mt-5' variant="primary" onClick={handleSignUp}>
                 Sign Up
             </Button>
         </Form>

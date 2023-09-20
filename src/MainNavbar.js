@@ -8,11 +8,11 @@ function EggNavbar() {
     const [showLoginModal, setShowLoginModal] = useState(false);
 
     const handleLoginClick = () => {
-      setShowLoginModal(true);
+        setShowLoginModal(true);
     };
-  
+
     const handleClose = () => {
-      setShowLoginModal(false);
+        setShowLoginModal(false);
     };
 
     const navigate = useNavigate();
@@ -48,7 +48,7 @@ function EggNavbar() {
             </nav>
             <Modal show={showLoginModal} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Log in <span style={{color:"gray",fontSize:"medium"}}>or</span> Sign up</Modal.Title>
+                    <Modal.Title>Log in <span style={{ color: "gray", fontSize: "medium" }}>or</span> Sign up</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Login />
