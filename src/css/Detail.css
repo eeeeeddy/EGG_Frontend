@@ -1,6 +1,6 @@
 .leftPage {
     background-color: white;
-    border-right: 2px solid #ccc;
+    border-right: 1px solid #ccc;
     padding-top: 5px;
     position: relative;
     flex: 1;
@@ -19,12 +19,12 @@
 
 .articleList {
     font-size: small;
-    border-top: 2px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     border-radius: 0px;
     padding: 5px 15px 5px 15px;
     margin-bottom: 5px;
-    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184); /* 가로 세로 흐림반경 색 투명도*/
-    
+    /* box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184);  */ /* 가로 세로 흐림반경 색 투명도*/
 }
 
 .leftButton {
@@ -67,4 +67,14 @@
     justify-content: center;
     align-items: center;
     transition: background-color 0.5s ease;
+}
+
+#helpModal {
+    width: 300px;
+    height: 220px;
+    bottom: 100%;
+    left: 0;
+    transform: translate(0, -5%); /* 도움말 모달 위치가 버튼과 얼마나 떨어져있는지 조정하는 요소 */
+    font-size: small;
+    overflow: auto;
 }

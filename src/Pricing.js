@@ -27,8 +27,8 @@ function Pricing() {
                                 <a href="/" className="btn btn-success rounded-pill">Sign Up</a>
                                 <p className="card-text mt-3">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 <ul>
-                                    <li>5 graphs per month</li>
-                                    <li>All features included</li>
+                                    <li className='text-start'>5 graphs per month</li>
+                                    <li className='text-start'>All features included</li>
                                 </ul>
                             </div>
                         </div>
@@ -42,9 +42,9 @@ function Pricing() {
                                 <a href="/" className="btn btn-success rounded-pill">Sign Up</a> <br />
                                 <p className="card-text mt-3">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 <ul>
-                                    <li>Unlimited graphs</li>
-                                    <li>All features included</li>
-                                    <li>For academics, non-profits and personal use</li>
+                                    <li className='text-start'>Unlimited graphs</li>
+                                    <li className='text-start'>All features included</li>
+                                    <li className='text-start'>For academics, non-profits and personal use</li>
                                 </ul>
                             </div>
                         </div>
@@ -58,9 +58,9 @@ function Pricing() {
                                 <a href="/" className="btn btn-success rounded-pill">Sign Up</a> <br />
                                 <p className="card-text mt-3">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 <ul>
-                                    <li>Unlimited graphs</li>
-                                    <li>All features included</li>
-                                    <li>For business and industry</li>
+                                    <li className='text-start'>Unlimited graphs</li>
+                                    <li className='text-start'>All features included</li>
+                                    <li className='text-start'>For business and industry</li>
                                 </ul>
                             </div>
                         </div>
