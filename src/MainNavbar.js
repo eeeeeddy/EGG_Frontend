@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
-import { Navbar, Nav, Modal, Button} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { Navbar, Nav, Modal } from 'react-bootstrap';
 import Login from './Login';
 
-function EggMainNavbar() {
+function EggNavbar() {
     const [showLoginModal, setShowLoginModal] = useState(false);
 
     const handleLoginClick = () => {
@@ -14,6 +15,10 @@ function EggMainNavbar() {
       setShowLoginModal(false);
     };
 
+    const navigate = useNavigate();
+
+    ;
+
     return (
         <div>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -22,10 +27,14 @@ function EggMainNavbar() {
                         <img src="/ditto_logo.jpg" alt="" width="32" height="32" class="d-inline-block align-text-top" />
                     </a>
                     <a class="navbar-brand" href="/">EGG</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                             <Nav>
-                                <Nav.Link style={{ color: 'black' }} href="/About">About</Nav.Link>
-                                <Nav.Link style={{ color: 'black' }} href="/Pricing">Pricing</Nav.Link>
+                                {/* <Nav.Link style={{ color: 'black' }} href="/About">About</Nav.Link>
+                                <Nav.Link style={{ color: 'black' }} href="/Pricing">Pricing</Nav.Link> */}
                                 <Nav.Link style={{ color: 'black' }} onClick={handleLoginClick} >
                                     <svg width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                                         <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
@@ -34,24 +43,19 @@ function EggMainNavbar() {
                                 </Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
+                    </div>
                 </div>
             </nav>
             <Modal show={showLoginModal} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Login</Modal.Title>
+                    <Modal.Title>Log in <span style={{color:"gray",fontSize:"medium"}}>or</span> Sign up</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Login />
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary">Login</Button>
-                </Modal.Footer>
             </Modal>
         </div>
     );
 }
 
-export default EggMainNavbar;
+export default EggNavbar;

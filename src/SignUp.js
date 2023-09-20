@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-function SignUp() {
-  const [email, setEmail] = useState('');
+function SignUp({ email: initialEmail }) {
+  const [email, setEmail] = useState(initialEmail);
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [birthDate, setBirthDate] = useState(null);
   const [gender, setGender] = useState('');
+
+  useEffect(() => {
+    // 이메일 prop이 변경될 때마다 이메일 입력란에 값을 설정
+    if (initialEmail) {
+      setEmail(initialEmail); // 초기 이메일 값을 설정할 때도 상태 변수 이름 사용
+    }
+  }, [initialEmail]);
 
   const handleSignUp = () => {
     // 회원가입 로직을 여기에 추가하세요
@@ -27,10 +34,8 @@ function SignUp() {
         <Form.Label>Email</Form.Label>
         <Form.Control
           type="email"
-          placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         />
       </Form.Group>
 
@@ -38,7 +43,7 @@ function SignUp() {
         <Form.Label>Name</Form.Label>
         <Form.Control
           type="text"
-          placeholder="Enter name"
+          placeholder="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -48,7 +53,7 @@ function SignUp() {
         <Form.Label>Password</Form.Label>
         <Form.Control
           type="password"
-          placeholder="Enter password"
+          placeholder="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required

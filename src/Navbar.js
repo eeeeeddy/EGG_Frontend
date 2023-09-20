@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Navbar, Nav, Modal, Button} from 'react-bootstrap';
+import { Navbar, Nav, Modal } from 'react-bootstrap';
 import Login from './Login';
 
 function EggNavbar() {
