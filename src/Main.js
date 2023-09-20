@@ -68,7 +68,7 @@ function Main() {
                         {isShowInfo ? '사이트 이용 방법 △' : '사이트 이용 방법 ▽'} </button>
                     {isShowInfo && (
                         <div className="showDescript">
-                            <p style={{textAlign: 'center'}}><h2>사이트 설명</h2></p>
+                            <p style={{textAlign: 'center'}}>카테고리 | 사용 설명서 (버튼 2개로 나누기)</p>
                         </div>)}
                     {/* </div> */}
                 </div>
