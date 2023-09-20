@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
+import SignUp from './SingUp';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -89,8 +90,7 @@ function Login() {
               <div>
                 <br />
                 <p style={{ color: 'red' }}>Invalid email. Please sign up.</p>
-                {/* 여기에 회원가입 양식 컴포넌트를 추가하세요 */}
-                {/* 회원가입 양식 컴포넌트는 여기에 추가하세요 */}
+                <SignUp />
               </div>
             ) : (
               // 회원가입 양식을 보이지 않을 경우
