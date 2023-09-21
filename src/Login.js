@@ -2,50 +2,66 @@
 import React, { useState } from 'react';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import SignUp from './SignUp';
+import axios from 'axios';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isEmailValid, setIsEmailValid] = useState(false);
-    const [isRegistering, setIsRegistering] = useState(false);
+    const [isEmailValid, setIsEmailValid] = useState('');
+    const [isRegistering, setIsRegistering] = useState('');
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
 
-    const handleContinueClick = () => {
-        // 이메일이 회원 목록에 있는지 확인 (시뮬레이션)
-        const isEmailRegistered = checkEmailInServer(email);
-
-        if (isEmailRegistered) {
-            setIsEmailValid(true); // 이메일이 유효하면 상태를 true로 설정
-        } else {
-            setIsRegistering(true); // 회원가입 양식을 보여줌
+    const handleContinueClick = async () => {
+        try {
+            // 이메일이 서버에 있는지 확인
+            const response = await axios.get(`/users/checkEmail?email=${email}`);
+            console.log(response)
+            if (response.data.result.exists == true) {
+                setIsEmailValid(true); // 이메일이 유효하면 상태를 true로 설정
+                setIsRegistering(false); // 이미 등록된 이메일이므로 회원가입 화면이 아닌 로그인 화면을 보여줌
+            } else {
+                setIsEmailValid(false); // 이메일이 유효하지 않으면 상태를 false로 설정
+                setIsRegistering(true); // 회원가입 양식을 보여줌
+            }
+        } catch (error) {
+            console.error('Error checking email', error);
         }
     };
-
-    const checkEmailInServer = (email) => {
-        // 이 부분에서 서버와 통신하여 이메일 확인 (시뮬레이션)
-        return false; // 가상으로 true 반환 (시뮬레이션)
-    };
-
+    
+    
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
 
-    const handleLoginClick = () => {
-        // 패스워드를 사용하여 로그인
-        console.log('Login in with email:', email, 'password:', password);
+    const handleLoginClick = async () => {
+        try {
+            // 서버로 로그인 요청을 보냄
+            const response = await axios.post('/users/login', {
+                email,
+                password,
+            });
 
-        // 이후 로그인 성공 또는 실패 처리를 진행할 수 있습니다.
-    };
+            // 로그인이 성공하면 토큰을 받아올 수 있음
+            const token = response.data;
 
-    const handleEmailKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault(); // Enter 키의 기본 동작(새 줄 추가)을 방지합니다.
-            handleContinueClick(); // "Continue with Email" 버튼을 클릭합니다.
+            // 이후 토큰을 사용하여 로그인 상태를 관리하거나 보호된 리소스에 접근 가능
+            console.log('Login successful. Token:', token);
+
+            // 로그인 후의 추가 작업을 수행하거나 리디렉션을 할 수 있음
+        } catch (error) {
+            console.error('Error logging in', error);
         }
     };
+
+    // const handleEmailKeyPress = (e) => {
+    //     if (e.key === 'Enter') {
+    //         e.preventDefault(); // Enter 키의 기본 동작(새 줄 추가)을 방지합니다.
+    //         handleContinueClick(); // "Continue with Email" 버튼을 클릭합니다.
+    //     }
+    // };
 
     return (
         <Container className="panel">
@@ -58,7 +74,6 @@ function Login() {
                                 type="email"
                                 placeholder="E-mail"
                                 onChange={handleEmailChange}
-                                onKeyPress={handleEmailKeyPress} // Enter 키 핸들링 추가
                                 value={email}
                             />
                         </Col>
