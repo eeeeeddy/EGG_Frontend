@@ -20,10 +20,8 @@
 .articleList {
     font-size: small;
     border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
     border-radius: 0px;
     padding: 5px 15px 5px 15px;
-    margin-bottom: 5px;
     /* 가로 세로 흐림반경 색 투명도*/
     /* box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184);  */
 }
@@ -82,4 +80,32 @@
     transform: translate(0, -5%);
     font-size: small;
     overflow: auto;
+}
+
+/* 그래프와 노드 정보를 감싸는 컨테이너 스타일 */
+.svg-container {
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+/* 그래프 영역 스타일 (2:1 비율) */
+.graph {
+    flex: 4; /* 그래프 영역이 전체 너비의 2/3을 차지하도록 설정 */
+    display: flex; /* 그래프 영역 내부에서도 flex를 사용하여 가운데 정렬 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    width: 100%; /* 그래프 영역이 부모 요소의 100% 너비를 차지하도록 설정 */
+    height: 100%; /* 그래프 영역이 부모 요소의 100% 높이를 차지하도록 설정 */
+    overflow: hidden; /* 그래프 영역을 벗어나는 내용 숨김 */
+}
+
+ /* 노드 정보 영역 스타일 (2:1 비율) */
+.node-info {
+    flex: 1; /* 노드 정보 영역이 전체 너비의 1/3을 차지하도록 설정 */
+    padding: 20px; /* 여백을 추가하거나 조절하세요 */
+    border-left: 1px solid #ccc; /* 그래프 영역과 구분하기 위한 왼쪽 경계선 추가 */
+    background-color: #f5f5f5; /* 노드 정보 영역 배경색 설정 */
+    overflow-y: auto; /* 노드 정보가 넘칠 경우 스크롤바 추가 */
+    height: 100%;
 }

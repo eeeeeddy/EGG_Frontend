@@ -1,8 +1,10 @@
 import './css/Detail.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import EggNavbar from './Navbar';
+import * as d3 from 'd3';
+import data from './data.json';
 
 function Test() {
     const [detailResult, setDetailResult] = useState([]);
@@ -12,6 +14,11 @@ function Test() {
     const [highlightedText, setHighlightedText] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isShowHelp, setIsShowHelp] = useState(false);
+    const svgRef = useRef(null);
+    const [selectedNode, setSelectedNode] = useState(null); // 선택한 노드 정보를 저장할 상태 변수
+    const initialScale = 1; // 초기 스크롤 배율
+    const graphData = data; // graph JSON 데이터
+    const nodes = graphData.nodes;
 
     useEffect(() => {
         const { article_id } = params;
@@ -47,6 +54,108 @@ function Test() {
     // const clickCenter = () => {
     //     클릭 시 그래프 배율 초기화 (그래프 그린 후에 동작 기능 추가하기)
     // }
+
+    // graph 생성
+    useEffect(() => {
+        const width = 1000;
+        const height = 750;
+
+        // SVG 요소 초기화
+        const svg = d3.select(svgRef.current)
+            .attr('width', width)
+            .attr('height', height)
+            .call(d3.zoom().on('zoom', zoomed)); // 줌 이벤트 핸들러 추가
+
+        // SVG 영역에 테두리 추가
+        svg.append('rect')
+            .attr('width', width)
+            .attr('height', height)
+            .style('fill', 'none')
+            .style('stroke', 'black')
+            .style('stroke-width', 0);
+
+        // JSON 데이터 로드
+        // const graphData = data;
+
+        const simulation = d3.forceSimulation(graphData.nodes)
+            .force('link', d3.forceLink(graphData.links).distance(d => d.distance))
+            .force('charge', d3.forceManyBody().strength(-300))
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force('collide', d3.forceCollide().radius(20));
+
+        const link = svg.selectAll('.link')
+            .data(graphData.links)
+            .enter().append('line')
+            .attr('class', 'link')
+            .style('stroke', 'black')  // 간선 색상
+            .style('stroke-width', 1); // 간선 두께
+
+        const node = svg.selectAll('.node')
+            .data(graphData.nodes)
+            .enter().append('circle')
+            .attr('class', 'node')
+            .attr('r', d => d.size)
+            .style('fill', d => 'lightgrey'); // 노드 색상
+
+        const label = svg.selectAll('.label')
+            .data(graphData.nodes)
+            .enter().append('text')
+            .attr('class', 'label')
+            .attr('text-anchor', 'middle')
+            .attr('dy', -5) // 이 부분을 음수 값으로 설정하여 텍스트를 상단으로 올릴 수 있음
+            .text(d => (d.author_name + ", " + d.pub_year));
+
+        // 노드 위에 마우스를 올렸을 때 hover 효과 및 노드 정보 표시
+        node.on('mouseover', (event, d) => {
+            setSelectedNode(d);
+            d3.select(event.currentTarget)
+                .attr('r', d.size + 5) // 노드 크기를 키워 hover 효과 표시
+                .style('fill', 'rgba(0, 127, 0, 0.5)') // 색상 및 투명도(0.5)
+                .style('stroke', 'gray') // 노드 테두리 색상
+                .style('stroke-width', 2); // 노드 테두리 두께
+        });
+
+        node.on('mouseout', (event, d) => {
+            setSelectedNode(null);
+            d3.select(event.currentTarget)
+                .attr('r', d.size) // 노드 크기 원래대로 복원
+                .style('fill', 'lightgrey') // 색상 원래대로 복원
+                .style('stroke-width', 0);
+        });
+
+        simulation.on('tick', () => {
+            link
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+
+            node
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y);
+
+            label
+                .attr('x', d => d.x)
+                .attr('y', d => d.y);
+        });
+
+        // 줌 이벤트 핸들러
+        function zoomed(event) {
+            const { transform } = event;
+            svg.attr('transform', transform); // 현재 변환을 SVG에 적용
+
+            // 현재 줌 레벨 가져오기
+            const currentScale = transform.k;
+
+            // 배율을 통해 원하는 작업을 수행할 수 있습니다.
+            // 예: 노드와 연결된 요소 크기 조정
+            node.attr('r', d => d.size / currentScale);
+            label.attr('font-size', 10 / currentScale);
+        }
+
+        // 초기 배율 설정
+        svg.call(d3.zoom().transform, d3.zoomIdentity.scale(initialScale));
+    }, []);
 
     return (
         <div>
@@ -85,7 +194,7 @@ function Test() {
                             </div>
                             {/* 그래프 그려진 논문 리스트 */}
                             <div className='mt-2' >
-                                {detailResult.map((result) => {
+                                {/* {detailResult.map((result) => {
                                     if (result.article_id) {
                                         const regex = new RegExp(`(${searchQuery})`, 'gi');
                                         const titleWithHighlight = result.title_ko.replace(
@@ -112,7 +221,36 @@ function Test() {
                                         );
                                     }
                                     return null;
-                                })}
+                                })} */}
+                                {
+                                    nodes.map((node) => {
+                                        if (node.article_id) {
+                                            const regex = new RegExp(`(${searchQuery})`, 'gi');
+                                            const titleWithHighlight = node.title_ko.replace(
+                                                regex,
+                                                (match) => `<span class="highlighted">${match}</span>`);
+                                            const authorWithHighlight = node.author_name.replace(
+                                                regex,
+                                                (match) => `<span class="highlighted">${match}</span>`);
+                                            const yearWithHighlight = node.pub_year.toString().replace(
+                                                regex,
+                                                (match) => `<span class="highlighted">${match}</span>`);
+                                            const abstractWithHighlight = node.abstract_ko.replace(
+                                                regex,
+                                                (match) => `<span class="highlighted">${match}</span>`);
+                                            return (
+                                                <div className="articleList" key={node.article_id}>
+                                                    <p className='mt-3'>
+                                                        <b><span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
+                                                        <span className='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span><br />
+                                                        <span className='left-page-year' dangerouslySetInnerHTML={{ __html: yearWithHighlight }}></span><br />
+                                                        <span className='paperbox-p' dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span>
+                                                    </p>
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    })}
                             </div>
                         </div>
                         <button className='leftButton' onClick={toggleLeftPage}>
@@ -154,13 +292,27 @@ function Test() {
 
                 {/* graph-section */}
                 <div className='col-md-7 z-0'>
-                    <img src='/connected.PNG' alt="no" />
+                    <div className="svg-container">
+                        <div className='graph'>
+                            <svg ref={svgRef}></svg>
+                        </div>
+                    </div>
                 </div>
 
                 {/* right-section */}
                 <div className='col-md-3 z-0 mt-4 bg-white'>
                     <div className="d-flex justify-content-center border-start">
-                        {detailResult.map((result) => {
+                        {selectedNode && (
+                            <div className='' style={{ width: '420px' }}>
+                                <h5 style={{ textAlign: 'left' }}><strong>{selectedNode.title_ko}</strong></h5>
+                                <p style={{ textAlign: 'left' }}>{selectedNode.author}</p>
+                                <p style={{ textAlign: 'left' }}>{selectedNode.pub_year} {selectedNode.journal_name}</p>
+                                <p style={{ textAlign: 'left' }}>{selectedNode.citation} citation</p>
+                                <p style={{ textAlign: 'left' }}>{selectedNode.abstract_ko}</p>
+                                {/* 다른 노드 정보 필드를 추가할 수 있음 */}
+                            </div>
+                        )}
+                        {/* {detailResult.map((result) => {
                             if (result.article_id) {
                                 return (
                                     <div className="" key={result.article_id} style={{ width: '420px' }}>
@@ -175,7 +327,7 @@ function Test() {
                                 );
                             }
                             return ''; // 나머지는 표시하지 않음
-                        })}
+                        })} */}
                     </div>
                 </div>
             </div>
