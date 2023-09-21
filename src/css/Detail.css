@@ -24,12 +24,13 @@
     border-radius: 0px;
     padding: 5px 15px 5px 15px;
     margin-bottom: 5px;
-    /* box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184);  */ /* 가로 세로 흐림반경 색 투명도*/
+    /* 가로 세로 흐림반경 색 투명도*/
+    /* box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184);  */
 }
 
 .leftButton {
     position: absolute;
-    top: 9px;
+    top: 70px;
     left: calc(100%);
     width: 30px;
     height: 70px;
@@ -47,12 +48,15 @@
 }
 
 .leftButton:hover {
-    background-color: rgba(021, 115, 071, 1); /* 호버 시 배경색 변경 */
+    /* 호버 시 배경색 변경 */
+    background-color: rgba(021, 115, 071, 1);
 }
 
-.highlighted  {
-    background-color: yellow; /* 원하는 하이라이팅 색상 지정 */
-    font-weight: bold; /* 원하는 스타일 지정 */
+.highlighted {
+    /* 원하는 하이라이팅 색상 지정 */
+    background-color: yellow;
+    /* 원하는 스타일 지정 */
+    font-weight: bold;
 }
 
 .bottomButtonGroup {
@@ -74,7 +78,8 @@
     height: 220px;
     bottom: 100%;
     left: 0;
-    transform: translate(0, -5%); /* 도움말 모달 위치가 버튼과 얼마나 떨어져있는지 조정하는 요소 */
+    /* 도움말 모달 위치가 버튼과 얼마나 떨어져있는지 조정하는 요소 */
+    transform: translate(0, -5%);
     font-size: small;
     overflow: auto;
 }
