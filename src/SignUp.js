@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Col, Row, InputGroup, FormControl } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
+import { ko } from "date-fns/esm/locale";
 import 'react-datepicker/dist/react-datepicker.css';
 
 function SignUp({ email: initialEmail }) {
@@ -8,7 +9,9 @@ function SignUp({ email: initialEmail }) {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [birthDate, setBirthDate] = useState(null);
+    const [birthYear, setBirthYear] = useState(null);
+    const [birthMonth, setBirthMonth] = useState(null);
+    const [birthDay, setBirthDay] = useState(null);
     const [gender, setGender] = useState('');
 
     useEffect(() => {
@@ -24,9 +27,13 @@ function SignUp({ email: initialEmail }) {
         console.log('Name:', name);
         console.log('Password:', password);
         console.log('Confirm Password:', confirmPassword);
-        console.log('Birth Date:', birthDate);
+        console.log('Birth Year:', birthYear);
+        console.log('Birth Month:', birthMonth);
+        console.log('Birth Day:', birthDay);
         console.log('Gender:', gender);
     };
+
+
 
     return (
         <Form>
@@ -43,7 +50,6 @@ function SignUp({ email: initialEmail }) {
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                     type="text"
-                    placeholder="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
@@ -53,7 +59,6 @@ function SignUp({ email: initialEmail }) {
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                     type="password"
-                    placeholder="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -64,36 +69,81 @@ function SignUp({ email: initialEmail }) {
                 <Form.Label>Confirm Password</Form.Label>
                 <Form.Control
                     type="password"
-                    placeholder="Confirm password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                 />
             </Form.Group>
 
-            <Form.Group controlId="birthDate" className='mt-2'>
-                <Form.Label>Birth Date</Form.Label>
-                <br />
-                <DatePicker
-                    className='form-control'
-                    selected={birthDate}
-                    onChange={(date) => setBirthDate(date)}
-                    dateFormat="MM/dd/yyyy"
-                    placeholderText="Select birth date"
-                />
+
+            <Form.Group controlId="birthDate" className="mt-2">
+                <Form.Label>Birth Day</Form.Label>
+                <Row>
+                    <Col>
+                        <InputGroup>
+                        <DatePicker
+                                className="form-control"
+                                selected={birthYear}
+                                onChange={(date) => setBirthYear(date)}
+                                dateFormat="yyyy"
+                                showYearDropdown
+                                minDate={new Date('1950-01-01')} // 최소 년도 (1950년)
+                                maxDate={new Date()} // 최대 년도 (현재 연도까지)
+                                placeholderText="Year"
+                            />
+                        </InputGroup>
+                    </Col>
+                    <Col>
+                        <InputGroup>
+                            <DatePicker
+                                className="form-control"
+                                selected={birthMonth}
+                                onChange={(date) => setBirthMonth(date)}
+                                dateFormat="MM"                                
+                                placeholderText="Month"
+                                calendarOnly 
+                            />
+                        </InputGroup>
+                    </Col>
+                    <Col>
+                        <InputGroup>
+                            <DatePicker
+                                className="form-control"
+                                selected={birthDay}
+                                onChange={(date) => setBirthDay(date)}
+                                dateFormat="dd"
+                                placeholderText="Day"
+                                calendarOnly 
+                            />
+                        </InputGroup>
+                    </Col>
+                </Row>
             </Form.Group>
 
             <Form.Group controlId="gender" className='mt-2'>
                 <Form.Label>Gender</Form.Label>
-                <Form.Control
-                    as="select"
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                >
-                    <option value="">Select gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                </Form.Control>
+                <Row>
+                    <Col>
+                        <Form.Check
+                            type="radio"
+                            label="Male"
+                            name="gender"
+                            value="male"
+                            checked={gender === 'male'}
+                            onChange={() => setGender('male')}
+                        />
+                    </Col>
+                    <Col>
+                        <Form.Check
+                            type="radio"
+                            label="Female"
+                            name="gender"
+                            value="female"
+                            checked={gender === 'female'}
+                            onChange={() => setGender('female')}
+                        />
+                    </Col>
+                </Row>
             </Form.Group>
 
             <Button className='mt-5' variant="primary" onClick={handleSignUp}>
