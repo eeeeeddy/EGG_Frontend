@@ -1,22 +1,30 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Navbar, Nav, Modal, Dropdown  } from 'react-bootstrap';
+import { Navbar, Nav, Modal, Dropdown,Form, Row, Col, Container, Button } from 'react-bootstrap';
 import Login from './Login';
+import SignUp from './SignUp';
+import axios from 'axios';
 
 function EggNavbar() {
+    const [searchQuery, setSearchQuery] = useState('');    
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false); // 로그인 상태를 나타내는 state 추가
     const [userEmail, setUserEmail] = useState(''); // 사용자 이메일을 저장할 state 추가
-    // const [isLoggedIn, setIsLoggedIn] = useState(false); // Add this state
+    const [isEmailValid, setIsEmailValid] = useState('');
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [loginError, setLoginError] = useState('');
+    const [email, setEmail] = useState('');
+    const [showEmailInput, setShowEmailInput] = useState(true);
 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleLoginClick = () => {
-      setShowLoginModal(true);
+        setShowEmailInput(false); // 로그인 버튼을 클릭하면 이메일 입력 란을 숨김
+        setShowLoginModal(true);
     };
-  
+
     const handleClose = () => {
       setShowLoginModal(false);
     };
@@ -34,8 +42,6 @@ function EggNavbar() {
         setLoggedIn(false); // 로그인 상태를 false로 설정
     };
 
-    const [searchQuery, setSearchQuery] = useState('');
-
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             if (searchQuery.trim() === '') {
@@ -45,6 +51,35 @@ function EggNavbar() {
                 navigate(`/search/${encodeURIComponent(searchQuery)}`);
                 // 검색어를 포함하여 Search 페이지로 이동합니다.
             }
+        }
+    };
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    };
+    const handleContinueClick = async () => {
+        try {
+            // 이메일이 서버에 있는지 확인
+            const response = await axios.get(`/users/checkEmail?email=${email}`);
+            console.log(response)
+            if (response.data.result.exists == true) {
+                setIsEmailValid(true); 
+                setIsRegistering(false); // 이미 등록된 이메일이므로 회원가입 화면이 아닌 로그인 화면을 보여줌
+                setLoginError(''); 
+            } else {
+                setIsEmailValid(false); 
+                setIsRegistering(true); // 회원가입 양식을 보여줌
+                setLoginError(''); 
+            }
+        } catch (error) {
+            console.error('Error checking email', error);
+            setLoginError('Error checking email'); // 오류 메시지 설정
+        }
+    };
+    const handleEmailKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Enter 키의 기본 동작(새 줄 추가)을 방지합니다.
+            handleContinueClick(); // "Continue with Email" 버튼을 클릭합니다.
         }
     };
 
@@ -81,10 +116,10 @@ function EggNavbar() {
                                     <Dropdown.Menu>
                                         {loggedIn ? (
                                             <>
-                                                <Dropdown.Item disabled>{userEmail}</Dropdown.Item>
-                                                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-                                                <Dropdown.Item>Save</Dropdown.Item>
-                                                <Dropdown.Item>History</Dropdown.Item>
+                                            <Dropdown.Item disabled>{userEmail}</Dropdown.Item>
+                                            <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                                            <Dropdown.Item>Save</Dropdown.Item>
+                                            <Dropdown.Item>History</Dropdown.Item>
                                             </>
                                         ) : (
                                             <Dropdown.Item onClick={handleLoginClick}>Log in</Dropdown.Item>
@@ -101,7 +136,56 @@ function EggNavbar() {
                     <Modal.Title>Log in <span style={{color:"gray",fontSize:"medium"}}>or</span> Sign up</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                <Login onLoginSuccess={handleLoginSuccess} />
+                    <Container className="panel">
+                        <Form>
+                        <br />
+                        {!isRegistering  ? (  //회원가입 양식이 아닐 때만 이메일 입력란을 표시
+                            <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail" style={{ display: isEmailValid ? 'none' : 'block' }}>
+                                <Col sm>
+                                    <Form.Control
+                                        type="email"
+                                        placeholder="E-mail"
+                                        onChange={handleEmailChange}
+                                        onKeyDown={handleEmailKeyPress}
+                                        value={email}
+                                    />
+                                </Col>
+                                </Form.Group>
+                        ) : null}
+                        </Form>
+                        {isEmailValid ? (
+                            <div>
+                                <Login email={email} onLoginSuccess={handleLoginSuccess} />
+                            </div>
+                        ) : (
+                            <div>
+                                {isRegistering ? (
+                                // 회원가입 양식을 보여줄 경우
+                                <div>
+                                    <p style={{ color: 'gray' }}>
+                                        This email is not registered.<br />
+                                        Please proceed with membership registration.
+                                    </p>
+                                    <SignUp email={email} /> {/* 이메일 prop 전달 */}
+                                </div>
+                                ) : (
+                                    <div>
+                                    <br />
+                                        <div className="d-grid gap-1">
+                                            <Button
+                                                variant="secondary"
+                                                type="button"
+                                                onClick={handleContinueClick}
+                                                onKeyDown={handleEmailKeyPress}
+                                            >   
+                                                Continue with Email
+                                            </Button>
+                                        </div>
+                                    </div>
+                                    )}
+                            </div>
+                            )}
+                    </Container>
                 </Modal.Body>
             </Modal>
         </div>

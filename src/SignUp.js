@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
 
-function SignUp({ email: initialEmail }) {
+function SignUp({ email: initialEmail  }) {
     const [email, setEmail] = useState(initialEmail);
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');

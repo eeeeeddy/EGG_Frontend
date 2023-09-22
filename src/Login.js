@@ -1,40 +1,16 @@
-// Login.js
 import React, { useState } from 'react';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
-import SignUp from './SignUp';
 import axios from 'axios';
 
 function Login(props) {
-    const [email, setEmail] = useState('');
+    const { email: initialEmail } = props; 
+    const [email, setEmail] = useState(props.email || '');
     const [password, setPassword] = useState('');
-    const [isEmailValid, setIsEmailValid] = useState('');
-    const [isRegistering, setIsRegistering] = useState('');
     const [loginError, setLoginError] = useState('');
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
-
-    const handleContinueClick = async () => {
-        try {
-            // 이메일이 서버에 있는지 확인
-            const response = await axios.get(`/users/checkEmail?email=${email}`);
-            console.log(response)
-            if (response.data.result.exists == true) {
-                setIsEmailValid(true); 
-                setIsRegistering(false); // 이미 등록된 이메일이므로 회원가입 화면이 아닌 로그인 화면을 보여줌
-                setLoginError(''); 
-            } else {
-                setIsEmailValid(false); 
-                setIsRegistering(true); // 회원가입 양식을 보여줌
-                setLoginError(''); 
-            }
-        } catch (error) {
-            console.error('Error checking email', error);
-            setLoginError('Error checking email'); // 오류 메시지 설정
-        }
-    };
-    
     
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
@@ -69,15 +45,12 @@ function Login(props) {
     const handleEmailKeyPress = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault(); // Enter 키의 기본 동작(새 줄 추가)을 방지합니다.
-            handleContinueClick(); // "Continue with Email" 버튼을 클릭합니다.
         }
     };
 
     return (
         <Container className="panel">
             <Form>
-                <br />
-                {!isRegistering ? ( // 회원가입 양식이 아닐 때만 이메일 입력란을 표시
                     <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                         <Col sm>
                             <Form.Control
@@ -89,8 +62,6 @@ function Login(props) {
                             />
                         </Col>
                     </Form.Group>
-                ) : null}
-                {isEmailValid ? (
                     <div>
                         <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
                             <Col sm>
@@ -115,34 +86,6 @@ function Login(props) {
                         </div>
                         {loginError && <p style={{ color: 'red'}}>{loginError}</p>}
                     </div>
-                ) : (
-                    <div>
-                        {isRegistering ? (
-                            // 회원가입 양식을 보여줄 경우
-                            <div>
-                                <p style={{ color: 'gray' }}>
-                                    This email is not registered.<br />
-                                    Please proceed with membership registration.
-                                </p>
-                                <SignUp email={email} /> {/* 이메일 prop 전달 */}
-                            </div>
-                        ) : (
-                            <div>
-                                <br />
-                                <div className="d-grid gap-1">
-                                    <Button
-                                        variant="secondary"
-                                        type="button"
-                                        onClick={handleContinueClick}
-                                        onKeyDown={handleEmailKeyPress}
-                                    >
-                                        Continue with Email
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                )}
             </Form>
         </Container>
     );
