@@ -20,20 +20,20 @@ function Test() {
     const graphData = data; // graph JSON 데이터
     const nodes = graphData.nodes;
 
-    useEffect(() => {
-        const { article_id } = params;
+    // useEffect(() => {
+    //     const { article_id } = params;
 
-        // Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
-        axios.get(`/search/${article_id}`)
-            .then((response) => {
-                // API 응답으로 받은 데이터를 검색 결과로 설정합니다.
-                setDetailResult([response.data]);
-                // console.log(response.data);
-            })
-            .catch((error) => {
-                console.error('API 요청 중 오류 발생:', error);
-            });
-    }, [setDetailResult, params]);
+    //     // Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
+    //     axios.get(`/search/${article_id}`)
+    //         .then((response) => {
+    //             // API 응답으로 받은 데이터를 검색 결과로 설정합니다.
+    //             setDetailResult([response.data]);
+    //             // console.log(response.data);
+    //         })
+    //         .catch((error) => {
+    //             console.error('API 요청 중 오류 발생:', error);
+    //         });
+    // }, [setDetailResult, params]);
 
     useEffect(() => {
         // detailResult 데이터가 로드되면 isLoading을 false로 설정
@@ -167,8 +167,8 @@ function Test() {
 
                 {/* left-page */}
                 <div className='col-md-2 z-1 mt-4'>
-                    <div className={`leftPage ${isLeftPageOpen ? 'closed' : 'open'}`} style={{ width: "400px", height: "100%" }}>
-                        <div className='pt-1'>
+                    <div className={`leftPage ${isLeftPageOpen ? 'closed' : 'open'}`} style={{ width: "400px", height: "100%"}}>
+                        <div className='pt-1' style={{overflow: "scroll"}}>
                             <div className='d-flex'>
                                 {/* 돋보기 이미지 */}
                                 <div className='p-2 flex-fill'>
@@ -300,8 +300,8 @@ function Test() {
                 </div>
 
                 {/* right-section */}
-                <div className='col-md-3 z-0 mt-4 bg-white'>
-                    <div className="d-flex justify-content-center border-start">
+                <div className='col-md-3 z-0 mt-4 bg-white border-start'>
+                    <div className="d-flex justify-content-center me-3">
                         {selectedNode && (
                             <div className='' style={{ width: '420px' }}>
                                 <h5 style={{ textAlign: 'left' }}><strong>{selectedNode.title_ko}</strong></h5>
