@@ -39,8 +39,16 @@ function EggNavbar() {
     const handleLogout = () => {
         // 로그아웃 버튼을 클릭할 때 호출되는 함수
         setUserEmail(''); // 사용자 이메일 초기화
-        setLoggedIn(false); // 로그인 상태를 false로 설정
+        setLoggedIn(false);
+        setUserEmail(email);  // 로그인 상태를 false로 설정
     };
+
+    const handleSignUpSuccess = () => {
+        // 회원가입 성공 후 실행할 작업을 여기에 추가합니다.
+        setShowLoginModal(false); // 모달 닫기
+        setLoggedIn(true);
+        setUserEmail(email);
+      };
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
@@ -122,7 +130,7 @@ function EggNavbar() {
                                             <Dropdown.Item>History</Dropdown.Item>
                                             </>
                                         ) : (
-                                            <Dropdown.Item onClick={handleLoginClick}>Log in</Dropdown.Item>
+                                            <Dropdown.Item onClick={handleLoginClick}>Login <span style={{color:"gray",fontSize:"medium"}}>or</span> Signup</Dropdown.Item>
                                         )}
                                     </Dropdown.Menu>
                                 </Dropdown>
@@ -166,7 +174,7 @@ function EggNavbar() {
                                         This email is not registered.<br />
                                         Please proceed with membership registration.
                                     </p>
-                                    <SignUp email={email} /> {/* 이메일 prop 전달 */}
+                                    <SignUp email={email} onSignUpSuccess={handleSignUpSuccess} setShowLoginModal={setShowLoginModal} /> {/* 이메일 prop 전달 */}
                                 </div>
                                 ) : (
                                     <div>

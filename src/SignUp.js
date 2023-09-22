@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
 
-function SignUp({ email: initialEmail  }) {
+function SignUp({ email: initialEmail, onSignUpSuccess, setShowLoginModal }) {
     const [email, setEmail] = useState(initialEmail);
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
@@ -14,6 +14,7 @@ function SignUp({ email: initialEmail  }) {
     const [gender, setGender] = useState('male');
     const [passwordMismatch, setPasswordMismatch] = useState(false); 
     const [formErrors, setFormErrors] = useState({}); 
+    const [signUpError, setSignUpError] = useState(null); // 오류 메시지를 저장하는 상태 변수
 
     useEffect(() => {
         // 이메일 prop이 변경될 때마다 이메일 입력란에 값을 설정
@@ -35,11 +36,17 @@ function SignUp({ email: initialEmail  }) {
             // 사용자 정보 등록 성공 시 처리
             console.log('User registration successful:', response.data);
             // 사용자를 로그인 페이지로 리디렉션 또는 다른 작업 수행
+            setShowLoginModal(false);
+            onSignUpSuccess();
         })
         .catch(error => {
             // 사용자 정보 등록 실패 시 처리
             console.error('User registration failed:', error);
             // 오류 처리 또는 사용자에게 메시지 표시
+            // 오류 메시지를 표시하거나 다른 처리를 수행할 수 있습니다.
+            // 여기서는 오류 상태를 설정하여 오류 메시지를 모달 내에서 표시합니다.
+            setSignUpError('Failed to register user. Please try again.'); // 오류 메시지 설정
+            setShowLoginModal(true);
         });
 
         // 비밀번호와 확인 비밀번호가 같은지 확인
@@ -78,6 +85,7 @@ function SignUp({ email: initialEmail  }) {
         } else {
             setFormErrors(errors);
             return;
+        onSignUpSuccess();
         }
 
         // 회원가입 로직을 여기에 추가하세요
@@ -87,6 +95,12 @@ function SignUp({ email: initialEmail  }) {
         console.log('Confirm Password:', confirmPassword);
         console.log('Birth:', birth);
         console.log('Gender:', gender);
+
+        // 회원가입 성공 시 부모 컴포넌트로 알려줍니다.
+        onSignUpSuccess();
+
+        // 모달을 닫습니다.
+        setShowLoginModal(false);
     };
 
 
@@ -163,7 +177,7 @@ function SignUp({ email: initialEmail  }) {
                                 selected={birth}
                                 onChange={(date) => setBirth(date)}
                                 dateFormat="yyyy-MM-dd"
-                                showDropdown
+                                showyearDropdown
                                 minDate={new Date('1950-01-01')}
                                 maxDate={new Date()}
                                 placeholderText="Year"
@@ -211,6 +225,9 @@ function SignUp({ email: initialEmail  }) {
                 Sign Up
                 </Button>
              </div>
+             {signUpError && (
+                <p style={{ color: 'red' }}>{signUpError}</p>
+            )}
         </Form>
     );
 }
