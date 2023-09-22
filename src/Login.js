@@ -4,7 +4,7 @@ import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import SignUp from './SignUp';
 import axios from 'axios';
 
-function Login() {
+function Login(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isEmailValid, setIsEmailValid] = useState('');
@@ -51,6 +51,8 @@ function Login() {
             const token = response.data;
             // 이후 토큰을 사용하여 로그인 상태를 관리하거나 보호된 리소스에 접근 가능
             console.log('Login successful. Token:', token);
+            // 로그인 성공 시 부모 컴포넌트로 이메일 전달
+            props.onLoginSuccess(email);
     
         } catch (error) {
             console.error('Error logging in', error);

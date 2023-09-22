@@ -6,14 +6,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
 
-function SignUp({ email: initialEmail }) {
+function SignUp({ email: initialEmail, onLoginSuccess  }) {
     const [email, setEmail] = useState(initialEmail);
-    const [name, setName] = useState('');
+    const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [birthYear, setBirthYear] = useState(null);
-    const [birthMonth, setBirthMonth] = useState(null);
-    const [birthDay, setBirthDay] = useState(null);
+    const [birth, setBirth] = useState(null);
+    // const [birthMonth, setBirthMonth] = useState(null);
+    // const [birthDay, setBirthDay] = useState(null);
     const [gender, setGender] = useState('male');
     const [passwordMismatch, setPasswordMismatch] = useState(false); 
     const [formErrors, setFormErrors] = useState({}); 
@@ -29,9 +29,9 @@ function SignUp({ email: initialEmail }) {
         e.preventDefault();
         axios.post('/users/join', {
             email,
-            name,
+            userName,
             password,
-            birthDate: `${birthYear}-${birthMonth}-${birthDay}`,
+            birth,
             gender
         })
         .then(response => {
@@ -44,7 +44,7 @@ function SignUp({ email: initialEmail }) {
             console.error('User registration failed:', error);
             // 오류 처리 또는 사용자에게 메시지 표시
         });
-        
+
         // 비밀번호와 확인 비밀번호가 같은지 확인
         if (password !== confirmPassword) {
             setPasswordMismatch(true); // 일치하지 않으면 상태 변수를 true로 설정
@@ -57,8 +57,8 @@ function SignUp({ email: initialEmail }) {
         if (!email) {
             errors.email = 'Email is required';
         }
-        if (!name) {
-            errors.name = 'Name is required';
+        if (!userName) {
+            errors.userName = 'Name is required';
         }
         if (!password) {
             errors.password = 'Password is required';
@@ -68,12 +68,8 @@ function SignUp({ email: initialEmail }) {
         } else if (password !== confirmPassword) {
             errors.confirmPassword = 'Passwords do not match';
         }
-        if (!birthYear || !birthMonth || !birthDay) {
-            errors.birthday = 'Birth Date is required';
-        } else {
-            // 선택된 날짜로부터 JavaScript Date 객체 생성
-            const selectedDate = new Date(birthYear, birthMonth - 1, birthDay);
-            const currentDate = new Date();
+        if (!birth) {
+            errors.birth = 'Birth Date is required';
         }
         if (!gender) {
             errors.gender = 'Gender is required';
@@ -89,12 +85,12 @@ function SignUp({ email: initialEmail }) {
 
         // 회원가입 로직을 여기에 추가하세요
         console.log('Signing up with email:', email);
-        console.log('Name:', name);
+        console.log('userName:', userName);
         console.log('Password:', password);
         console.log('Confirm Password:', confirmPassword);
-        console.log('Birth Year:', birthYear);
-        console.log('Birth Month:', birthMonth);
-        console.log('Birth Day:', birthDay);
+        console.log('Birth:', birth);
+        // console.log('Birth Month:', birthMonth);
+        // console.log('Birth Day:', birthDay);
         console.log('Gender:', gender);
     };
 
@@ -114,16 +110,16 @@ function SignUp({ email: initialEmail }) {
                 </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="name" className='mt-2'>
+            <Form.Group controlId="userName" className='mt-2'>
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    isInvalid={formErrors.name}
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                    isInvalid={formErrors.userName}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {formErrors.name}
+                    {formErrors.userName}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -162,16 +158,16 @@ function SignUp({ email: initialEmail }) {
             </Form.Group>
 
 
-            <Form.Group controlId="birthDate" className="mt-2">
+            <Form.Group controlId="birth" className="mt-2">
                 <Form.Label>Birth Day</Form.Label>
                 <Row>
                     <Col>
                         <InputGroup>
                         <DatePicker
                                 className="form-control"
-                                selected={birthYear}
-                                onChange={(date) => setBirthYear(date)}
-                                dateFormat="yyyy"
+                                selected={birth}
+                                onChange={(date) => setBirth(date)}
+                                dateFormat="yyyy-MM-dd"
                                 showYearDropdown
                                 minDate={new Date('1950-01-01')} // 최소 년도 (1950년)
                                 maxDate={new Date()} // 최대 년도 (현재 연도까지)
@@ -179,7 +175,7 @@ function SignUp({ email: initialEmail }) {
                             />
                         </InputGroup>
                     </Col>
-                    <Col>
+                    {/* <Col>
                         <InputGroup>
                             <DatePicker
                                 className="form-control"
@@ -202,10 +198,10 @@ function SignUp({ email: initialEmail }) {
                                 calendarOnly 
                             />
                         </InputGroup>
-                    </Col>
+                    </Col> */}
                 </Row>
                 <Form.Control.Feedback type="invalid">
-                    {formErrors.birthDate}
+                    {formErrors.birth}
                 </Form.Control.Feedback>
             </Form.Group>
 
