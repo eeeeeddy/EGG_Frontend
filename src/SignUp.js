@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Col, Row, InputGroup, FormControl } from 'react-bootstrap';
+import { Form, Button, Col, Row, InputGroup } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
-import { ko } from "date-fns/esm/locale";
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
 
-function SignUp({ email: initialEmail, onLoginSuccess  }) {
+function SignUp({ email: initialEmail }) {
     const [email, setEmail] = useState(initialEmail);
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [birth, setBirth] = useState(null);
-    // const [birthMonth, setBirthMonth] = useState(null);
-    // const [birthDay, setBirthDay] = useState(null);
     const [gender, setGender] = useState('male');
     const [passwordMismatch, setPasswordMismatch] = useState(false); 
     const [formErrors, setFormErrors] = useState({}); 
@@ -89,8 +86,6 @@ function SignUp({ email: initialEmail, onLoginSuccess  }) {
         console.log('Password:', password);
         console.log('Confirm Password:', confirmPassword);
         console.log('Birth:', birth);
-        // console.log('Birth Month:', birthMonth);
-        // console.log('Birth Day:', birthDay);
         console.log('Gender:', gender);
     };
 
@@ -168,37 +163,13 @@ function SignUp({ email: initialEmail, onLoginSuccess  }) {
                                 selected={birth}
                                 onChange={(date) => setBirth(date)}
                                 dateFormat="yyyy-MM-dd"
-                                showYearDropdown
-                                minDate={new Date('1950-01-01')} // 최소 년도 (1950년)
-                                maxDate={new Date()} // 최대 년도 (현재 연도까지)
+                                showDropdown
+                                minDate={new Date('1950-01-01')}
+                                maxDate={new Date()}
                                 placeholderText="Year"
                             />
                         </InputGroup>
                     </Col>
-                    {/* <Col>
-                        <InputGroup>
-                            <DatePicker
-                                className="form-control"
-                                selected={birthMonth}
-                                onChange={(date) => setBirthMonth(date)}
-                                dateFormat="MM"                                
-                                placeholderText="Month"
-                                calendarOnly 
-                            />
-                        </InputGroup>
-                    </Col>
-                    <Col>
-                        <InputGroup>
-                            <DatePicker
-                                className="form-control"
-                                selected={birthDay}
-                                onChange={(date) => setBirthDay(date)}
-                                dateFormat="dd"
-                                placeholderText="Day"
-                                calendarOnly 
-                            />
-                        </InputGroup>
-                    </Col> */}
                 </Row>
                 <Form.Control.Feedback type="invalid">
                     {formErrors.birth}
