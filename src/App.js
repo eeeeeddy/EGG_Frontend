@@ -7,6 +7,7 @@ import Detail from './Detail';
 import About from './About';
 import Pricing from './Pricing';
 import Login from './Login';
+import Author from './Author';
 // import Test from './Test';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/About" element={<About />} />
                     <Route path="/Pricing" element={<Pricing />} />
                     <Route path="/Login" element={<Login />} />
+                    <Route path="/Author" element={<Author />} />
                     {/* <Route path="/Test" element={<Test />} /> */}
                     {/* <Route path="/Test/:article_id" element={<Test />} /> */}
                 </Routes>
