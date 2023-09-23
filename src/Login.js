@@ -45,6 +45,7 @@ function Login(props) {
     const handleEmailKeyPress = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault(); // Enter 키의 기본 동작(새 줄 추가)을 방지합니다.
+            handleLoginClick(); // "Continue with Email" 버튼을 클릭합니다.
         }
     };
  
@@ -81,6 +82,7 @@ function Login(props) {
                                 variant="secondary"
                                 type="button"
                                 onClick={handleLoginClick}
+                                onKeyDown={handleEmailKeyPress}
                             >
                                 Login
                             </Button>

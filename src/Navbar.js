@@ -146,7 +146,6 @@ function EggNavbar() {
                 <Modal.Body>
                     <Container className="panel">
                         <Form>
-                        <br />
                         {!isRegistering  ? (  //회원가입 양식이 아닐 때만 이메일 입력란을 표시
                             <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail" style={{ display: isEmailValid ? 'none' : 'block' }}>
                                 <Col sm>
