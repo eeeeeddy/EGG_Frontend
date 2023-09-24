@@ -3,37 +3,26 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import EggNavbar from './Navbar';
+import Author from './Author';
 import * as d3 from 'd3';
 import data from './data.json';
 
-function Test() {
+function Detail() {
     const [detailResult, setDetailResult] = useState([]);
     const params = useParams();
     const [searchQuery, setSearchQuery] = useState('');
     const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
+    const [selectedAuthorId, setSelectedAuthorId] = useState(null);
     const [highlightedText, setHighlightedText] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isShowHelp, setIsShowHelp] = useState(false);
+    const [isAuthorModalOpen, setIsAuthorModalOpen] = useState(false);
     const svgRef = useRef(null);
     const [selectedNode, setSelectedNode] = useState(null); // 선택한 노드 정보를 저장할 상태 변수
+    const [fixedNode, setFixedNode] = useState(null); // 고정된 노드 정보를 저장할 상태 변수
     const initialScale = 1; // 초기 스크롤 배율
     const graphData = data; // graph JSON 데이터
     const nodes = graphData.nodes;
-
-    // useEffect(() => {
-    //     const { article_id } = params;
-
-    //     // Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
-    //     axios.get(`/search/${article_id}`)
-    //         .then((response) => {
-    //             // API 응답으로 받은 데이터를 검색 결과로 설정합니다.
-    //             setDetailResult([response.data]);
-    //             // console.log(response.data);
-    //         })
-    //         .catch((error) => {
-    //             console.error('API 요청 중 오류 발생:', error);
-    //         });
-    // }, [setDetailResult, params]);
 
     useEffect(() => {
         // detailResult 데이터가 로드되면 isLoading을 false로 설정
@@ -49,6 +38,15 @@ function Test() {
 
     const clickHelp = () => {
         setIsShowHelp(!isShowHelp)
+    }
+
+    const AuthorClick = (author_id) => {
+        if (author_id !== 'None') {
+            setSelectedAuthorId(author_id);
+            setIsAuthorModalOpen(true);
+        } else {
+            alert("KCI 내에 등록된 저자 아이디가 없습니다.")
+        }
     }
 
     // const clickCenter = () => {
@@ -116,11 +114,18 @@ function Test() {
         });
 
         node.on('mouseout', (event, d) => {
-            setSelectedNode(null);
-            d3.select(event.currentTarget)
-                .attr('r', d.size) // 노드 크기 원래대로 복원
-                .style('fill', 'lightgrey') // 색상 원래대로 복원
-                .style('stroke-width', 0);
+            if (d !== fixedNode) {
+                setSelectedNode(null);
+                d3.select(event.currentTarget)
+                    .attr('r', d.size) // 노드 크기 원래대로 복원
+                    .style('fill', 'lightgrey') // 색상 원래대로 복원
+                    .style('stroke-width', 0);
+            }
+        });
+
+        // 노드 클릭 시 고정된 노드 정보 업데이트
+        node.on('click', (event, d) => {
+            setFixedNode(d);
         });
 
         simulation.on('tick', () => {
@@ -167,8 +172,8 @@ function Test() {
 
                 {/* left-page */}
                 <div className='col-md-2 z-1 mt-4'>
-                    <div className={`leftPage ${isLeftPageOpen ? 'closed' : 'open'}`} style={{ width: "400px", height: "100%"}}>
-                        <div className='pt-1' style={{overflow: "scroll"}}>
+                    <div className={`leftPage ${isLeftPageOpen ? 'closed' : 'open'}`} style={{ width: "400px", height: "100%" }}>
+                        <div className='pt-1' style={{ overflow: "scroll" }}>
                             <div className='d-flex'>
                                 {/* 돋보기 이미지 */}
                                 <div className='p-2 flex-fill'>
@@ -194,23 +199,23 @@ function Test() {
                             </div>
                             {/* 그래프 그려진 논문 리스트 */}
                             <div className='mt-2' >
-                                {/* {detailResult.map((result) => {
-                                    if (result.article_id) {
+                                {nodes.map((node) => {
+                                    if (node.article_id) {
                                         const regex = new RegExp(`(${searchQuery})`, 'gi');
-                                        const titleWithHighlight = result.title_ko.replace(
+                                        const titleWithHighlight = node.title_ko.replace(
                                             regex,
                                             (match) => `<span class="highlighted">${match}</span>`);
-                                        const authorWithHighlight = result.author_name.replace(
+                                        const authorWithHighlight = node.author_name.replace(
                                             regex,
                                             (match) => `<span class="highlighted">${match}</span>`);
-                                        const yearWithHighlight = result.pub_year.toString().replace(
+                                        const yearWithHighlight = node.pub_year.toString().replace(
                                             regex,
                                             (match) => `<span class="highlighted">${match}</span>`);
-                                        const abstractWithHighlight = result.abstract_ko.replace(
+                                        const abstractWithHighlight = node.abstract_ko.replace(
                                             regex,
                                             (match) => `<span class="highlighted">${match}</span>`);
                                         return (
-                                            <div className="articleList" key={result.article_id}>
+                                            <div className="articleList" key={node.article_id}>
                                                 <p className='mt-3'>
                                                     <b><span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
                                                     <span className='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span><br />
@@ -221,36 +226,7 @@ function Test() {
                                         );
                                     }
                                     return null;
-                                })} */}
-                                {
-                                    nodes.map((node) => {
-                                        if (node.article_id) {
-                                            const regex = new RegExp(`(${searchQuery})`, 'gi');
-                                            const titleWithHighlight = node.title_ko.replace(
-                                                regex,
-                                                (match) => `<span class="highlighted">${match}</span>`);
-                                            const authorWithHighlight = node.author_name.replace(
-                                                regex,
-                                                (match) => `<span class="highlighted">${match}</span>`);
-                                            const yearWithHighlight = node.pub_year.toString().replace(
-                                                regex,
-                                                (match) => `<span class="highlighted">${match}</span>`);
-                                            const abstractWithHighlight = node.abstract_ko.replace(
-                                                regex,
-                                                (match) => `<span class="highlighted">${match}</span>`);
-                                            return (
-                                                <div className="articleList" key={node.article_id}>
-                                                    <p className='mt-3'>
-                                                        <b><span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
-                                                        <span className='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span><br />
-                                                        <span className='left-page-year' dangerouslySetInnerHTML={{ __html: yearWithHighlight }}></span><br />
-                                                        <span className='paperbox-p' dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span>
-                                                    </p>
-                                                </div>
-                                            );
-                                        }
-                                        return null;
-                                    })}
+                                })}
                             </div>
                         </div>
                         <button className='leftButton' onClick={toggleLeftPage}>
@@ -302,36 +278,43 @@ function Test() {
                 {/* right-section */}
                 <div className='col-md-3 z-0 mt-4 bg-white border-start'>
                     <div className="d-flex justify-content-center me-3">
-                        {selectedNode && (
+                        {fixedNode || selectedNode ? (
                             <div className='' style={{ width: '420px' }}>
-                                <h5 style={{ textAlign: 'left' }}><strong>{selectedNode.title_ko}</strong></h5>
-                                <p style={{ textAlign: 'left' }}>{selectedNode.author}</p>
-                                <p style={{ textAlign: 'left' }}>{selectedNode.pub_year} {selectedNode.journal_name}</p>
-                                <p style={{ textAlign: 'left' }}>{selectedNode.citation} citation</p>
-                                <p style={{ textAlign: 'left' }}>{selectedNode.abstract_ko}</p>
+                                <h5 style={{ textAlign: 'left' }}><strong>{(fixedNode || selectedNode).title_ko}</strong></h5>
+                                <p style={{ textAlign: 'left' }}>
+                                    {(fixedNode || selectedNode).author_name.split(',').map((author, index) => (
+                                        <span key={index} onClick={() => AuthorClick((fixedNode || selectedNode).author_id.split(',')[index])} style={{ cursor: 'pointer' }}>{author.trim()} </span>
+                                    ))}
+                                </p>
+                                <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).pub_year} {(fixedNode || selectedNode).journal_name}</p>
+                                <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).citation} citation</p>
+                                <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).abstract_ko}</p>
                                 {/* 다른 노드 정보 필드를 추가할 수 있음 */}
                             </div>
-                        )}
-                        {/* {detailResult.map((result) => {
-                            if (result.article_id) {
-                                return (
-                                    <div className="" key={result.article_id} style={{ width: '420px' }}>
-                                        <h5><strong>{result.title_ko}</strong></h5><br />
-                                        <span>{result.author_name}</span><br />
-                                        <span>{result.pub_year}, {result.journal_name}</span><br />
-                                        <span>{result.citation_count} citaion</span><br />
-                                        <br />
-                                        <span>{result.abstract_ko}</span><br />
-                                        <br />
-                                    </div>
-                                );
-                            }
-                            return ''; // 나머지는 표시하지 않음
-                        })} */}
+                        ) : (nodes.length > 0 ? (
+                            <div className='' style={{ width: '420px' }}>
+                                <h5 style={{ textAlign: 'left' }}><strong>{nodes[0].title_ko}</strong></h5>
+                                <p style={{ textAlign: 'left' }}>
+                                    {nodes[0].author_name.split(',').map((author, index) => (
+                                        <span key={index}>{author.trim()} </span>
+                                    ))}
+                                </p>
+                                <p style={{ textAlign: 'left' }}>{nodes[0].pub_year} {nodes[0].journal_name}</p>
+                                <p style={{ textAlign: 'left' }}>{nodes[0].citation} citation</p>
+                                <p style={{ textAlign: 'left' }}>{nodes[0].abstract_ko}</p>
+                                {/* 다른 노드 정보 필드를 추가할 수 있음 */}
+                            </div>
+                        ) : null)}
                     </div>
                 </div>
+                {/* 저자 모달 창 */}
+                <div className={`col-md-9 z-3 mt-4 bg-white position-absolute ${isAuthorModalOpen ? 'd-block' : 'd-none'}`}>
+                    {isAuthorModalOpen && (
+                        <Author author_id={selectedAuthorId} onClose={() => setIsAuthorModalOpen(false)} />
+                    )}
+                </div>
             </div>
-        </div >
+        </div>
     );
 }
-export default Test;
+export default Detail;
