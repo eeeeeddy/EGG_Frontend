@@ -1,50 +1,75 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Document, Page, pdf } from '@react-pdf/renderer';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-const PdfDocument = ({ authorInfo }) => {
+// PDF 문서 컴포넌트
+const PdfDocument = ({ authorResult }) => {
     return (
         <Document>
             <Page>
                 {/* PDF에 표시할 컨텐츠를 여기에 추가 */}
-                <h2>{authorInfo.authorName}</h2>
-                <p>Publication Year: {authorInfo.pubYear}</p>
-                <p>Journal: {authorInfo.journalName}</p>
-                <p>Citation: {authorInfo.citation}</p>
-                <p>Abstract:</p>
-                <p>{authorInfo.abstract}</p>
-                {/* 다른 저자 정보 필드를 추가할 수 있음 */}
+                <h2>{authorResult.name}</h2>
+                <p>Institution: {authorResult.institution}</p>
             </Page>
         </Document>
     );
 };
 
-function Author({ author_id, onClose }) {
+// 저자 정보 컴포넌트
+function Author({ onClose }) {
+    // 모달 관련 상태
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const authorInfo = {
-        authorName: 'John Doe',
-        pubYear: 2023,
-        journalName: 'Sample Journal',
-        citation: 50,
-        abstract: 'This is a sample abstract for the author.',
-    };
 
+    // URL 파라미터 가져오기
+    const params = useParams();
+    const { authorQuery } = params;
+
+    // 저자 정보 상태
+    const [authorResult, setAuthorResult] = useState([]);
+
+    // 데이터 로딩 여부 상태
+    const [isLoading, setIsLoading] = useState(true);
+
+    // 페이지가 로드될 때 저자 정보를 불러옴
+    useEffect(() => {
+        if (authorQuery === 'loading') {
+            setIsLoading(true);
+            return;
+        }
+
+        setIsLoading(true);
+
+        axios.get(`/author/${authorQuery}`) // URL 패턴 수정
+            .then((response) => {
+                setIsLoading(false);
+                setAuthorResult(response.data);
+                console.log(authorQuery);
+            })
+            .catch((error) => {
+                console.log('API 요청 중 오류 발생:', error);
+            });
+    }, [setAuthorResult, authorQuery]);
+
+    // 모달 닫기 함수
     const closeModal = () => {
         setIsModalOpen(false);
         onClose();
     };
 
+    // PDF 미리보기 관련 상태
     const [previewVisible, setPreviewVisible] = useState(false);
-    const [pdfData, setPdfData] = useState(null);
 
+    // PDF 미리보기 토글 함수
     const togglePreview = async () => {
         setPreviewVisible(!previewVisible);
         if (!previewVisible) {
             const data = await pdf(
-                <PdfDocument authorInfo={authorInfo} />,
+                <PdfDocument authorResult={authorResult} />,
             ).toBlob();
             const url = URL.createObjectURL(data);
 
-            // pdf 미리보기를 새창으로 열기
+            // PDF 미리보기를 새창으로 열기
             window.open(url);
         }
     };
@@ -58,13 +83,8 @@ function Author({ author_id, onClose }) {
                         &times;
                     </span>
                     <hr />
-                    <h2>{authorInfo.authorName}</h2>
-                    <p>Publication Year: {authorInfo.pubYear}</p>
-                    <p>Journal: {authorInfo.journalName}</p>
-                    <p>Citation: {authorInfo.citation}</p>
-                    <p>Abstract:</p>
-                    <p>{authorInfo.abstract}</p>
-
+                    <h2>{authorResult.name}</h2>
+                    <p>Institution: {authorResult.institution}</p>
                 </div>
             </div>
         </div>

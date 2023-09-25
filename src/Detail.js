@@ -1,6 +1,6 @@
 import './css/Detail.css';
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import EggNavbar from './Navbar';
 import Author from './Author';
@@ -10,7 +10,9 @@ import data from './data.json';
 function Detail() {
     const [detailResult, setDetailResult] = useState([]);
     const params = useParams();
+    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
+    const [authorQuery, setAuthorQuery] = useState('');
     const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
     const [selectedAuthorId, setSelectedAuthorId] = useState(null);
     const [highlightedText, setHighlightedText] = useState('');
@@ -40,10 +42,14 @@ function Detail() {
         setIsShowHelp(!isShowHelp)
     }
 
-    const AuthorClick = (author_id) => {
-        if (author_id !== 'None') {
-            setSelectedAuthorId(author_id);
+    const AuthorClick = (authorId) => {
+        console.log('AuthorClick called with author_id:', authorId);
+        if (authorId !== 'None') {
+            // 클릭한 'author_id'를 서버로 전송
+            navigate(`/author/${encodeURIComponent(authorId)}`);
+            setSelectedAuthorId(authorId);
             setIsAuthorModalOpen(true);
+            console.log(authorId)
         } else {
             alert("KCI 내에 등록된 저자 아이디가 없습니다.")
         }
