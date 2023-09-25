@@ -46,13 +46,21 @@ function Detail() {
         console.log('AuthorClick called with author_id:', authorId);
         if (authorId !== 'None') {
             // 클릭한 'author_id'를 서버로 전송
-            navigate(`/author/${encodeURIComponent(authorId)}`);
+            // navigate(`/author/${encodeURIComponent(authorId)}`);
             setSelectedAuthorId(authorId);
-            setIsAuthorModalOpen(true);
+            openModal();
             console.log(authorId)
         } else {
             alert("KCI 내에 등록된 저자 아이디가 없습니다.")
         }
+    }
+
+    const openModal = () => {
+        setIsAuthorModalOpen(true);
+    }
+
+    const closeModal = () => {
+        setIsAuthorModalOpen(false);
     }
 
     // const clickCenter = () => {
@@ -316,7 +324,7 @@ function Detail() {
                 {/* 저자 모달 창 */}
                 <div className={`col-md-9 z-3 mt-4 bg-white position-absolute ${isAuthorModalOpen ? 'd-block' : 'd-none'}`}>
                     {isAuthorModalOpen && (
-                        <Author author_id={selectedAuthorId} onClose={() => setIsAuthorModalOpen(false)} />
+                        <Author authorId={selectedAuthorId} onClose={closeModal} />
                     )}
                 </div>
             </div>
