@@ -1,7 +1,5 @@
 import './css/Detail.css';
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import EggNavbar from './Navbar';
 import Author from './Author';
 import * as d3 from 'd3';
@@ -9,10 +7,7 @@ import data from './data.json';
 
 function Detail() {
     const [detailResult, setDetailResult] = useState([]);
-    const params = useParams();
-    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
-    const [authorQuery, setAuthorQuery] = useState('');
     const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
     const [selectedAuthorId, setSelectedAuthorId] = useState(null);
     const [highlightedText, setHighlightedText] = useState('');
@@ -45,8 +40,6 @@ function Detail() {
     const AuthorClick = (authorId) => {
         console.log('AuthorClick called with author_id:', authorId);
         if (authorId !== 'None') {
-            // 클릭한 'author_id'를 서버로 전송
-            // navigate(`/author/${encodeURIComponent(authorId)}`);
             setSelectedAuthorId(authorId);
             openModal();
             console.log(authorId)
@@ -66,6 +59,12 @@ function Detail() {
     // const clickCenter = () => {
     //     클릭 시 그래프 배율 초기화 (그래프 그린 후에 동작 기능 추가하기)
     // }
+
+    const ClickOpenKCI = (article_id) => {
+        const kciUrl = `https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=` + article_id;
+        console.log(kciUrl)
+        window.open(kciUrl);
+    }
 
     // graph 생성
     useEffect(() => {
@@ -99,7 +98,7 @@ function Detail() {
             .data(graphData.links)
             .enter().append('line')
             .attr('class', 'link')
-            .style('stroke', 'black')  // 간선 색상
+            .style('stroke', 'rgba(0, 0, 0, 0.5')  // 간선 색상
             .style('stroke-width', 1); // 간선 두께
 
         const node = svg.selectAll('.node')
@@ -107,24 +106,25 @@ function Detail() {
             .enter().append('circle')
             .attr('class', 'node')
             .attr('r', d => d.size)
-            .style('fill', d => 'lightgrey'); // 노드 색상
+            .style('fill', d => 'rgba(211, 211, 211, 0.5'); // 노드 색상
 
         const label = svg.selectAll('.label')
             .data(graphData.nodes)
             .enter().append('text')
             .attr('class', 'label')
             .attr('text-anchor', 'middle')
-            .attr('dy', -5) // 이 부분을 음수 값으로 설정하여 텍스트를 상단으로 올릴 수 있음
-            .text(d => (d.author_name + ", " + d.pub_year));
+            .attr('dy', -10) // 이 부분을 음수 값으로 설정하여 텍스트를 상단으로 올릴 수 있음
+            .style('font-size', '12px') // 텍스트의 크기를 10px로 설정 (원하는 크기로 변경)
+            .text(d => (d.author_name.split(',')[0] + ", " + d.pub_year));
 
         // 노드 위에 마우스를 올렸을 때 hover 효과 및 노드 정보 표시
         node.on('mouseover', (event, d) => {
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', d.size + 5) // 노드 크기를 키워 hover 효과 표시
-                .style('fill', 'rgba(0, 127, 0, 0.5)') // 색상 및 투명도(0.5)
-                .style('stroke', 'gray') // 노드 테두리 색상
-                .style('stroke-width', 2); // 노드 테두리 두께
+                .style('fill', 'rgba(102, 102, 102, 0.5') // 색상 및 투명도(0.5)
+                .style('stroke', 'rgba(102, 153, 102, 0.5') // 노드 테두리 색상
+                .style('stroke-width', 3); // 노드 테두리 두께
         });
 
         node.on('mouseout', (event, d) => {
@@ -132,7 +132,7 @@ function Detail() {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
                     .attr('r', d.size) // 노드 크기 원래대로 복원
-                    .style('fill', 'lightgrey') // 색상 원래대로 복원
+                    .style('fill', 'rgba(211, 211, 211, 0.5') // 색상 원래대로 복원
                     .style('stroke-width', 0);
             }
         });
@@ -174,7 +174,7 @@ function Detail() {
 
         // 초기 배율 설정
         svg.call(d3.zoom().transform, d3.zoomIdentity.scale(initialScale));
-    }, []);
+    });
 
     return (
         <div>
@@ -185,7 +185,7 @@ function Detail() {
             <div className='row'>
 
                 {/* left-page */}
-                <div className='col-md-2 z-1 mt-4'>
+                <div className='col-md-2 mt-4'>
                     <div className={`leftPage ${isLeftPageOpen ? 'closed' : 'open'}`} style={{ width: "400px", height: "100%" }}>
                         <div className='pt-1' style={{ overflow: "scroll" }}>
                             <div className='d-flex'>
@@ -208,11 +208,11 @@ function Detail() {
                                 </div>
                                 {/* filter 버튼 */}
                                 <div className='p-2 flex-fill'>
-                                    <button type="button" className='btn btn-success'>FILTER</button>
+                                    <button className='btn btn-success' type="button" data-bs-toggle="collapse" data-bs-target="#filterBar" aria-expanded="false" aria-controls="filterBar">FILTER</button>
                                 </div>
                             </div>
                             {/* 그래프 그려진 논문 리스트 */}
-                            <div className='mt-2' >
+                            <div className='mt-2' style={{ maxHeight: '750px', overflowY: 'auto' }}>
                                 {nodes.map((node) => {
                                     if (node.article_id) {
                                         const regex = new RegExp(`(${searchQuery})`, 'gi');
@@ -281,7 +281,67 @@ function Detail() {
                 </div>
 
                 {/* graph-section */}
-                <div className='col-md-7 z-0'>
+                <div className='col-md-7'>
+                    {/* filter */}
+                    <div className='col-md-10 mt-4 collapse' id="filterBar" style={{ marginLeft: "8.5rem" }}> {/* 마진 부여 수정 필요 */}
+                        <div className='row g-2'>
+                            <div className="col-md">
+                                <form className='form-floating'>
+                                    <input class="form-control form-control-sm" type="text" id="mainAuthor" placeholder="" />
+                                    <label for="mainAuthor">Main Author</label>
+                                </form>
+                            </div>
+                            <div className='col-md'>
+                                <form className='form-floating'>
+                                    <input class="form-control form-control-sm" type="text" id="citationNumber" placeholder="" />
+                                    <label for="citationNumber">Citation</label>
+                                </form>
+                            </div>
+                            <div className='col-md'>
+                                <div class="form-floating">
+                                    <select class="form-select" id="publishYear">
+                                        <option value="2023" selected>2023</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2017">2017</option>
+                                        <option value="2016">2016</option>
+                                        <option value="2015">2015</option>
+                                        <option value="2014">2014</option>
+                                        <option value="2013">2013</option>
+                                    </select>
+                                    <label for="category">Publish Year</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='row g-2 mt-2'>
+                            <div className='col-md'>
+                                <div class="form-floating">
+                                    <select class="form-select" id="category">
+                                        <option selected>Open this select menu</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                    <label for="category">Category</label>
+                                </div>
+                            </div>
+                            <div className='col-md'>
+                                <div class="form-floating">
+                                    <select class="form-select" id="journalName">
+                                        <option selected>Open this select menu</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                    <label for="journalName">Journal</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* graph */}
                     <div className="svg-container">
                         <div className='graph'>
                             <svg ref={svgRef}></svg>
@@ -290,7 +350,7 @@ function Detail() {
                 </div>
 
                 {/* right-section */}
-                <div className='col-md-3 z-0 mt-4 bg-white border-start'>
+                <div className='col-md-3 mt-4 bg-white border-start' style={{ maxHeight: '900px', overflowY: 'auto' }}>
                     <div className="d-flex justify-content-center me-3">
                         {fixedNode || selectedNode ? (
                             <div className='' style={{ width: '420px' }}>
@@ -302,6 +362,9 @@ function Detail() {
                                 </p>
                                 <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).pub_year} {(fixedNode || selectedNode).journal_name}</p>
                                 <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).citation} citation</p>
+                                <button className='btn btn-success btn-sm mb-3' type='button' onClick={() => ClickOpenKCI((fixedNode || selectedNode).article_id)}>Open in KCI</button>
+                                <br />
+                                <button className='btn btn-warning btn-sm mb-3' type='button'>+ Add Origin</button>
                                 <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).abstract_ko}</p>
                                 {/* 다른 노드 정보 필드를 추가할 수 있음 */}
                             </div>
@@ -310,11 +373,12 @@ function Detail() {
                                 <h5 style={{ textAlign: 'left' }}><strong>{nodes[0].title_ko}</strong></h5>
                                 <p style={{ textAlign: 'left' }}>
                                     {nodes[0].author_name.split(',').map((author, index) => (
-                                        <span key={index}>{author.trim()} </span>
+                                        <span key={index} onClick={() => AuthorClick(nodes[0].author_id.split(',')[index])} style={{ cursor: 'pointer' }}>{author.trim()} </span>
                                     ))}
                                 </p>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].pub_year} {nodes[0].journal_name}</p>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].citation} citation</p>
+                                <button className='btn btn-success btn-sm mb-3' type='button' onClick={() => ClickOpenKCI(nodes[0].article_id)}>Open in KCI</button>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].abstract_ko}</p>
                                 {/* 다른 노드 정보 필드를 추가할 수 있음 */}
                             </div>
@@ -322,7 +386,7 @@ function Detail() {
                     </div>
                 </div>
                 {/* 저자 모달 창 */}
-                <div className={`col-md-9 z-3 mt-4 bg-white position-absolute ${isAuthorModalOpen ? 'd-block' : 'd-none'}`}>
+                <div className={`col-md-9 z-1 mt-4 bg-white position-absolute ${isAuthorModalOpen ? 'd-block' : 'd-none'}`}>
                     {isAuthorModalOpen && (
                         <Author authorId={selectedAuthorId} onClose={closeModal} />
                     )}

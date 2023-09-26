@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Document, Page, Text, pdf } from '@react-pdf/renderer';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 
 const PdfDocument = ({ authorResult }) => {
     return (
@@ -9,7 +8,16 @@ const PdfDocument = ({ authorResult }) => {
             <Page>
                 <Text>
                     <Text>{authorResult.name}</Text>
+                    <Text><br /></Text>
                     <Text>Institution: {authorResult.institution}</Text>
+                    <Text>Total Paper: </Text>
+                    <Text>Total Cited: </Text>
+                    <Text>Average Cited: </Text>
+                    <Text>H-Index: </Text>
+                    <Text><hr /></Text>
+                    <Text><h5>키워드 클라우드</h5></Text>
+                    <Text><hr /></Text>
+                    <Text><h5>Author Graph</h5></Text>
                     {/* 다른 정보를 추가할 때도 각각의 <Text> 컴포넌트로 감싸야 합니다. */}
                 </Text>
             </Page>
@@ -19,8 +27,6 @@ const PdfDocument = ({ authorResult }) => {
 
 function Author({ authorId, onClose }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const params = useParams();
-
     const [authorResult, setAuthorResult] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -72,11 +78,19 @@ function Author({ authorId, onClose }) {
                     </span>
                     <hr />
                     {isLoading ? (
-                        <p>Loading...</p>
+                        <div className="spinner-border text-success" role="status"></div>
                     ) : (
                         <>
                             <h2>{authorResult.name}</h2>
                             <p>{authorResult.institution}</p>
+                            <p>Total Paper: </p>
+                            <p>Total Cited: </p>
+                            <p>Average Cited: </p>
+                            <p>H-Index: </p>
+                            <hr />
+                            <h5>키워드 클라우드</h5>
+                            <hr />
+                            <h5>Author Graph</h5>
                             {/* 다른 정보를 모달에 추가할 수 있음 */}
                         </>
                     )}
