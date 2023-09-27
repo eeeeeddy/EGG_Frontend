@@ -25,7 +25,7 @@ function SignUp({ email: initialEmail, onSignUpSuccess, setShowLoginModal }) {
 
     const handleSignUp = (e) => {
         e.preventDefault();
-        axios.post('/users/join', {
+        axios.post('/api/v1/users/sign-up', {
             email,
             userName,
             password,

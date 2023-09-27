@@ -17,30 +17,37 @@ function EggNavbar() {
     const [loginError, setLoginError] = useState('');
     const [email, setEmail] = useState('');
     const [showEmailInput, setShowEmailInput] = useState(true);
+    const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken') || ''); // 로컬 스토리지에서 액세스 토큰을 가져와 초기화
+    const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken') || ''); // 로컬 스토리지에서 리프레시 토큰을 가져와 초기화
 
     const navigate = useNavigate();
 
     const handleLoginClick = () => {
+        // 모달 열기 전에 상태 변수 초기화
+        setEmail('');
+        setIsRegistering(false); // 회원가입 화면이 아닌 상태로 초기화
+        setIsEmailValid(''); // 이메일 유효성 검사 상태 초기화
+        setLoginError(''); // 로그인 에러 초기화
+    
         setShowEmailInput(false); // 로그인 버튼을 클릭하면 이메일 입력 란을 숨김
         setShowLoginModal(true);
     };
 
     const handleClose = () => {
       setShowLoginModal(false);
+      setEmail('');
     };
 
-    const handleLoginSuccess = (email) => {
+    const handleLoginSuccess = (email, tokens) => {
+
         // 로그인이 성공하면 호출되는 함수
         setUserEmail(email); // 사용자 이메일 설정
+        setAccessToken(tokens.accessToken); // 액세스 토큰 저장
+        setRefreshToken(tokens.refreshToken); // 리프레시 토큰 저장
+        localStorage.setItem('accessToken', tokens.accessToken); // 로컬 스토리지에 액세스 토큰 저장
+        localStorage.setItem('refreshToken', tokens.refreshToken); // 로컬 스토리지에 리프레시 토큰 저장
         setLoggedIn(true); // 로그인 상태를 true로 설정
         handleClose(); // 모달 닫기
-    };
-
-    const handleLogout = () => {
-        // 로그아웃 버튼을 클릭할 때 호출되는 함수
-        setUserEmail(''); // 사용자 이메일 초기화
-        setLoggedIn(false);
-        setUserEmail(email);  // 로그인 상태를 false로 설정
     };
 
     const handleSignUpSuccess = () => {
@@ -49,28 +56,25 @@ function EggNavbar() {
         setLoggedIn(true);
         setUserEmail(email);
       };
-
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            if (searchQuery.trim() === '') {
-                window.alert('검색어를 입력하세요.');
-            } else {
-                console.log('검색어가 입력되었습니다.');
-                navigate(`/search/${encodeURIComponent(searchQuery)}`);
-                // 검색어를 포함하여 Search 페이지로 이동합니다.
-            }
-        }
+    const isValidEmail = (email) => {
+        // 간단한 이메일 유효성 검사를 위한 정규 표현식
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        return emailRegex.test(email);
     };
-
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
     const handleContinueClick = async () => {
         try {
+            if (!isValidEmail(email)) {
+                // 이메일이 유효하지 않은 경우 경고창 표시
+                window.alert('Please enter a valid email address.');
+                return;
+            }
             // 이메일이 서버에 있는지 확인
-            const response = await axios.get(`/users/checkEmail?email=${email}`);
+            const response = await axios.get(`/api/v1/users/checkEmail?email=${email}`);
             console.log(response)
-            if (response.data.result.exists == true) {
+            if (response.data === true) {
                 setIsEmailValid(true); 
                 setIsRegistering(false); // 이미 등록된 이메일이므로 회원가입 화면이 아닌 로그인 화면을 보여줌
                 setLoginError(''); 
@@ -91,6 +95,36 @@ function EggNavbar() {
         }
     };
 
+    const handleLogout = async () => {
+        try {
+            // 클라이언트 측에서 로그아웃 처리
+            setUserEmail(''); // 사용자 이메일 초기화
+            setAccessToken(''); // 액세스 토큰 초기화
+            setRefreshToken(''); // 리프레시 토큰 초기화
+            localStorage.removeItem('accessToken'); // 로컬 스토리지에서 액세스 토큰 제거
+            localStorage.removeItem('refreshToken'); // 로컬 스토리지에서 리프레시 토큰 제거
+            
+            setEmail('');
+    
+            // 서버로 로그아웃 요청 보내기
+            const logoutData = {
+                accessToken: accessToken, // 저장된 액세스 토큰 사용
+                refreshToken: refreshToken, // 저장된 리프레시 토큰 사용
+            };
+
+            const response = await axios.post('/api/v1/users/logout');
+            console.log(response)
+            if (response.status === 200) {
+                console.log('로그아웃 성공');
+                // 이후 필요한 처리를 수행하세요 (예: 홈페이지로 이동)
+            } else {
+                console.error('로그아웃 실패');
+            }
+        } catch (error) {
+            console.error('로그아웃 오류', error);
+        }
+    };
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -99,9 +133,6 @@ function EggNavbar() {
                         <img src="/ditto_logo.jpg" alt="" width="32" height="32" className="d-inline-block align-text-top" />
                     </a>
                     <a className="navbar-brand" href="/">EGG</a>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                             <Nav>
@@ -137,7 +168,6 @@ function EggNavbar() {
                 <Modal.Body>
                     <Container className="panel">
                         <Form>
-                        <br />
                         {!isRegistering  ? (  //회원가입 양식이 아닐 때만 이메일 입력란을 표시
                             <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail" style={{ display: isEmailValid ? 'none' : 'block' }}>
                                 <Col sm>

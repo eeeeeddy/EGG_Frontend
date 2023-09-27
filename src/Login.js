@@ -19,16 +19,16 @@ function Login(props) {
     const handleLoginClick = async () => {
         try {
             // 서버로 로그인 요청을 보냄
-            const response = await axios.post('/users/login', {
+            const response = await axios.post('/api/v1/users/login', {
                 email,
                 password,
             });
             // 로그인이 성공하면 토큰을 받아올 수 있음
-            const token = response.data;
+            const tokens = response.data;
             // 이후 토큰을 사용하여 로그인 상태를 관리하거나 보호된 리소스에 접근 가능
-            console.log('Login successful. Token:', token);
+            console.log('Login successful. Token:', tokens);
             // 로그인 성공 시 부모 컴포넌트로 이메일 전달
-            props.onLoginSuccess(email);
+            props.onLoginSuccess(email,tokens);
     
         } catch (error) {
             console.error('Error logging in', error);
