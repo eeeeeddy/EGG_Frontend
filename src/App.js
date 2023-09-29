@@ -25,7 +25,7 @@ function App() {
                     <Route path="/Pricing" element={<Pricing />} />
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Author" element={<Author />} />
-                    <Route path="/author/:authorId" element={<Author />} />
+                    <Route path="/Author/:authorId" element={<Author />} />
                     {/* <Route path="/Test" element={<Test />} /> */}
                     {/* <Route path="/Test/:article_id" element={<Test />} /> */}
                 </Routes>
