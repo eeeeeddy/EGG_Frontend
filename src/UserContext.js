@@ -14,7 +14,7 @@ const UserContext = createContext(initialUserState);
 // UserProvider 컴포넌트를 정의합니다.
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [userEmail2, setUserEmail2] = useState(''); // 초기 사용자 이메일 설정
+  const [userEmail, setUserEmail] = useState(''); // 초기 사용자 이메일 설정
 
 
   // 로그인 상태 업데이트 함수
@@ -24,13 +24,13 @@ export function UserProvider({ children }) {
 
   // 사용자 이메일을 설정하는 함수 추가
   const updateEmail = (email) => {
-    setUserEmail2(email);
+    setUserEmail(email);
   };
  
 
   // UserContext.Provider 컴포넌트로 감싸서 사용자 상태를 하위 컴포넌트에 제공합니다.
   return (
-    <UserContext.Provider value={{ user, userEmail2, setUser, updateEmail }}>
+    <UserContext.Provider value={{ user, userEmail, setUser, updateEmail }}>
       {children}
     </UserContext.Provider>
   );
