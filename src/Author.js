@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Document, Page, Text, pdf } from '@react-pdf/renderer';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import EggNavbar from './Navbar';
+
 
 const PdfDocument = ({ authorResult }) => {
     return (
@@ -29,6 +32,7 @@ function Author({ authorId, onClose }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [authorResult, setAuthorResult] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const params = useParams();
 
     useEffect(() => {
         if (authorId === 'loading') {
@@ -38,7 +42,7 @@ function Author({ authorId, onClose }) {
 
         setIsLoading(true);
 
-        axios.get(`/author/${authorId}`)
+        axios.get(`http://localhost:8080/author/${params.authorId}`)
             .then((response) => {
                 setIsLoading(false);
                 setAuthorResult(response.data);
@@ -46,7 +50,7 @@ function Author({ authorId, onClose }) {
             .catch((error) => {
                 console.log('API 요청 중 오류 발생:', error);
             });
-    }, [authorId]);
+    }, [params.authorId]);
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -70,30 +74,41 @@ function Author({ authorId, onClose }) {
 
     return (
         <div>
-            <div className="card card-body ms-4">
-                <div className="author-modal-content">
-                    <button className='btn btn-success btn-sm' onClick={togglePreview}>Export to PDF</button>
-                    <span className="close" onClick={closeModal} style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}>
-                        &times;
-                    </span>
-                    <hr />
-                    {isLoading ? (
-                        <div className="spinner-border text-success" role="status"></div>
-                    ) : (
-                        <>
-                            <h2>{authorResult.name}</h2>
-                            <p>{authorResult.institution}</p>
-                            <p>Total Paper: </p>
-                            <p>Total Cited: </p>
-                            <p>Average Cited: </p>
-                            <p>H-Index: </p>
-                            <hr />
-                            <h5>키워드 클라우드</h5>
-                            <hr />
-                            <h5>Author Graph</h5>
-                            {/* 다른 정보를 모달에 추가할 수 있음 */}
-                        </>
-                    )}
+
+            <div className='Navbar'>
+                <EggNavbar />
+            </div>
+
+            <div className='row'>
+                {/* left section */}
+                <div className='col-md-3 mt-4 border-end' style={{ maxHeight: '900px', overflowY: 'auto' }}>
+                    <div className="ms-2">
+                        <button className='btn btn-success btn-sm ms-1' onClick={togglePreview}>Export to PDF</button>
+                        <button className='btn btn-success btn-sm ms-1'>Filter</button>
+                        <hr />
+                        {isLoading ? (
+                            <div className="spinner-border text-success" role="status"></div>
+                        ) : (
+                            <>
+                                <h2>{authorResult.name}</h2>
+                                <p>{authorResult.institution}</p>
+                                <p>Total Paper: </p>
+                                <p>Total Cited: </p>
+                                <p>Average Cited: </p>
+                                <p>H-Index: </p>
+                                <hr />
+                                <h5>키워드 클라우드</h5>
+                                <hr />
+                                <h5>추가 시각화 정보</h5>
+                                {/* 다른 정보를 모달에 추가할 수 있음 */}
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                {/* Graph section */}
+                <div className='col-md-9 mt-4'>
+                    <h1>Graph Section</h1>
                 </div>
             </div>
         </div>

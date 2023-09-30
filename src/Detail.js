@@ -4,6 +4,7 @@ import EggNavbar from './Navbar';
 import Author from './Author';
 import * as d3 from 'd3';
 import data from './data.json';
+import { useNavigate } from 'react-router-dom';
 
 function Detail() {
     const [detailResult, setDetailResult] = useState([]);
@@ -20,6 +21,7 @@ function Detail() {
     const initialScale = 1; // 초기 스크롤 배율
     const graphData = data; // graph JSON 데이터
     const nodes = graphData.nodes;
+    const navigate = useNavigate();
 
     useEffect(() => {
         // detailResult 데이터가 로드되면 isLoading을 false로 설정
@@ -41,7 +43,8 @@ function Detail() {
         console.log('AuthorClick called with author_id:', authorId);
         if (authorId !== 'None') {
             setSelectedAuthorId(authorId);
-            openModal();
+            // openModal();
+            navigate(`/Author/${authorId}`);
             console.log(authorId)
         } else {
             alert("KCI 내에 등록된 저자 아이디가 없습니다.")
