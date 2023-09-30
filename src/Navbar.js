@@ -5,6 +5,7 @@ import { Navbar, Nav, Modal, Dropdown,Form, Row, Col, Container, Button } from '
 import Login from './Login';
 import SignUp from './SignUp';
 import axios from 'axios';
+import { useUser } from './UserContext';
 
 function EggNavbar() {
     const [searchQuery, setSearchQuery] = useState('');    
@@ -19,16 +20,28 @@ function EggNavbar() {
     const [showEmailInput, setShowEmailInput] = useState(true);
     const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken') || ''); // 로컬 스토리지에서 액세스 토큰을 가져와 초기화
     const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken') || ''); // 로컬 스토리지에서 리프레시 토큰을 가져와 초기화
-
+    const [showLogoutSuccessMessage, setShowLogoutSuccessMessage] = useState(false);
+    const { user, userEmail2, setUser, updateEmail } = useUser(); 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // 컴포넌트가 마운트될 때 로컬 스토리지에서 로그인 정보를 가져와서 로그인 상태를 설정합니다.
+        const storedAccessToken = localStorage.getItem('accessToken');
+        const storedRefreshToken = localStorage.getItem('refreshToken');
+        const storedUserEmail = localStorage.getItem('userEmail2'); // 저장된 이메일 가져오기
+        if (storedAccessToken && storedRefreshToken) {
+            setAccessToken(storedAccessToken);
+            setRefreshToken(storedRefreshToken);
+            setLoggedIn(true);
+            updateEmail(storedUserEmail);
+        }
+    }, [setUser, updateEmail]);
+
     const handleLoginClick = () => {
-        // 모달 열기 전에 상태 변수 초기화
         setEmail('');
         setIsRegistering(false); // 회원가입 화면이 아닌 상태로 초기화
         setIsEmailValid(''); // 이메일 유효성 검사 상태 초기화
         setLoginError(''); // 로그인 에러 초기화
-    
         setShowEmailInput(false); // 로그인 버튼을 클릭하면 이메일 입력 란을 숨김
         setShowLoginModal(true);
     };
@@ -39,13 +52,12 @@ function EggNavbar() {
     };
 
     const handleLoginSuccess = (email, tokens) => {
-
-        // 로그인이 성공하면 호출되는 함수
         setUserEmail(email); // 사용자 이메일 설정
         setAccessToken(tokens.accessToken); // 액세스 토큰 저장
         setRefreshToken(tokens.refreshToken); // 리프레시 토큰 저장
         localStorage.setItem('accessToken', tokens.accessToken); // 로컬 스토리지에 액세스 토큰 저장
         localStorage.setItem('refreshToken', tokens.refreshToken); // 로컬 스토리지에 리프레시 토큰 저장
+        localStorage.setItem('userEmail', email);
         setLoggedIn(true); // 로그인 상태를 true로 설정
         handleClose(); // 모달 닫기
     };
@@ -86,7 +98,6 @@ function EggNavbar() {
             }
             // 이메일이 서버에 있는지 확인
             const response = await axios.get(`/api/v1/users/checkEmail?email=${email}`);
-            console.log(response)
             if (response.data === true) {
                 setIsEmailValid(true); 
                 setIsRegistering(false); // 이미 등록된 이메일이므로 회원가입 화면이 아닌 로그인 화면을 보여줌
@@ -108,24 +119,35 @@ function EggNavbar() {
         }
     };
 
+    const headers = {
+        'Content-Type': 'application/json'
+      };
     const handleLogout = async () => {
+        console.log('handleLogout function called');
         try {
-            console.log('accessToken:', accessToken);
-            console.log('refreshToken:', refreshToken);
-
-            const response = await axios.post('/api/v1/users/logout');
+            const response = await axios.post('/api/v1/users/logout', null, { headers });
             console.log(response)
             if (response.status === 200) {
                 console.log('로그아웃 성공');
+                setShowLogoutSuccessMessage(true); 
+                console.log('ShowLogoutSuccessMessage set to true');
+                setTimeout(() => {
+                    setShowLogoutSuccessMessage(false); // Hide the success message after a delay (e.g., 2000 milliseconds)
+                }, 1000);
             } else {
                 console.error('로그아웃 실패');
             }
+            updateEmail('');
             setUserEmail(''); // 사용자 이메일 초기화
             setAccessToken(''); // 액세스 토큰 초기화
             setRefreshToken(''); // 리프레시 토큰 초기화
             localStorage.removeItem('accessToken'); // 로컬 스토리지에서 액세스 토큰 제거
             localStorage.removeItem('refreshToken'); // 로컬 스토리지에서 리프레시 토큰 제거
             setEmail('');
+            setShowLoginModal(false); // 모달 닫기
+            setLoggedIn(false); // 로그인 상태 초기화
+            localStorage.removeItem('userEmail');
+
         } catch (error) {
             console.error('로그아웃 오류', error);
         }
@@ -164,7 +186,7 @@ function EggNavbar() {
                                     <Dropdown.Menu>
                                         {loggedIn ? (
                                             <>
-                                            <Dropdown.Item disabled>{userEmail}</Dropdown.Item>
+                                            <Dropdown.Item><span style={{color:"gray"}}>{userEmail}</span></Dropdown.Item>
                                             <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                                             <Dropdown.Item>Save</Dropdown.Item>
                                             <Dropdown.Item>History</Dropdown.Item>
@@ -177,6 +199,12 @@ function EggNavbar() {
                             </Nav>
                         </Navbar.Collapse>
                     </div>
+                    
+            {showLogoutSuccessMessage && (
+                        <div className="logout-popup">
+                             <p>로그아웃 완료</p>
+                        </div>
+                    )}
                 </div>
             </nav>
             <Modal show={showLoginModal} onHide={handleClose}>
@@ -233,6 +261,7 @@ function EggNavbar() {
                             </div>
                             )}
                     </Container>
+                    
                 </Modal.Body>
             </Modal>
         </div>

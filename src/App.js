@@ -8,6 +8,7 @@ import About from './About';
 import Pricing from './Pricing';
 import Login from './Login';
 import Author from './Author';
+// import UserContext from './UserContext';
 // import Test from './Test';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Author" element={<Author />} />
                     <Route path="/author/:authorId" element={<Author />} />
+                    {/* <Route path="/UserContext" element={<UserContext />} /> */}
                     {/* <Route path="/Test" element={<Test />} /> */}
                     {/* <Route path="/Test/:article_id" element={<Test />} /> */}
                 </Routes>

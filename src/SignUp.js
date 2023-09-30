@@ -33,18 +33,12 @@ function SignUp({ email: initialEmail, onSignUpSuccess, setShowLoginModal }) {
             gender
         })
         .then(response => {
-            // 사용자 정보 등록 성공 시 처리
-            console.log('User registration successful:', response.data);
-            // 사용자를 로그인 페이지로 리디렉션 또는 다른 작업 수행
             setShowLoginModal(false);
             onSignUpSuccess();
         })
         .catch(error => {
             // 사용자 정보 등록 실패 시 처리
             console.error('User registration failed:', error);
-            // 오류 처리 또는 사용자에게 메시지 표시
-            // 오류 메시지를 표시하거나 다른 처리를 수행할 수 있습니다.
-            // 여기서는 오류 상태를 설정하여 오류 메시지를 모달 내에서 표시합니다.
             setSignUpError('Failed to register user. Please try again.'); // 오류 메시지 설정
             setShowLoginModal(true);
         });
