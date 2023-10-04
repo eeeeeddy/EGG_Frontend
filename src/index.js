@@ -5,11 +5,15 @@ import App from './App';
 import reportWebVitals from './umm/reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // 부트스트랩의 JavaScript 파일을 로드
+import { UserProvider } from './UserContext'; // UserProvider를 import
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <App />
+    <UserProvider> {/* UserProvider로 App을 감싸기 */}
+      <App />
+    </UserProvider>
 
     </React.StrictMode>
 );

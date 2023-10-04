@@ -5,6 +5,7 @@ import Login from './Login';
 import SignUp from './SignUp';
 import axios from 'axios';
 import { useUser } from './UserContext';
+import { Link } from 'react-router-dom';
 
 function EggNavbar() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -61,6 +62,7 @@ function EggNavbar() {
     localStorage.setItem('refreshToken', tokens.refreshToken);
     localStorage.setItem('userEmail', email);
     setLoggedIn(true);
+    updateEmail(email);
     handleClose();
   };
 
@@ -73,7 +75,7 @@ function EggNavbar() {
     localStorage.setItem('userEmail', email);
     setLoggedIn(true);
     setUserEmail(email);
-    setUserEmail(email);
+    updateEmail(email);
   };
 
   const handleKeyDown = (event) => {
@@ -140,6 +142,7 @@ function EggNavbar() {
         console.log('ShowLogoutSuccessMessage set to true');
         setTimeout(() => {
           setShowLogoutSuccessMessage(false);
+          navigate('/');
         }, 1000);
       } else {
         console.error('로그아웃 실패');
@@ -191,7 +194,7 @@ function EggNavbar() {
                         <Dropdown.Item><span style={{ color: "gray" }}>{userEmail}</span></Dropdown.Item>
                         <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                         <Dropdown.Item>Save</Dropdown.Item>
-                        <Dropdown.Item>History</Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/history"> History </Dropdown.Item>
                       </>
                     ) : (
                       <Dropdown.Item onClick={handleLoginClick}>Login <span style={{ color: "gray", fontSize: "medium" }}>or</span> Signup</Dropdown.Item>

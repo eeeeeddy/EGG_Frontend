@@ -8,14 +8,13 @@ import About from './About';
 import Pricing from './Pricing';
 import Login from './Login';
 import Author from './Author';
-// import UserContext from './UserContext';
-// import Test from './Test';
+import History from './History';
 
 function App() {
 
     return (
         <BrowserRouter>
-            <div className='my-1'> {/* className에서 container 제외 */}
+            <div className='my-1'>
                 <Routes>
                     <Route path="/" element={<Main />} />
                     <Route path="/search" element={<Search />} />
@@ -27,8 +26,7 @@ function App() {
                     <Route path="/Login" element={<Login />} />
                     <Route path="/Author" element={<Author />} />
                     <Route path="/Author/:authorId" element={<Author />} />
-                    {/* <Route path="/Test" element={<Test />} /> */}
-                    {/* <Route path="/Test/:article_id" element={<Test />} /> */}
+                    <Route path="/History" element={<History />} />
                 </Routes>
             </div>
         </BrowserRouter>

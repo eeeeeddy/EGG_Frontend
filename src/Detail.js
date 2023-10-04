@@ -1,10 +1,13 @@
+//Detail.js_1003
+
 import './css/Detail.css';
 import React, { useState, useEffect, useRef } from 'react';
 import EggNavbar from './Navbar';
 import Author from './Author';
 import * as d3 from 'd3';
 import data from './data.json';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
+import { useUser } from './UserContext';
 
 function Detail() {
     const [detailResult, setDetailResult] = useState([]);
@@ -22,6 +25,10 @@ function Detail() {
     const graphData = data; // graph JSON 데이터
     const nodes = graphData.nodes;
     const navigate = useNavigate();
+    // const { history, updateHistory } = useUser();
+    const [selectedPaper, setSelectedPaper] = useState(null);
+    const { userEmail, updateHistory } = useUser();
+
 
     useEffect(() => {
         // detailResult 데이터가 로드되면 isLoading을 false로 설정
@@ -59,13 +66,53 @@ function Detail() {
         setIsAuthorModalOpen(false);
     }
 
-    // const clickCenter = () => {
-    //     클릭 시 그래프 배율 초기화 (그래프 그린 후에 동작 기능 추가하기)
-    // }
+    const clickCenter = () => {
+        // 클릭 시 그래프 배율 초기화 (그래프 그린 후에 동작 기능 추가하기)
+    }
 
+    // const addToHistory = (paper) => {
+    //     const newHistory = [...history, paper];
+    //     updateHistory(newHistory);
+    //     localStorage.setItem('userHistory', JSON.stringify(newHistory));
+    //   };
+    
     const ClickOpenKCI = (article_id) => {
         const kciUrl = `https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=` + article_id;
-        console.log(kciUrl)
+        console.log(kciUrl);
+    
+        // 선택한 논문 정보 가져오기
+        const selectedPaper = fixedNode || selectedNode;
+
+        setSelectedPaper(selectedPaper);
+        const historyItem = {
+            title: selectedPaper.title_ko,
+            authors: selectedPaper.author_name,
+            abstract: selectedPaper.abstract_ko,
+            userEmail: userEmail, // 로그인한 사용자의 이메일
+          };
+          console.log(historyItem);
+        updateHistory(historyItem);
+        
+    
+        // 로컬 스토리지에서 이전 논문 히스토리 가져오기
+        const previousHistoryJSON = localStorage.getItem('lastOpenedPaper');
+        let previousHistory = JSON.parse(previousHistoryJSON);
+
+
+        console.log("논문 정보:", selectedPaper);
+    
+        // 이전 히스토리가 배열이 아니면 빈 배열로 초기화
+        if (!Array.isArray(previousHistory)) {
+            previousHistory = [];
+        }
+    
+        // 새로운 히스토리에 추가하고 최대 개수 제한
+        const updatedHistory = [selectedPaper, ...previousHistory.slice(0, 20)];
+    
+        // 로컬 스토리지에 업데이트된 히스토리 저장
+        localStorage.setItem('lastOpenedPaper', JSON.stringify(updatedHistory));
+    
+        // 새 창으로 KCI 링크 열기
         window.open(kciUrl);
     }
 
@@ -178,6 +225,7 @@ function Detail() {
         // 초기 배율 설정
         svg.call(d3.zoom().transform, d3.zoomIdentity.scale(initialScale));
     });
+
 
     return (
         <div>
