@@ -24,7 +24,7 @@ function Search() {
         setIsLoading(true);
 
         // Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
-        axios.get(`/search/?searchKeyword=${searchQuery}`)
+        axios.get(`/search/_search/${params.searchQuery}`)
             .then((response) => {
                 // 데이터 불러오기 완료 후 로딩 상태 변경
                 setIsLoading(false);
@@ -70,12 +70,12 @@ function Search() {
                             {searchResult.length > 0 ? (
                                 searchResult.map((result) => (
                                 // 검색 결과를 여기서 필요한대로 렌더링하세요.
-                                <div key={result.article_id} className="paper-box"
-                                    onClick={() => handlePaperBoxClick(result.article_id)}>
-                                    <h4>{result.title_ko}</h4>
-                                    <p>{result.author_name}<br />
+                                <div key={result.articleId} className="paper-box"
+                                    onClick={() => handlePaperBoxClick(result.articleId)}>
+                                    <h4>{result.titleKor}</h4>
+                                    <p>{result.author1Name}<br />
                                         {result.pub_year}<br /><br />
-                                        <span className='paperbox-p'>{result.abstract_ko}</span></p>
+                                        <span className='paperbox-p'>{result.abstractKor}</span></p>
                                 </div>
                             ))
                             ) : (
