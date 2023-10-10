@@ -7,11 +7,28 @@ import EggMainNavbar from './MainNavbar';
 function Main() {
     const [searchQuery, setSearchQuery] = useState('');
     const [isShowInfo, setIsShowInfo] = useState(false);
+    const [isShowInfo2, setIsShowInfo2] = useState(false);
     const navigate = useNavigate();
     // useNavigate 훅을 사용하여 네비게이션 함수를 가져옵니다.
 
     const handleShowButtonClick = () => {
         setIsShowInfo(!isShowInfo);
+        if (isShowInfo2 === true) {
+            setIsShowInfo2(!isShowInfo2)
+
+        } else {
+            setIsShowInfo2(isShowInfo2)
+        }
+        // 작은 페이지 가시성 상태를 토글
+    };
+
+    const handleShowButtonClick2 = () => {
+        setIsShowInfo2(!isShowInfo2)
+        if (isShowInfo === true) {
+            setIsShowInfo(!isShowInfo)
+        } else {
+            setIsShowInfo(isShowInfo);
+        }
         // 작은 페이지 가시성 상태를 토글
     };
 
@@ -68,13 +85,20 @@ function Main() {
                         {isShowInfo ? 'Category △' : 'Category ▽'} </button>
                     {isShowInfo && (
                         <div className="showDescript">
-                            <p style={{ textAlign: 'center' }}>카테고리 | 사용 설명서 (버튼 2개로 나누기)</p>
+                            <p className="mt-2" style={{ textAlign: 'center' }}></p>
+                            <ul>
+                                <li>AI</li>
+                                <li>DataBase</li>
+                                <li>Graphics</li>
+                                <li>Data Structure</li>
+                            </ul>
                         </div>)}
-                    <button className="descriptShowButton" type="button" onClick={handleShowButtonClick}>
-                        {isShowInfo ? 'How to use it △' : 'How to use it ▽'} </button>
-                    {isShowInfo && (
-                        <div className="showDescript">
-                            <p style={{ textAlign: 'center' }}>카테고리 | 사용 설명서 (버튼 2개로 나누기)</p>
+                    <button className="descriptShowButton2" type="button" onClick={handleShowButtonClick2}>
+                        {isShowInfo2 ? 'How to use it △' : 'How to use it ▽'} </button>
+                    {isShowInfo2 && (
+                        <div className="showDescript2">
+                            <p className="mt-2" style={{ textAlign: 'center' }}></p>
+                            <p> 이 페이지는 영국에서 시작하여....</p>
                         </div>)}
                     {/* </div> */}
                 </div>

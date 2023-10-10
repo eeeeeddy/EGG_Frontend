@@ -67,7 +67,8 @@ function Search() {
                         <div className="spinner-border text-info" role="status"></div>
                     ) : (
                         <div className="paper-box-container">
-                            {searchResult.map((result) => (
+                            {searchResult.length > 0 ? (
+                                searchResult.map((result) => (
                                 // 검색 결과를 여기서 필요한대로 렌더링하세요.
                                 <div key={result.article_id} className="paper-box"
                                     onClick={() => handlePaperBoxClick(result.article_id)}>
@@ -76,7 +77,11 @@ function Search() {
                                         {result.pub_year}<br /><br />
                                         <span className='paperbox-p'>{result.abstract_ko}</span></p>
                                 </div>
-                            ))}
+                            ))
+                            ) : (
+                                <h4>검색 결과가 없습니다.</h4>
+                            )
+                        }
                         </div>
                     )}
                 </div>
