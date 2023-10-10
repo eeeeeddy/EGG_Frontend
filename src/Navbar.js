@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Modal, Dropdown, Form, Row, Col, Container, Button } from 'react-bootstrap';
 import Login from './Login';
 import SignUp from './SignUp';
-import axios from 'axios';
+// import axios from 'axios';
 import { useUser } from './UserContext';
 import { Link } from 'react-router-dom';
+import axios from './AxiosConfig';
 
 function EggNavbar() {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -51,32 +52,40 @@ function EggNavbar() {
 		setEmail('');
 	};
 
-	const handleLoginSuccess = (email, tokens) => {
-		console.log('Login success!');
-		console.log('Logged in as:', email);
-		setUserEmail(email);
-		setShowLoginModal(true);
-		setAccessToken(tokens.accessToken);
-		setRefreshToken(tokens.refreshToken);
-		localStorage.setItem('accessToken', tokens.accessToken);
-		localStorage.setItem('refreshToken', tokens.refreshToken);
-		localStorage.setItem('userEmail', email);
-		setLoggedIn(true);
-		updateEmail(email);
-		handleClose();
-	};
+  const handleLoginSuccess = (email, tokens) => {
+    console.log('Login success!');
+    console.log('Logged in as:', email); 
+    console.log('Tokens:', tokens); // tokens 객체 확인
+    setUserEmail(email);
+    setShowLoginModal(true);
+    setAccessToken(tokens.accessToken);
+    setRefreshToken(tokens.refreshToken);
+    localStorage.setItem('accessToken', tokens.data.accessToken);
+    localStorage.setItem('refreshToken', tokens.data.refreshToken);
+    localStorage.setItem('userEmail', email);
+    setLoggedIn(true);
+    updateEmail(email);
+    handleClose();
 
-	const handleSignUpSuccess = (tokens) => {
-		console.log('Sign up success!');
-		setShowLoginModal(false);
-		setLoggedIn(true);
-		localStorage.setItem('accessToken', tokens.accessToken);
-		localStorage.setItem('refreshToken', tokens.refreshToken);
-		localStorage.setItem('userEmail', email);
-		setLoggedIn(true);
-		setUserEmail(email);
-		updateEmail(email);
-	};
+    const storedAccessToken = localStorage.getItem('accessToken');
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+    console.log('at:',storedAccessToken)
+    console.log('rt:',storedRefreshToken)    
+  };
+
+  const handleSignUpSuccess = (tokens) => {
+    console.log('Sign up success!');
+    setShowLoginModal(false);
+    setLoggedIn(true);
+    localStorage.setItem('accessToken', tokens.accessToken);
+    localStorage.setItem('refreshToken', tokens.refreshToken);
+    localStorage.setItem('userEmail', email);
+    setLoggedIn(true);
+    setUserEmail(email);
+    updateEmail(email);
+    const storedAccessToken = localStorage.getItem('accessToken');
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+  };
 
 	const handleKeyDown = (event) => {
 		if (event.key === 'Enter') {
@@ -131,32 +140,39 @@ function EggNavbar() {
 		'Content-Type': 'application/json',
 	};
 
-	const handleLogout = async () => {
-		console.log('handleLogout function called');
-		try {
-			const response = await axios.post('/api/v1/users/logout', null, { headers });
-			console.log(response);
-			if (response.status === 200) {
-				console.log('로그아웃된 이메일:', userEmail);
-				setShowLogoutSuccessMessage(true);
-				console.log('ShowLogoutSuccessMessage set to true');
-				setTimeout(() => {
-					setShowLogoutSuccessMessage(false);
-					navigate('/');
-				}, 1000);
-			} else {
-				console.error('로그아웃 실패');
-			}
-			localStorage.removeItem('accessToken');
-			localStorage.removeItem('refreshToken');
-			localStorage.removeItem('userEmail');
-			setEmail('');
-			setShowLoginModal(false);
-			setLoggedIn(false);
-		} catch (error) {
-			console.error('로그아웃 오류', error);
-		}
-	};
+  const handleLogout = async () => {
+    console.log('handleLogout function called');
+    try {
+      const response = await axios.post('/api/v1/users/logout', null,{
+        headers:{
+          'Content-Type': 'application/json',
+        }
+      });
+      console.log(response);
+      if (response.status === 200) {
+        console.log('로그아웃된 이메일:', userEmail);
+        setShowLogoutSuccessMessage(true);
+        console.log('ShowLogoutSuccessMessage set to true');
+        setTimeout(() => {
+          setShowLogoutSuccessMessage(false);
+          navigate('/');
+        }, 1000);
+      } else {
+        console.error('로그아웃 실패');
+      }
+      // 토큰 및 사용자 정보를 로컬 스토리지에서 삭제
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userEmail');
+      setEmail('');
+      setShowLoginModal(false);
+      setLoggedIn(false);
+      setUserEmail('');
+      navigate('/');
+    } catch (error) {
+      console.error('로그아웃 오류', error);
+    }
+  };
 
 	return (
 		<div>

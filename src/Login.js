@@ -24,6 +24,7 @@ function Login(props) {
             }
             // 서버로 로그인 요청을 보냄
             const response = await axios.post('/api/v1/users/login', {
+                // withCredentials: true,
                 email,
                 password,
             });

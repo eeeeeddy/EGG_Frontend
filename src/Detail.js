@@ -277,8 +277,6 @@ function Detail() {
             });
     }
     
-    
-    
     return (
         <div>
             <div className='Navbar'>
