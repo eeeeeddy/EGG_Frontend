@@ -1,4 +1,3 @@
-//Detail.js_1003
 
 import './css/Detail.css';
 import React, { useState, useEffect, useRef } from 'react';
@@ -8,6 +7,7 @@ import * as d3 from 'd3';
 import data from './data.json';
 import { useNavigate } from 'react-router-dom'; 
 import { useUser } from './UserContext';
+import axios from 'axios';
 
 function Detail() {
     const [detailResult, setDetailResult] = useState([]);
@@ -29,9 +29,12 @@ function Detail() {
     const [selectedPaper, setSelectedPaper] = useState(null);
     const { userEmail, updateHistory } = useUser();
 
+    useEffect(() => {
+        console.log('User Email 변경:', userEmail);
+        // userEmail 상태가 변경될 때 실행할 코드를 이 곳에 추가할 수 있습니다.
+    }, [userEmail]);
 
     useEffect(() => {
-        // detailResult 데이터가 로드되면 isLoading을 false로 설정
         // 그래프 생성되면 detailResult부분 수정 필요
         if (detailResult.length > 0) {
             setIsLoading(false);
@@ -66,16 +69,6 @@ function Detail() {
         setIsAuthorModalOpen(false);
     }
 
-    const clickCenter = () => {
-        // 클릭 시 그래프 배율 초기화 (그래프 그린 후에 동작 기능 추가하기)
-    }
-
-    // const addToHistory = (paper) => {
-    //     const newHistory = [...history, paper];
-    //     updateHistory(newHistory);
-    //     localStorage.setItem('userHistory', JSON.stringify(newHistory));
-    //   };
-    
     const ClickOpenKCI = (article_id) => {
         const kciUrl = `https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=` + article_id;
         console.log(kciUrl);
@@ -126,6 +119,7 @@ function Detail() {
             .attr('width', width)
             .attr('height', height)
             .call(d3.zoom().on('zoom', zoomed)); // 줌 이벤트 핸들러 추가
+
 
         // SVG 영역에 테두리 추가
         svg.append('rect')
@@ -225,8 +219,66 @@ function Detail() {
         // 초기 배율 설정
         svg.call(d3.zoom().transform, d3.zoomIdentity.scale(initialScale));
     });
+    // console.log(svgRef.current)
+    // console.log("initialScale:", initialScale); // initialScale 값 확인
 
+    const handleSaveNode = (selectedNode, userEmail) => {
+        const selectedPaper = fixedNode || selectedNode;
+        
+        if (!selectedPaper || !selectedPaper.article_id) {
+            console.error("유효하지 않은 논문 정보: selectedNode 또는 article_id가 없습니다.");
+            // 선택한 논문 정보가 없음을 사용자에게 알릴 수 있습니다.
+            return;
+        }
+        
+        if (!userEmail) {
+            console.error("유효하지 않은 사용자 이메일: userEmail이 없습니다.");
+            // 사용자 이메일이 없음을 사용자에게 알릴 수 있습니다.
+            return;
+        }
 
+        console.log("Node saved:", selectedPaper);
+        console.log("User Email:", userEmail);
+    
+        // 논문 정보와 사용자 이메일을 요청 본문에 포함하여 서버에 전송
+        const requestData = {
+            article_id: selectedPaper.article_id,
+            title_ko: selectedPaper.title_ko,
+            title_en: selectedPaper.title_en,
+            author_name: selectedPaper.author_name,
+            author_id : selectedPaper.author_id,
+            pub_year: selectedPaper.pub_year,
+            journal_name: selectedPaper.journal_name,
+            citation: selectedPaper.citation,
+            abstract_ko: selectedPaper.abstract_ko,
+            abstract_en: selectedPaper.abstract_en,
+            userEmail: userEmail,
+        };
+        console.log("articleid :", selectedPaper.article_id);
+        console.log("userEmail:",userEmail);
+    
+        // 서버로 요청을 보냅니다.
+        axios.post('/api/save/papers', requestData)
+            .then((response) => {
+            // 요청 객체의 헤더와 바디 정보
+            console.log('Request Headers:', requestData.headers);
+            console.log('Request Body:', requestData.data);
+            console.log('Response Headers:', response.headers);
+            console.log('Response Data:', response.data);
+
+            // 저장 성공 처리
+            console.log('논문 정보 저장 성공:', response.data);
+            // 추가 작업을 수행하거나 사용자에게 알림을 표시할 수 있습니다.
+            })
+            .catch((error) => {
+                // 오류 처리
+                console.error('논문 정보 저장 오류:', error);
+                // 오류 메시지를 사용자에게 표시하거나 추가 오류 처리를 수행할 수 있습니다.
+            });
+    }
+    
+    
+    
     return (
         <div>
             <div className='Navbar'>
@@ -242,7 +294,7 @@ function Detail() {
                             <div className='d-flex'>
                                 {/* 돋보기 이미지 */}
                                 <div className='p-2 flex-fill'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="32" fill="currentColor" class="bi bi-search" viewBox="0 -3 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="32" fill="currentColor" className="bi bi-search" viewBox="0 -3 16 16">
                                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                                     </svg>
                                 </div>
@@ -319,8 +371,8 @@ function Detail() {
                                         </svg>
                                     </span>
                                     <div className='mt-2'></div> {/* 버튼 간격을 위한 div 태그 */}
-                                    <span className="" id="centerButton">
-                                        <svg className='text-success' width="38" height="38" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                                    <span className='text-success' id="centerButton" >
+                                        <svg className='text-success' width="38" height="38" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16" >
                                             <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
                                             <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
                                         </svg>
@@ -350,8 +402,8 @@ function Detail() {
                             </div>
                             <div className='col-md'>
                                 <div class="form-floating">
-                                    <select class="form-select" id="publishYear">
-                                        <option value="2023" selected>2023</option>
+                                    <select class="form-select" id="publishYear" defaultValue="2023">
+                                        <option value="2023">2023</option>
                                         <option value="2022">2022</option>
                                         <option value="2021">2021</option>
                                         <option value="2020">2020</option>
@@ -376,7 +428,7 @@ function Detail() {
                                         <option value="2">Two</option>
                                         <option value="3">Three</option>
                                     </select>
-                                    <label for="category">Category</label>
+                                    <label htmlFor="category">Category</label>
                                 </div>
                             </div>
                             <div className='col-md'>
@@ -387,7 +439,7 @@ function Detail() {
                                         <option value="2">Two</option>
                                         <option value="3">Three</option>
                                     </select>
-                                    <label for="journalName">Journal</label>
+                                    <label htmlFor="journalName">Journal</label>
                                 </div>
                             </div>
                         </div>
@@ -413,7 +465,15 @@ function Detail() {
                                 </p>
                                 <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).pub_year} {(fixedNode || selectedNode).journal_name}</p>
                                 <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).citation} citation</p>
-                                <button className='btn btn-success btn-sm mb-3' type='button' onClick={() => ClickOpenKCI((fixedNode || selectedNode).article_id)}>Open in KCI</button>
+                                <div className="d-flex">         
+                                <button className='btn btn-success btn-sm' type='button' onClick={() => ClickOpenKCI((fixedNode || selectedNode).article_id)}>Open in KCI</button>
+                                <button className='btn btn-outline-danger' type='button' onClick={() => handleSaveNode((fixedNode || selectedNode).article_id,userEmail)}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
+                                            <path fillRule="evenodd" 
+                                            d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+                                        </svg>Save
+                                    </button> 
+                                </div>
                                 <br />
                                 <button className='btn btn-warning btn-sm mb-3' type='button'>+ Add Origin</button>
                                 <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).abstract_ko}</p>
@@ -429,13 +489,22 @@ function Detail() {
                                 </p>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].pub_year} {nodes[0].journal_name}</p>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].citation} citation</p>
-                                <button className='btn btn-success btn-sm mb-3' type='button' onClick={() => ClickOpenKCI(nodes[0].article_id)}>Open in KCI</button>
+                                <div className="d-flex">
+                                    <button className='btn btn-success btn-sm' type='button' onClick={() => ClickOpenKCI(nodes[0].article_id)}>Open in KCI</button>
+                                    <button className='btn btn-outline-danger' type='button' onClick={() => handleSaveNode( nodes[0].article_id,userEmail)}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
+                                            <path fillRule="evenodd" 
+                                            d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+                                        </svg>Save
+                                    </button>
+                                </div>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].abstract_ko}</p>
                                 {/* 다른 노드 정보 필드를 추가할 수 있음 */}
                             </div>
                         ) : null)}
                     </div>
                 </div>
+
                 {/* 저자 모달 창 */}
                 <div className={`col-md-9 z-1 mt-4 bg-white position-absolute ${isAuthorModalOpen ? 'd-block' : 'd-none'}`}>
                     {isAuthorModalOpen && (
