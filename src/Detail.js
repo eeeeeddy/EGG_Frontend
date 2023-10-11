@@ -387,15 +387,15 @@ function Detail() {
         window.open(newUrl, '_blank');
     }
 
-    const handleSaveNode = (selectedNode, userEmail) => {
+    async function handleSaveNode (selectedNode, userEmail) {
         const selectedPaper = fixedNode || selectedNode || nodes[0];
-
+        
         if (!selectedPaper || !selectedPaper.article_id) {
             console.error("유효하지 않은 논문 정보: selectedNode 또는 article_id가 없습니다.");
             // 선택한 논문 정보가 없음을 사용자에게 알릴 수 있습니다.
             return;
         }
-
+        
         if (!userEmail) {
             console.error("유효하지 않은 사용자 이메일: userEmail이 없습니다.");
             // 사용자 이메일이 없음을 사용자에게 알릴 수 있습니다.
@@ -404,14 +404,14 @@ function Detail() {
 
         console.log("Node saved:", selectedPaper);
         console.log("User Email:", userEmail);
-
+    
         // 논문 정보와 사용자 이메일을 요청 본문에 포함하여 서버에 전송
         const requestData = {
             articleId: selectedPaper.article_id,
             title_ko: selectedPaper.title_ko,
             title_en: selectedPaper.title_en,
             author_name: selectedPaper.author_name,
-            author_id: selectedPaper.author_id,
+            author_id : selectedPaper.author_id,
             pub_year: selectedPaper.pub_year,
             journal_name: selectedPaper.journal_name,
             citation: selectedPaper.citation,
@@ -440,6 +440,7 @@ function Detail() {
             console.log(error)
         }
     }
+    
 
     return (
         <div>
