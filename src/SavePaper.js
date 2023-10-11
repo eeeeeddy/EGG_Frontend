@@ -54,7 +54,7 @@ function SavePaper() {
               <p className='save-item-title' onClick={() => ClickOpenKCI(paper.articleId)}>{paper.title_ko}</p>
               <p className="save-item-author">{paper.author_name}</p>
               <p className="save-item-abstract">{paper.abstract_ko}</p>
-              <button className="btn btn-outline-success rounded-pill" type="submit" onClick={() => handleDeletePaper(paper.articleId)}>삭제</button>
+              <button className="btn btn-outline-success rounded-pill" type="submit" onClick={() => handleDeletePaper(paper.articleId)}>Delete</button>
             </li>
           ))}
         </ul>

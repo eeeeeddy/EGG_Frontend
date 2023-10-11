@@ -484,6 +484,15 @@ function Detail() {
                                 </p>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].pub_year} {nodes[0].journal_name}</p>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].citation} citation</p>
+                                <div className="d-flex">
+                                    <button className='btn btn-success btn-sm' type='button' onClick={() => ClickOpenKCI(nodes[0].article_id)}>Open in KCI</button>
+                                    <button className='btn btn-outline-danger' type='button' onClick={() => handleSaveNode( nodes[0].article_id,userEmail)}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
+                                            <path fillRule="evenodd" 
+                                            d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+                                        </svg>Save
+                                    </button>
+                                </div>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].abstract_ko}</p>
                                 {/* 다른 노드 정보 필드를 추가할 수 있음 */}
                             </div>
