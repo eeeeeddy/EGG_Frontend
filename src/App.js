@@ -10,6 +10,7 @@ import Login from './Login';
 import Author from './Author';
 import History from './History';
 import Dashboard from './Dashboard';
+import SavePaper from './SavePaper';
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
                     <Route path="/Author/:authorId" element={<Author />} />
                     <Route path="/History" element={<History />} />
                     <Route path="/Dashboard" element={<Dashboard />} />
+                    <Route path="/SavePaper" element={<SavePaper/>} />
                 </Routes>
             </div>
         </BrowserRouter>

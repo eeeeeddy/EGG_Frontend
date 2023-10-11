@@ -3,78 +3,68 @@ import { useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Modal, Dropdown, Form, Row, Col, Container, Button } from 'react-bootstrap';
 import Login from './Login';
 import SignUp from './SignUp';
-// import axios from 'axios';
 import { useUser } from './UserContext';
 import { Link } from 'react-router-dom';
 import axios from './AxiosConfig';
+import SavePaper from './SavePaper';
 
 function EggNavbar() {
-	const [searchQuery, setSearchQuery] = useState('');
-	const [showLoginModal, setShowLoginModal] = useState(false);
-	const [showProfileMenu, setShowProfileMenu] = useState(false);
-	const [loggedIn, setLoggedIn] = useState(false);
-	const [userEmail, setUserEmail] = useState('');
-	const [isEmailValid, setIsEmailValid] = useState('');
-	const [isRegistering, setIsRegistering] = useState(false);
-	const [loginError, setLoginError] = useState('');
-	const [email, setEmail] = useState('');
-	const [showEmailInput, setShowEmailInput] = useState(true);
-	const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken') || '');
-	const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken') || '');
-	const [showLogoutSuccessMessage, setShowLogoutSuccessMessage] = useState(false);
-	const navigate = useNavigate();
-	const { updateEmail } = useUser();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-	// 컴포넌트가 마운트될 때 로컬 스토리지에서 로그인 정보를 가져와서 로그인 상태를 설정합니다.
-	useEffect(() => {
-		const storedAccessToken = localStorage.getItem('accessToken');
-		const storedRefreshToken = localStorage.getItem('refreshToken');
-		const storedUserEmail = localStorage.getItem('userEmail');
-		if (storedAccessToken && storedRefreshToken) {
-			setAccessToken(storedAccessToken);
-			setRefreshToken(storedRefreshToken);
-			setLoggedIn(true);
-			setUserEmail(storedUserEmail);
-		}
-	}, []);
+  const navigate = useNavigate();
+  const { updateEmail } = useUser();
 
-	const handleLoginClick = () => {
-		setEmail('');
-		setIsRegistering(false);
-		setIsEmailValid('');
-		setLoginError('');
-		setShowEmailInput(false);
-		setShowLoginModal(true);
-	};
+  const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem('accessToken')));
+  const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || '');
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [email, setEmail] = useState('');
+  const [showEmailInput, setShowEmailInput] = useState(true);
+  const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken') || '');
+  const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken') || '');
+  const [showLogoutSuccessMessage, setShowLogoutSuccessMessage] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(false);
 
-	const handleClose = () => {
-		setShowLoginModal(false);
-		setEmail('');
-	};
+  useEffect(() => {
+    const storedAccessToken = localStorage.getItem('accessToken');
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+    const storedUserEmail = localStorage.getItem('userEmail');
+    if (storedAccessToken && storedRefreshToken) {
+      setAccessToken(storedAccessToken);
+      setRefreshToken(storedRefreshToken);
+      setLoggedIn(true);
+      setUserEmail(storedUserEmail);
+    }
+  }, []);
+
+  const handleLoginClick = () => {
+    setEmail('');
+    setIsRegistering(false);
+    setIsEmailValid('');
+    setLoginError('');
+    setShowEmailInput(false);
+    setShowLoginModal(true);
+  };
+
+  const handleClose = () => {
+    setShowLoginModal(false);
+    setEmail('');
+  };
 
   const handleLoginSuccess = (email, tokens) => {
-    console.log('Login success!');
-    console.log('Logged in as:', email); 
-    console.log('Tokens:', tokens); // tokens 객체 확인
     setUserEmail(email);
     setShowLoginModal(true);
     setAccessToken(tokens.accessToken);
-    setRefreshToken(tokens.refreshToken);
     localStorage.setItem('accessToken', tokens.data.accessToken);
-    localStorage.setItem('refreshToken', tokens.data.refreshToken);
     localStorage.setItem('userEmail', email);
     setLoggedIn(true);
     updateEmail(email);
     handleClose();
-
-    const storedAccessToken = localStorage.getItem('accessToken');
-    const storedRefreshToken = localStorage.getItem('refreshToken');
-    console.log('at:',storedAccessToken)
-    console.log('rt:',storedRefreshToken)    
   };
 
   const handleSignUpSuccess = (tokens) => {
-    console.log('Sign up success!');
     setShowLoginModal(false);
     setLoggedIn(true);
     localStorage.setItem('accessToken', tokens.accessToken);
@@ -83,76 +73,65 @@ function EggNavbar() {
     setLoggedIn(true);
     setUserEmail(email);
     updateEmail(email);
-    const storedAccessToken = localStorage.getItem('accessToken');
-    const storedRefreshToken = localStorage.getItem('refreshToken');
   };
 
-	const handleKeyDown = (event) => {
-		if (event.key === 'Enter') {
-			if (searchQuery.trim() === '') {
-				window.alert('검색어를 입력하세요.');
-			} else {
-				console.log('검색어가 입력되었습니다.');
-				navigate(`/search/${encodeURIComponent(searchQuery)}`);
-			}
-		}
-	};
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      if (searchQuery.trim() === '') {
+        window.alert('검색어를 입력하세요.');
+      } else {
+        navigate(`/search/${encodeURIComponent(searchQuery)}`);
+      }
+    }
+  };
 
-	const isValidEmail = (email) => {
-		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-		return emailRegex.test(email);
-	};
+  const isValidEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zAZ0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailRegex.test(email);
+  };
 
-	const handleEmailChange = (e) => {
-		setEmail(e.target.value);
-	};
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
 
-	const handleContinueClick = async () => {
-		try {
-			if (!isValidEmail(email)) {
-				window.alert('Please enter a valid email address.');
-				return;
-			}
-			const response = await axios.get(`/api/v1/users/checkEmail?email=${email}`);
-			if (response.data === true) {
-				setIsEmailValid(true);
-				setIsRegistering(false);
-				setLoginError('');
-			} else {
-				setIsEmailValid(false);
-				setIsRegistering(true);
-				setLoginError('');
-			}
-		} catch (error) {
-			console.error('Error checking email', error);
-			setLoginError('Error checking email');
-		}
-	};
+  const handleContinueClick = async () => {
+    try {
+      if (!isValidEmail(email)) {
+        window.alert('Please enter a valid email address.');
+        return;
+      }
+      const response = await axios.get(`/api/v1/users/checkEmail?email=${email}`);
+      if (response.data === true) {
+        setIsEmailValid(true);
+        setIsRegistering(false);
+        setLoginError('');
+      } else {
+        setIsEmailValid(false);
+        setIsRegistering(true);
+        setLoginError('');
+      }
+    } catch (error) {
+      console.error('Error checking email', error);
+      setLoginError('Error checking email');
+    }
+  };
 
-	const handleEmailKeyPress = (e) => {
-		if (e.key === 'Enter') {
-			e.preventDefault();
-			handleContinueClick();
-		}
-	};
-
-	const headers = {
-		'Content-Type': 'application/json',
-	};
+  const handleEmailKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleContinueClick();
+    }
+  };
 
   const handleLogout = async () => {
-    console.log('handleLogout function called');
     try {
-      const response = await axios.post('/api/v1/users/logout', null,{
-        headers:{
+      const response = await axios.post('/api/v1/users/logout', null, {
+        headers: {
           'Content-Type': 'application/json',
-        }
+        },
       });
-      console.log(response);
       if (response.status === 200) {
-        console.log('로그아웃된 이메일:', userEmail);
         setShowLogoutSuccessMessage(true);
-        console.log('ShowLogoutSuccessMessage set to true');
         setTimeout(() => {
           setShowLogoutSuccessMessage(false);
           navigate('/');
@@ -160,7 +139,6 @@ function EggNavbar() {
       } else {
         console.error('로그아웃 실패');
       }
-      // 토큰 및 사용자 정보를 로컬 스토리지에서 삭제
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('userEmail');
@@ -174,6 +152,10 @@ function EggNavbar() {
     }
   };
 
+  const handleSaveClick = () => {
+    navigate('/SavePaper');
+  };
+  
 	return (
 		<div>
 			<nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -194,44 +176,44 @@ function EggNavbar() {
 							<button className="btn btn-outline-success rounded-pill" type="submit">Search</button>
 						</form>
 						<Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-							<Nav>
-								<Nav.Link style={{ color: 'black' }} href="/Dashboard">Dashboard</Nav.Link>
-								<Nav.Link style={{ color: 'black' }} href="/About">About</Nav.Link>
-								<Nav.Link style={{ color: 'black' }} href="/Pricing">Pricing</Nav.Link>
-								<Dropdown align="end" show={showProfileMenu} onToggle={(isOpen) => setShowProfileMenu(isOpen)}>
-									<Dropdown.Toggle variant="link" id="profile-dropdown">
-										<svg width="24" height="24" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
-											<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-											<path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-										</svg>
-									</Dropdown.Toggle>
-									<Dropdown.Menu>
-										{loggedIn ? (
-											<>
-												<Dropdown.Item><span style={{ color: "gray" }}>{userEmail}</span></Dropdown.Item>
-												<Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-												<Dropdown.Item>Save</Dropdown.Item>
-												<Dropdown.Item as={Link} to="/history"> History </Dropdown.Item>
-											</>
-										) : (
-											<Dropdown.Item onClick={handleLoginClick}>Login <span style={{ color: "gray", fontSize: "medium" }}>or</span> Signup</Dropdown.Item>
-										)}
-									</Dropdown.Menu>
-								</Dropdown>
-							</Nav>
+						<Nav>
+							<Nav.Link style={{ color: 'black' }} href="/Dashboard">Dashboard</Nav.Link>
+							<Nav.Link style={{ color: 'black' }} href="/About">About</Nav.Link>
+							<Nav.Link style={{ color: 'black' }} href="/Pricing">Pricing</Nav.Link>
+							<Dropdown align="end" show={showProfileMenu} onToggle={(isOpen) => setShowProfileMenu(isOpen)}>
+							<Dropdown.Toggle variant="link" id="profile-dropdown">
+								<svg width="24" height="24" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
+								<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+								<path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+								</svg>
+							</Dropdown.Toggle>
+							<Dropdown.Menu>
+								{loggedIn ? (
+								<>
+									<Dropdown.Item><span style={{ color: "gray" }}>{userEmail}</span></Dropdown.Item>
+									<Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+									<Dropdown.Item onClick={handleSaveClick}>Save</Dropdown.Item>
+									<Dropdown.Item as={Link} to="/history"> History </Dropdown.Item>
+								</>
+								) : (
+								<Dropdown.Item onClick={handleLoginClick}>Login <span style={{ color: "gray", fontSize: "medium" }}>or</span> Signup</Dropdown.Item>
+								)}
+							</Dropdown.Menu>
+							</Dropdown>
+						</Nav>
 						</Navbar.Collapse>
 					</div>
 
 					{showLogoutSuccessMessage && (
 						<div className="logout-popup">
-							<p>로그아웃 완료</p>
+						<p>로그아웃 완료</p>
 						</div>
 					)}
-				</div>
-			</nav>
+					</div>
+				</nav>
 			<Modal show={showLoginModal} onHide={handleClose}>
 				<Modal.Header closeButton>
-					<Modal.Title>Log in <span style={{ color: "gray", fontSize: "medium" }}>or</span> Sign up</Modal.Title>
+				<Modal.Title>Log in <span style={{ color: "gray", fontSize: "medium" }}>or</span> Sign up</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<Container className="panel">

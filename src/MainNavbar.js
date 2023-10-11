@@ -3,16 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Modal, Dropdown, Form, Row, Col, Container, Button } from 'react-bootstrap';
 import Login from './Login';
 import SignUp from './SignUp';
-import axios from 'axios';
 import { useUser } from './UserContext';
+import { Link } from 'react-router-dom';
+import axios from './AxiosConfig';
+import SavePaper from './SavePaper';
 
 function EggMainNavbar() {
-  const [searchQuery, setSearchQuery] = useState('');
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
-  const [isEmailValid, setIsEmailValid] = useState('');
+
+  const navigate = useNavigate();
+  const { updateEmail } = useUser();
+
+  const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem('accessToken')));
+  const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || '');
   const [isRegistering, setIsRegistering] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [email, setEmail] = useState('');
@@ -20,10 +24,8 @@ function EggMainNavbar() {
   const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken') || '');
   const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken') || '');
   const [showLogoutSuccessMessage, setShowLogoutSuccessMessage] = useState(false);
-  const navigate = useNavigate();
-  const { updateEmail } = useUser();
+  const [isEmailValid, setIsEmailValid] = useState(false);
 
-  // 컴포넌트가 마운트될 때 로컬 스토리지에서 로그인 정보를 가져와서 로그인 상태를 설정합니다.
   useEffect(() => {
     const storedAccessToken = localStorage.getItem('accessToken');
     const storedRefreshToken = localStorage.getItem('refreshToken');
@@ -51,21 +53,17 @@ function EggMainNavbar() {
   };
 
   const handleLoginSuccess = (email, tokens) => {
-    console.log('Login success!');
-    console.log('Logged in as:', email); 
     setUserEmail(email);
     setShowLoginModal(true);
     setAccessToken(tokens.accessToken);
-    setRefreshToken(tokens.refreshToken);
-    localStorage.setItem('accessToken', tokens.accessToken);
-    localStorage.setItem('refreshToken', tokens.refreshToken);
+    localStorage.setItem('accessToken', tokens.data.accessToken);
     localStorage.setItem('userEmail', email);
     setLoggedIn(true);
+    updateEmail(email);
     handleClose();
   };
 
   const handleSignUpSuccess = (tokens) => {
-    console.log('Sign up success!');
     setShowLoginModal(false);
     setLoggedIn(true);
     localStorage.setItem('accessToken', tokens.accessToken);
@@ -73,11 +71,11 @@ function EggMainNavbar() {
     localStorage.setItem('userEmail', email);
     setLoggedIn(true);
     setUserEmail(email);
-    setUserEmail(email);
+    updateEmail(email);
   };
 
   const isValidEmail = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zAZ0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailRegex.test(email);
   };
 
@@ -114,21 +112,18 @@ function EggMainNavbar() {
     }
   };
 
-  const headers = {
-    'Content-Type': 'application/json',
-  };
-
   const handleLogout = async () => {
-    console.log('handleLogout function called');
     try {
-      const response = await axios.post('/api/v1/users/logout', null, { headers });
-      console.log(response);
+      const response = await axios.post('/api/v1/users/logout', null, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       if (response.status === 200) {
-        console.log('로그아웃된 이메일:', userEmail);
         setShowLogoutSuccessMessage(true);
-        console.log('ShowLogoutSuccessMessage set to true');
         setTimeout(() => {
           setShowLogoutSuccessMessage(false);
+          navigate('/');
         }, 1000);
       } else {
         console.error('로그아웃 실패');
@@ -139,110 +134,122 @@ function EggMainNavbar() {
       setEmail('');
       setShowLoginModal(false);
       setLoggedIn(false);
+      setUserEmail('');
+      navigate('/');
     } catch (error) {
       console.error('로그아웃 오류', error);
     }
   };
 
-  return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/">
-            <img src="/ditto_logo.jpg" alt="" width="32" height="32" className="d-inline-block align-text-top" />
-          </a>
-          <a className="navbar-brand" href="/">EGG</a>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-              <Nav>
-                <Dropdown align="end" show={showProfileMenu} onToggle={(isOpen) => setShowProfileMenu(isOpen)}>
-                  <Dropdown.Toggle variant="link" id="profile-dropdown">
-                    <svg width="24" height="24" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
-                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                      <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                    </svg>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {loggedIn ? (
-                      <>
-                        <Dropdown.Item><span style={{ color: "gray" }}>{userEmail}</span></Dropdown.Item>
-                        <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-                        <Dropdown.Item>Save</Dropdown.Item>
-                        <Dropdown.Item>History</Dropdown.Item>
-                      </>
-                    ) : (
-                      <Dropdown.Item onClick={handleLoginClick}>Login <span style={{ color: "gray", fontSize: "medium" }}>or</span> Signup</Dropdown.Item>
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Nav>
-            </Navbar.Collapse>
-          </div>
+  const handleSaveClick = () => {
+    navigate('/SavePaper');
+  };
+  
+	return (
+		<div>
+			<nav className="navbar navbar-expand-lg navbar-light bg-light">
+				<div className="container-fluid">
+					<a className="navbar-brand" href="/">
+						<img src="/ditto_logo.jpg" alt="" width="32" height="32" className="d-inline-block align-text-top" />
+					</a>
+					<a className="navbar-brand" href="/">EGG</a>
+					<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span className="navbar-toggler-icon"></span>
+					</button>
+					<div className="collapse navbar-collapse" id="navbarSupportedContent">
+						<Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+						<Nav>
+							<Nav.Link style={{ color: 'black' }} href="/Dashboard">Dashboard</Nav.Link>
+							<Nav.Link style={{ color: 'black' }} href="/About">About</Nav.Link>
+							<Nav.Link style={{ color: 'black' }} href="/Pricing">Pricing</Nav.Link>
+							<Dropdown align="end" show={showProfileMenu} onToggle={(isOpen) => setShowProfileMenu(isOpen)}>
+							<Dropdown.Toggle variant="link" id="profile-dropdown">
+								<svg width="24" height="24" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
+								<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+								<path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+								</svg>
+							</Dropdown.Toggle>
+							<Dropdown.Menu>
+								{loggedIn ? (
+								<>
+									<Dropdown.Item><span style={{ color: "gray" }}>{userEmail}</span></Dropdown.Item>
+									<Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+									<Dropdown.Item onClick={handleSaveClick}>Save</Dropdown.Item>
+									<Dropdown.Item as={Link} to="/history"> History </Dropdown.Item>
+								</>
+								) : (
+								<Dropdown.Item onClick={handleLoginClick}>Login <span style={{ color: "gray", fontSize: "medium" }}>or</span> Signup</Dropdown.Item>
+								)}
+							</Dropdown.Menu>
+							</Dropdown>
+						</Nav>
+						</Navbar.Collapse>
+					</div>
 
-          {showLogoutSuccessMessage && (
-            <div className="logout-popup">
-              <p>로그아웃 완료</p>
-            </div>
-          )}
-        </div>
-      </nav>
-      <Modal show={showLoginModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Log in <span style={{ color: "gray", fontSize: "medium" }}>or</span> Sign up</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Container className="panel">
-            <Form>
-              {!isRegistering ? (
-                <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail" style={{ display: isEmailValid ? 'none' : 'block' }}>
-                  <Col sm>
-                    <Form.Control
-                      type="email"
-                      placeholder="E-mail"
-                      onChange={handleEmailChange}
-                      onKeyDown={handleEmailKeyPress}
-                      value={email}
-                    />
-                  </Col>
-                </Form.Group>
-              ) : null}
-            </Form>
-            {isEmailValid ? (
-              <div>
-                <Login email={email} onLoginSuccess={handleLoginSuccess} />
-              </div>
-            ) : (
-              <div>
-                {isRegistering ? (
-                  <div>
-                    <p style={{ color: 'gray' }}>
-                      This email is not registered.<br />
-                      Please proceed with membership registration.
-                    </p>
-                    <SignUp email={email} onSignUpSuccess={handleSignUpSuccess} setShowLoginModal={setShowLoginModal} />
-                  </div>
-                ) : (
-                  <div>
-                    <br />
-                    <div className="d-grid gap-1">
-                      <Button
-                        variant="secondary"
-                        type="button"
-                        onClick={handleContinueClick}
-                        onKeyDown={handleEmailKeyPress}
-                      >
-                        Continue with Email
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </Container>
-        </Modal.Body>
-      </Modal>
-    </div>
-  );
+					{showLogoutSuccessMessage && (
+						<div className="logout-popup">
+						<p>로그아웃 완료</p>
+						</div>
+					)}
+					</div>
+				</nav>
+			<Modal show={showLoginModal} onHide={handleClose}>
+				<Modal.Header closeButton>
+				<Modal.Title>Log in <span style={{ color: "gray", fontSize: "medium" }}>or</span> Sign up</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Container className="panel">
+						<Form>
+							{!isRegistering ? (
+								<Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail" style={{ display: isEmailValid ? 'none' : 'block' }}>
+									<Col sm>
+										<Form.Control
+											type="email"
+											placeholder="E-mail"
+											onChange={handleEmailChange}
+											onKeyDown={handleEmailKeyPress}
+											value={email}
+										/>
+									</Col>
+								</Form.Group>
+							) : null}
+						</Form>
+						{isEmailValid ? (
+							<div>
+								<Login email={email} onLoginSuccess={handleLoginSuccess} />
+							</div>
+						) : (
+							<div>
+								{isRegistering ? (
+									<div>
+										<p style={{ color: 'gray' }}>
+											This email is not registered.<br />
+											Please proceed with membership registration.
+										</p>
+										<SignUp email={email} onSignUpSuccess={handleSignUpSuccess} setShowLoginModal={setShowLoginModal} />
+									</div>
+								) : (
+									<div>
+										<br />
+										<div className="d-grid gap-1">
+											<Button
+												variant="secondary"
+												type="button"
+												onClick={handleContinueClick}
+												onKeyDown={handleEmailKeyPress}
+											>
+												Continue with Email
+											</Button>
+										</div>
+									</div>
+								)}
+							</div>
+						)}
+					</Container>
+				</Modal.Body>
+			</Modal>
+		</div>
+	);
 }
 
 export default EggMainNavbar;

@@ -407,7 +407,7 @@ function Detail() {
 
         // 논문 정보와 사용자 이메일을 요청 본문에 포함하여 서버에 전송
         const requestData = {
-            article_id: selectedPaper.article_id,
+            articleId: selectedPaper.article_id,
             title_ko: selectedPaper.title_ko,
             title_en: selectedPaper.title_en,
             author_name: selectedPaper.author_name,
@@ -420,26 +420,25 @@ function Detail() {
             userEmail: userEmail,
         };
         console.log("articleid :", selectedPaper.article_id);
-        console.log("userEmail:", userEmail);
+        console.log("userEmail:",userEmail);
+    
+        const accessToken = localStorage.getItem('accessToken');
 
-        // 서버로 요청을 보냅니다.
-        axios.post('/api/save/papers', requestData)
-            .then((response) => {
-                // 요청 객체의 헤더와 바디 정보
-                console.log('Request Headers:', requestData.headers);
-                console.log('Request Body:', requestData.data);
-                console.log('Response Headers:', response.headers);
-                console.log('Response Data:', response.data);
-
-                // 저장 성공 처리
-                console.log('논문 정보 저장 성공:', response.data);
-                // 추가 작업을 수행하거나 사용자에게 알림을 표시할 수 있습니다.
+        try {
+            const response = await axios.post('/api/save/papers',
+            requestData,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
             })
-            .catch((error) => {
-                // 오류 처리
-                console.error('논문 정보 저장 오류:', error);
-                // 오류 메시지를 사용자에게 표시하거나 추가 오류 처리를 수행할 수 있습니다.
-            });
+
+            if (response.status === 200) {
+                console.log('저장완료')
+            }
+        } catch(error) {
+            console.log(error)
+        }
     }
 
     return (
