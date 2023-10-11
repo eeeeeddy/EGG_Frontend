@@ -26,6 +26,10 @@
     /* box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184);  */
 }
 
+.abstract {
+    font-size: small;
+}
+
 .leftButton {
     position: absolute;
     top: 70px;

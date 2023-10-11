@@ -20,7 +20,7 @@ function App() {
                     <Route path="/" element={<Main />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/Detail" element={<Detail />} />
-                    <Route path="/search/:searchQuery" element={<Search />} /> 
+                    <Route path="/search/:searchQuery" element={<Search />} />
                     <Route path="/Detail/:article_id" element={<Detail />} />
                     <Route path="/About" element={<About />} />
                     <Route path="/Pricing" element={<Pricing />} />
@@ -33,6 +33,5 @@ function App() {
             </div>
         </BrowserRouter>
     )
-
 }
 export default App;

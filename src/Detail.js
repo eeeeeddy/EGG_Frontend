@@ -4,30 +4,77 @@ import React, { useState, useEffect, useRef } from 'react';
 import EggNavbar from './Navbar';
 import Author from './Author';
 import * as d3 from 'd3';
-import data from './data.json';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate, useParams } from 'react-router-dom';
 import { useUser } from './UserContext';
 import axios from 'axios';
 
 function Detail() {
     const [detailResult, setDetailResult] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [detailQuery, setDetailQuety] = useState('');
     const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
-    const [selectedAuthorId, setSelectedAuthorId] = useState(null);
+    const [selectedAuthorId, setSelectedAuthorId] = useState([]);
     const [highlightedText, setHighlightedText] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [isShowHelp, setIsShowHelp] = useState(false);
     const [isAuthorModalOpen, setIsAuthorModalOpen] = useState(false);
     const svgRef = useRef(null);
     const [selectedNode, setSelectedNode] = useState(null); // 선택한 노드 정보를 저장할 상태 변수
     const [fixedNode, setFixedNode] = useState(null); // 고정된 노드 정보를 저장할 상태 변수
     const initialScale = 1; // 초기 스크롤 배율
-    const graphData = data; // graph JSON 데이터
-    const nodes = graphData.nodes;
+    //const graphData = data; // graph JSON 데이터
+    //const nodes = graphData.nodes;
     const navigate = useNavigate();
     // const { history, updateHistory } = useUser();
     const [selectedPaper, setSelectedPaper] = useState(null);
     const { userEmail, updateHistory } = useUser();
+    const [publishYear, setPublishYear] = useState(0);
+    const params = useParams();
+    const [graphData, setGraphData] = useState(null);
+    const [nodes, setNodes] = useState([]);
+    const [links, setLinks] = useState([]);
+
+    useEffect(() => {
+        // URL 파라미터로부터 검색어를 가져옵니다.
+        const { detailQuery } = params;
+
+        if (detailQuery === 'loading') {
+            setIsLoading(true);
+            return; // 데이터를 불러오지 않고 로딩 상태로 남김
+        }
+        setIsLoading(true);
+
+        // article_id가 배열이면 문자열로 결합
+        const articleIds = Array.isArray(params.article_id) ? params.article_id.join('+') : params.article_id;
+
+        // Fast API 엔드포인트에 GET 요청을 보냅니다.
+        axios.get(`http://15.165.247.85/Detail/${articleIds}`)
+            .then((response) => {
+                // 데이터 불러오기 완료 후 로딩 상태 변경
+                setIsLoading(false);
+                // API 응답으로 받은 데이터를 검색 결과로 설정합니다.
+                console.log("서버에서 받아온 결과", response.data);
+
+                const temp = response.data
+                setGraphData(temp)
+
+                const temp1 = response.data.nodes
+                setNodes(temp1)
+
+                const temp2 = response.data.links
+                setLinks(temp2)
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                console.error('FastAPI 요청 중 오류 발생:', error);
+            });
+    }, [params.article_id]); // 배열 안의 값이 변하면 통신하면서 화면을 렌더링함.
+
+    useEffect(() => {
+        console.log("graphData", graphData);
+        console.log("nodes", nodes)
+        console.log("links", links)
+    }, [graphData, nodes, links])
 
     useEffect(() => {
         console.log('User Email 변경:', userEmail);
@@ -69,12 +116,125 @@ function Detail() {
         setIsAuthorModalOpen(false);
     }
 
+    // const handleApplyFilter = (e) => {
+    //     setPublishYear(e.target.value);
+
+    //     const width = 1000;
+    //     const height = 750;
+
+    //     const svg = d3.select(svgRef.current)
+    //         .attr('width', width)
+    //         .attr('height', height)
+    //         .call(d3.zoom().on('zoom', zoomed)); // 줌 이벤트 핸들러 추가
+
+    //     // SVG 영역에 테두리 추가
+    //     svg.append('rect')
+    //         .attr('width', width)
+    //         .attr('height', height)
+    //         .style('fill', 'none')
+    //         .style('stroke', 'black')
+    //         .style('stroke-width', 0);
+
+    //     // JSON 데이터 로드
+    //     // const graphData = data;
+
+    //     const simulation = d3.forceSimulation(graphData.nodes)
+    //         .force('link', d3.forceLink(graphData.links).distance(d => d.distance))
+    //         .force('charge', d3.forceManyBody().strength(-300))
+    //         .force('center', d3.forceCenter(width / 2, height / 2))
+    //         .force('collide', d3.forceCollide().radius(20));
+
+    //     const link = svg.selectAll('.link')
+    //         .data(graphData.links)
+    //         .enter().append('line')
+    //         .attr('class', 'link')
+    //         .style('stroke', 'rgba(0, 0, 0, 0.5')  // 간선 색상
+    //         .style('stroke-width', 1); // 간선 두께
+
+    //     const node = svg.selectAll('.node')
+    //         .data(graphData.nodes)
+    //         .enter().append('circle')
+    //         .attr('class', 'node')
+    //         .attr('r', d => d.size)
+    //         .style('fill', d => 'rgba(211, 211, 211, 0.5') // 노드 색상
+    //         .style('stroke', (d) => {
+    //             return d.pub_year === publishYear ? 'rgba(255, 0, 0)' : 'rgba(0, 0, 0, 0)'
+    //         });
+
+    //     const label = svg.selectAll('.label')
+    //         .data(graphData.nodes)
+    //         .enter().append('text')
+    //         .attr('class', 'label')
+    //         .attr('text-anchor', 'middle')
+    //         .attr('dy', -10) // 이 부분을 음수 값으로 설정하여 텍스트를 상단으로 올릴 수 있음
+    //         .style('font-size', '12px') // 텍스트의 크기를 10px로 설정 (원하는 크기로 변경)
+    //         .text(d => (d.author_name.split(',')[0] + ", " + d.pub_year));
+
+    //     // 노드 위에 마우스를 올렸을 때 hover 효과 및 노드 정보 표시
+    //     node.on('mouseover', (event, d) => {
+    //         setSelectedNode(d);
+    //         d3.select(event.currentTarget)
+    //             .attr('r', d.size + 5) // 노드 크기를 키워 hover 효과 표시
+    //             .style('fill', 'rgba(102, 102, 102, 0.5') // 색상 및 투명도(0.5)
+    //             .style('stroke', 'rgba(102, 153, 102, 0.5') // 노드 테두리 색상
+    //             .style('stroke-width', 3); // 노드 테두리 두께
+    //     });
+
+    //     node.on('mouseout', (event, d) => {
+    //         if (d !== fixedNode) {
+    //             setSelectedNode(null);
+    //             d3.select(event.currentTarget)
+    //                 .attr('r', d.size) // 노드 크기 원래대로 복원
+    //                 .style('fill', 'rgba(211, 211, 211, 0.5') // 색상 원래대로 복원
+    //                 .style('stroke-width', 0);
+    //         }
+    //     });
+
+    //     // 노드 클릭 시 고정된 노드 정보 업데이트
+    //     node.on('click', (event, d) => {
+    //         setFixedNode(d);
+    //     });
+
+    //     simulation.on('tick', () => {
+    //         link
+    //             .attr('x1', d => d.source.x)
+    //             .attr('y1', d => d.source.y)
+    //             .attr('x2', d => d.target.x)
+    //             .attr('y2', d => d.target.y);
+
+    //         node
+    //             .attr('cx', d => d.x)
+    //             .attr('cy', d => d.y);
+
+    //         label
+    //             .attr('x', d => d.x)
+    //             .attr('y', d => d.y);
+    //     });
+
+    //     // 줌 이벤트 핸들러
+    //     function zoomed(event) {
+    //         const { transform } = event;
+    //         svg.attr('transform', transform); // 현재 변환을 SVG에 적용
+
+    //         // 현재 줌 레벨 가져오기
+    //         const currentScale = transform.k;
+
+    //         // 배율을 통해 원하는 작업을 수행할 수 있습니다.
+    //         // 예: 노드와 연결된 요소 크기 조정
+    //         node.attr('r', d => d.size / currentScale);
+    //         label.attr('font-size', 10 / currentScale);
+    //     }
+
+    //     // 초기 배율 설정
+    //     svg.call(d3.zoom().transform, d3.zoomIdentity.scale(initialScale));
+    // }
+
     const ClickOpenKCI = (article_id) => {
         const kciUrl = `https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=` + article_id;
         console.log(kciUrl);
-    
+
         // 선택한 논문 정보 가져오기
-        const selectedPaper = fixedNode || selectedNode;
+        const selectedPaper = fixedNode || selectedNode || nodes[0];
 
         setSelectedPaper(selectedPaper);
         const historyItem = {
@@ -82,29 +242,27 @@ function Detail() {
             authors: selectedPaper.author_name,
             abstract: selectedPaper.abstract_ko,
             userEmail: userEmail, // 로그인한 사용자의 이메일
-          };
-          console.log(historyItem);
+        };
+        console.log(historyItem);
         updateHistory(historyItem);
-        
-    
+
         // 로컬 스토리지에서 이전 논문 히스토리 가져오기
         const previousHistoryJSON = localStorage.getItem('lastOpenedPaper');
         let previousHistory = JSON.parse(previousHistoryJSON);
 
-
         console.log("논문 정보:", selectedPaper);
-    
+
         // 이전 히스토리가 배열이 아니면 빈 배열로 초기화
         if (!Array.isArray(previousHistory)) {
             previousHistory = [];
         }
-    
+
         // 새로운 히스토리에 추가하고 최대 개수 제한
         const updatedHistory = [selectedPaper, ...previousHistory.slice(0, 20)];
-    
+
         // 로컬 스토리지에 업데이트된 히스토리 저장
         localStorage.setItem('lastOpenedPaper', JSON.stringify(updatedHistory));
-    
+
         // 새 창으로 KCI 링크 열기
         window.open(kciUrl);
     }
@@ -120,7 +278,6 @@ function Detail() {
             .attr('height', height)
             .call(d3.zoom().on('zoom', zoomed)); // 줌 이벤트 핸들러 추가
 
-
         // SVG 영역에 테두리 추가
         svg.append('rect')
             .attr('width', width)
@@ -129,31 +286,32 @@ function Detail() {
             .style('stroke', 'black')
             .style('stroke-width', 0);
 
-        // JSON 데이터 로드
-        // const graphData = data;
-
-        const simulation = d3.forceSimulation(graphData.nodes)
-            .force('link', d3.forceLink(graphData.links).distance(d => d.distance))
-            .force('charge', d3.forceManyBody().strength(-300))
+        // node size = (d.citation + 5) * 3
+        const simulation = d3.forceSimulation(nodes)
+            .force('link', d3.forceLink(links).distance(d => d.distance))
+            .force('charge', d3.forceManyBody().strength(-1700)) // 그래프 퍼진 정도
             .force('center', d3.forceCenter(width / 2, height / 2))
             .force('collide', d3.forceCollide().radius(20));
 
         const link = svg.selectAll('.link')
-            .data(graphData.links)
+            .data(links)
             .enter().append('line')
             .attr('class', 'link')
-            .style('stroke', 'rgba(0, 0, 0, 0.5')  // 간선 색상
+            .style('stroke', 'rgba(0, 0, 0, 0.2')  // 간선 색상
             .style('stroke-width', 1); // 간선 두께
 
         const node = svg.selectAll('.node')
-            .data(graphData.nodes)
+            .data(nodes)
             .enter().append('circle')
             .attr('class', 'node')
-            .attr('r', d => d.size)
-            .style('fill', d => 'rgba(211, 211, 211, 0.5'); // 노드 색상
+            .attr('r', d => (d.citation + 5) * 3)
+            .style('fill', d => 'rgba(255, 255, 0, 0.8') // 노드 색상
+            .style('stroke', (d) => {
+                return d.pub_year === publishYear ? 'rgba(255, 0, 0)' : 'rgba(0, 0, 0, 0)'
+            });
 
         const label = svg.selectAll('.label')
-            .data(graphData.nodes)
+            .data(nodes)
             .enter().append('text')
             .attr('class', 'label')
             .attr('text-anchor', 'middle')
@@ -165,9 +323,9 @@ function Detail() {
         node.on('mouseover', (event, d) => {
             setSelectedNode(d);
             d3.select(event.currentTarget)
-                .attr('r', d.size + 5) // 노드 크기를 키워 hover 효과 표시
-                .style('fill', 'rgba(102, 102, 102, 0.5') // 색상 및 투명도(0.5)
-                .style('stroke', 'rgba(102, 153, 102, 0.5') // 노드 테두리 색상
+                .attr('r', (d.citation + 5) * 3 + 5) // 노드 크기를 키워 hover 효과 표시
+                .style('fill', 'rgba(255, 204, 0, 0.8') // 색상 및 투명도(0.5)
+                .style('stroke', 'rgba(255, 51, 51, 0.5') // 노드 테두리 색상
                 .style('stroke-width', 3); // 노드 테두리 두께
         });
 
@@ -175,8 +333,8 @@ function Detail() {
             if (d !== fixedNode) {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
-                    .attr('r', d.size) // 노드 크기 원래대로 복원
-                    .style('fill', 'rgba(211, 211, 211, 0.5') // 색상 원래대로 복원
+                    .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
+                    .style('fill', 'rgba(255, 255, 0, 0.8)') // 색상 원래대로 복원
                     .style('stroke-width', 0);
             }
         });
@@ -212,25 +370,32 @@ function Detail() {
 
             // 배율을 통해 원하는 작업을 수행할 수 있습니다.
             // 예: 노드와 연결된 요소 크기 조정
-            node.attr('r', d => d.size / currentScale);
+            node.attr('r', d => ((d.citation + 5) * 3) / currentScale);
             label.attr('font-size', 10 / currentScale);
         }
 
         // 초기 배율 설정
         svg.call(d3.zoom().transform, d3.zoomIdentity.scale(initialScale));
-    });
+    }, [publishYear, fixedNode, links, nodes]);
     // console.log(svgRef.current)
     // console.log("initialScale:", initialScale); // initialScale 값 확인
 
+    const addOrigin = (article_id) => {
+        console.log(params.article_id + '+' + article_id)
+        // navigate(`/Detail/${params.article_id+'+'+article_id}`);
+        const newUrl = `/Detail/${params.article_id + '+' + article_id}`;
+        window.open(newUrl, '_blank');
+    }
+
     const handleSaveNode = (selectedNode, userEmail) => {
-        const selectedPaper = fixedNode || selectedNode;
-        
+        const selectedPaper = fixedNode || selectedNode || nodes[0];
+
         if (!selectedPaper || !selectedPaper.article_id) {
             console.error("유효하지 않은 논문 정보: selectedNode 또는 article_id가 없습니다.");
             // 선택한 논문 정보가 없음을 사용자에게 알릴 수 있습니다.
             return;
         }
-        
+
         if (!userEmail) {
             console.error("유효하지 않은 사용자 이메일: userEmail이 없습니다.");
             // 사용자 이메일이 없음을 사용자에게 알릴 수 있습니다.
@@ -239,14 +404,14 @@ function Detail() {
 
         console.log("Node saved:", selectedPaper);
         console.log("User Email:", userEmail);
-    
+
         // 논문 정보와 사용자 이메일을 요청 본문에 포함하여 서버에 전송
         const requestData = {
             article_id: selectedPaper.article_id,
             title_ko: selectedPaper.title_ko,
             title_en: selectedPaper.title_en,
             author_name: selectedPaper.author_name,
-            author_id : selectedPaper.author_id,
+            author_id: selectedPaper.author_id,
             pub_year: selectedPaper.pub_year,
             journal_name: selectedPaper.journal_name,
             citation: selectedPaper.citation,
@@ -255,20 +420,20 @@ function Detail() {
             userEmail: userEmail,
         };
         console.log("articleid :", selectedPaper.article_id);
-        console.log("userEmail:",userEmail);
-    
+        console.log("userEmail:", userEmail);
+
         // 서버로 요청을 보냅니다.
         axios.post('/api/save/papers', requestData)
             .then((response) => {
-            // 요청 객체의 헤더와 바디 정보
-            console.log('Request Headers:', requestData.headers);
-            console.log('Request Body:', requestData.data);
-            console.log('Response Headers:', response.headers);
-            console.log('Response Data:', response.data);
+                // 요청 객체의 헤더와 바디 정보
+                console.log('Request Headers:', requestData.headers);
+                console.log('Request Body:', requestData.data);
+                console.log('Response Headers:', response.headers);
+                console.log('Response Data:', response.data);
 
-            // 저장 성공 처리
-            console.log('논문 정보 저장 성공:', response.data);
-            // 추가 작업을 수행하거나 사용자에게 알림을 표시할 수 있습니다.
+                // 저장 성공 처리
+                console.log('논문 정보 저장 성공:', response.data);
+                // 추가 작업을 수행하거나 사용자에게 알림을 표시할 수 있습니다.
             })
             .catch((error) => {
                 // 오류 처리
@@ -276,7 +441,7 @@ function Detail() {
                 // 오류 메시지를 사용자에게 표시하거나 추가 오류 처리를 수행할 수 있습니다.
             });
     }
-    
+
     return (
         <div>
             <div className='Navbar'>
@@ -384,7 +549,7 @@ function Detail() {
                 {/* graph-section */}
                 <div className='col-md-7'>
                     {/* filter */}
-                    <div className='col-md-10 mt-4 collapse' id="filterBar" style={{ marginLeft: "8.5rem" }}> {/* 마진 부여 수정 필요 */}
+                    <div className='col-md-9 mt-4 collapse' id="filterBar" style={{ marginLeft: "12rem" }}> {/* 마진 부여 수정 필요 */}
                         <div className='row g-2'>
                             <div className="col-md">
                                 <form className='form-floating'>
@@ -400,7 +565,8 @@ function Detail() {
                             </div>
                             <div className='col-md'>
                                 <div class="form-floating">
-                                    <select class="form-select" id="publishYear" defaultValue="2023">
+                                    {/* <select class="form-select" id="publishYear" onChange={handleApplyFilter}> */}
+                                    <select class="form-select" id="publishYear">
                                         <option value="2023">2023</option>
                                         <option value="2022">2022</option>
                                         <option value="2021">2021</option>
@@ -412,8 +578,9 @@ function Detail() {
                                         <option value="2015">2015</option>
                                         <option value="2014">2014</option>
                                         <option value="2013">2013</option>
+                                        <option value="2012">2012</option>
                                     </select>
-                                    <label for="category">Publish Year</label>
+                                    <label for="publishYear">Publish Year</label>
                                 </div>
                             </div>
                         </div>
@@ -440,6 +607,12 @@ function Detail() {
                                     <label htmlFor="journalName">Journal</label>
                                 </div>
                             </div>
+                            <div className='col-md'>
+                                <div class="form-floating">
+                                    {/* <button className='btn btn-success' type='button' onClick={handleApplyFilter} >Apply</button> */}
+                                    <button className='btn btn-success' type='button' >Apply</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {/* graph */}
@@ -454,7 +627,7 @@ function Detail() {
                 <div className='col-md-3 mt-4 bg-white border-start' style={{ maxHeight: '900px', overflowY: 'auto' }}>
                     <div className="d-flex justify-content-center me-3">
                         {fixedNode || selectedNode ? (
-                            <div className='' style={{ width: '420px' }}>
+                            <div className='' style={{ width: '450px' }}>
                                 <h5 style={{ textAlign: 'left' }}><strong>{(fixedNode || selectedNode).title_ko}</strong></h5>
                                 <p style={{ textAlign: 'left' }}>
                                     {(fixedNode || selectedNode).author_name.split(',').map((author, index) => (
@@ -463,22 +636,21 @@ function Detail() {
                                 </p>
                                 <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).pub_year} {(fixedNode || selectedNode).journal_name}</p>
                                 <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).citation} citation</p>
-                                <div className="d-flex">         
-                                <button className='btn btn-success btn-sm' type='button' onClick={() => ClickOpenKCI((fixedNode || selectedNode).article_id)}>Open in KCI</button>
-                                <button className='btn btn-outline-danger' type='button' onClick={() => handleSaveNode((fixedNode || selectedNode).article_id,userEmail)}>
+                                <div className="d-flex mb-2">
+                                    <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenKCI((fixedNode || selectedNode).article_id)}>Open in KCI</button>
+                                    <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => handleSaveNode((fixedNode || selectedNode).article_id, userEmail)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
-                                            <path fillRule="evenodd" 
-                                            d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
-                                        </svg>Save
-                                    </button> 
+                                            <path fillRule="evenodd"
+                                                d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
+                                        </svg> Save
+                                    </button>
                                 </div>
-                                <br />
-                                <button className='btn btn-warning btn-sm mb-3' type='button'>+ Add Origin</button>
-                                <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).abstract_ko}</p>
+                                <button className='btn btn-warning btn-sm mb-3' type='button' onClick={() => addOrigin((fixedNode || selectedNode).article_id)}>+ Add Origin</button>
+                                <p className="abstract" style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).abstract_ko}</p>
                                 {/* 다른 노드 정보 필드를 추가할 수 있음 */}
                             </div>
                         ) : (nodes.length > 0 ? (
-                            <div className='' style={{ width: '420px' }}>
+                            <div className='' style={{ width: '450px' }}>
                                 <h5 style={{ textAlign: 'left' }}><strong>{nodes[0].title_ko}</strong></h5>
                                 <p style={{ textAlign: 'left' }}>
                                     {nodes[0].author_name.split(',').map((author, index) => (
@@ -487,16 +659,16 @@ function Detail() {
                                 </p>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].pub_year} {nodes[0].journal_name}</p>
                                 <p style={{ textAlign: 'left' }}>{nodes[0].citation} citation</p>
-                                <div className="d-flex">
-                                    <button className='btn btn-success btn-sm' type='button' onClick={() => ClickOpenKCI(nodes[0].article_id)}>Open in KCI</button>
-                                    <button className='btn btn-outline-danger' type='button' onClick={() => handleSaveNode( nodes[0].article_id,userEmail)}>
+                                <div className="d-flex mb-3">
+                                    <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenKCI(nodes[0].article_id)}>Open in KCI</button>
+                                    <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => handleSaveNode(nodes[0].article_id, userEmail)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
-                                            <path fillRule="evenodd" 
-                                            d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
-                                        </svg>Save
+                                            <path fillRule="evenodd"
+                                                d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
+                                        </svg> Save
                                     </button>
                                 </div>
-                                <p style={{ textAlign: 'left' }}>{nodes[0].abstract_ko}</p>
+                                <p className="abstract" style={{ textAlign: 'left' }}>{nodes[0].abstract_ko}</p>
                                 {/* 다른 노드 정보 필드를 추가할 수 있음 */}
                             </div>
                         ) : null)}

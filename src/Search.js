@@ -30,7 +30,7 @@ function Search() {
                 setIsLoading(false);
                 // API 응답으로 받은 데이터를 검색 결과로 설정합니다.
                 setSearchResult(response.data);
-                console.log(response.data);
+                console.log("결과", response.data);
             })
             .catch((error) => {
                 setIsLoading(false);
@@ -70,11 +70,11 @@ function Search() {
                             {searchResult.length > 0 ? (
                                 searchResult.map((result) => (
                                 // 검색 결과를 여기서 필요한대로 렌더링하세요.
-                                <div key={result.articleId} className="paper-box"
-                                    onClick={() => handlePaperBoxClick(result.articleId)}>
+                                <div key={result.articleID} className="paper-box"
+                                    onClick={() => handlePaperBoxClick(result.articleID)}>
                                     <h4>{result.titleKor}</h4>
-                                    <p>{result.author1Name}<br />
-                                        {result.pub_year}<br /><br />
+                                    <p>{result.authors}<br />
+                                        {result.pubYear}<br /><br />
                                         <span className='paperbox-p'>{result.abstractKor}</span></p>
                                 </div>
                             ))
