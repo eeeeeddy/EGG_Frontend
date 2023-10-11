@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import './css/History.css';
+import EggNavbar from './Navbar';
 
 function History() {
   const [userHistory, setUserHistory] = useState([]);
@@ -41,17 +42,22 @@ function History() {
 }
 
   return (
-    <div className="history-container">
-      <h2 className="history-title">History</h2>
-      <ul className="history-list">
-        {userHistory.map((item, index) => (
-          <li key={index} className="history-item">
-            <p className='history-item-title' onClick={() => ClickOpenKCI(item.article_id)}>[ {item.title_ko} ]</p>
-            <p className="history-item-author">{item.author_name}</p>
-            <p className="history-item-abstract">{formatAbstract(item.abstract_ko)}</p>
-          </li>
-        ))}
-      </ul>
+    <div>
+      <div className='App'>
+        <EggNavbar />
+      </div>
+      <div className="history-container">
+        <h2 className="history-title">History</h2>
+        <ul className="history-list">
+          {userHistory.map((item, index) => (
+            <li key={index} className="history-item">
+              <p className='history-item-title' onClick={() => ClickOpenKCI(item.article_id)}>[ {item.title_ko} ]</p>
+              <p className="history-item-author">{item.author_name}</p>
+              <p className="history-item-abstract">{formatAbstract(item.abstract_ko)}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

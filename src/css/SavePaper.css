@@ -1,0 +1,41 @@
+.save-container{
+    max-width: 70%;
+    margin: 0 auto;
+ }
+  .save-title {
+    margin: 20px 0;
+    font-size: 30px;
+    font-weight: bolder;
+    text-align: center;
+    color: rgba(0, 0, 255, 0.763);
+  }
+  
+  .save-list {
+    list-style: none;
+    font-size: small;
+  }
+  
+  .save-item {
+    border-top: 1px solid #ccc;
+    padding: 20px 20px ;
+  }
+  
+  .save-item-title {
+    text-align: left;
+    font-weight: 500;
+    font-size: medium;
+    cursor: pointer; 
+    transition: color 0.3s ease;
+  }
+  
+  .save-item-title:hover {
+    color:rgba(0, 0, 255, 0.763) ;
+  }
+
+  .save-item-abstract {
+    max-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
