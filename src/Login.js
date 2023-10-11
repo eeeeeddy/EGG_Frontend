@@ -24,7 +24,6 @@ function Login(props) {
             }
             // 서버로 로그인 요청을 보냄
             const response = await axios.post('/api/v1/users/login', {
-                // withCredentials: true,
                 email,
                 password,
             });
@@ -32,8 +31,10 @@ function Login(props) {
             // 여기에서 로그인 성공 여부를 확인
             if (response.status === 200) {
                 console.log(response.data.message);
-                // 로그인 성공 시 부모 컴포넌트로 이메일 전달
-                props.onLoginSuccess(email, response.data);
+                // 로그인 성공 시 부모 컴포넌트로 이메일과 비밀번호 전달
+
+                localStorage.setItem('accessToken',response.data.accessToken)
+                props.onLoginSuccess(email, response.data, password);
             } else {
                 // 서버 응답이 성공(200 OK)이 아닌 경우 오류 메시지 표시
                 setLoginError('Invalid email or password');
@@ -56,8 +57,9 @@ function Login(props) {
                 setLoginError('An unknown error occurred. Please try again later.');
             }
             setPassword('');
-        }
+        };
     };
+    
     
     const handleEmailKeyPress = (e) => {
         if (e.key === 'Enter') {

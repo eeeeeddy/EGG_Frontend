@@ -7,6 +7,7 @@ import SignUp from './SignUp';
 import { useUser } from './UserContext';
 import { Link } from 'react-router-dom';
 import axios from './AxiosConfig';
+import SavePaper from './SavePaper';
 
 function EggNavbar() {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -25,8 +26,10 @@ function EggNavbar() {
 	const navigate = useNavigate();
 	const { updateEmail } = useUser();
 
+
 	// 컴포넌트가 마운트될 때 로컬 스토리지에서 로그인 정보를 가져와서 로그인 상태를 설정합니다.
 	useEffect(() => {
+		// console.log('컴포넌트 마운트됨');
 		const storedAccessToken = localStorage.getItem('accessToken');
 		const storedRefreshToken = localStorage.getItem('refreshToken');
 		const storedUserEmail = localStorage.getItem('userEmail');
@@ -59,19 +62,18 @@ function EggNavbar() {
     setUserEmail(email);
     setShowLoginModal(true);
     setAccessToken(tokens.accessToken);
-    setRefreshToken(tokens.refreshToken);
+    // setRefreshToken(tokens.refreshToken);
     localStorage.setItem('accessToken', tokens.data.accessToken);
-    localStorage.setItem('refreshToken', tokens.data.refreshToken);
+    // localStorage.setItem('refreshToken', tokens.data.refreshToken);
     localStorage.setItem('userEmail', email);
     setLoggedIn(true);
     updateEmail(email);
     handleClose();
 
     const storedAccessToken = localStorage.getItem('accessToken');
-    const storedRefreshToken = localStorage.getItem('refreshToken');
     console.log('at:',storedAccessToken)
-    console.log('rt:',storedRefreshToken)    
-  };
+	};
+  
 
   const handleSignUpSuccess = (tokens) => {
     console.log('Sign up success!');
@@ -169,11 +171,18 @@ function EggNavbar() {
       setLoggedIn(false);
       setUserEmail('');
       navigate('/');
+
+      const logoutstoredAccessToken = localStorage.removeItem('accessToken');
+      const logoutstoredRefreshToken = localStorage.removeItem('refreshToken');
+      console.log('at:',logoutstoredAccessToken)
+      console.log('rt:',logoutstoredRefreshToken)  
     } catch (error) {
       console.error('로그아웃 오류', error);
     }
   };
-
+  const handleSaveClick = () => {
+    navigate('/SavePaper');
+  };
 	return (
 		<div>
 			<nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -210,7 +219,7 @@ function EggNavbar() {
 											<>
 												<Dropdown.Item><span style={{ color: "gray" }}>{userEmail}</span></Dropdown.Item>
 												<Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-												<Dropdown.Item>Save</Dropdown.Item>
+												<Dropdown.Item onClick={handleSaveClick}>Save</Dropdown.Item>
 												<Dropdown.Item as={Link} to="/history"> History </Dropdown.Item>
 											</>
 										) : (
