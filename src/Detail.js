@@ -387,7 +387,7 @@ function Detail() {
         window.open(newUrl, '_blank');
     }
 
-    async function handleSaveNode (selectedNode, userEmail) {
+    async function handleSaveNode (article_id, userEmail) {
         const selectedPaper = fixedNode || selectedNode || nodes[0];
         
         if (!selectedPaper || !selectedPaper.article_id) {
@@ -437,7 +437,11 @@ function Detail() {
                 console.log('저장완료')
             }
         } catch(error) {
-            console.log(error)
+            if (error.response && error.response.status === 409) {
+                alert('This paper has already been saved.');
+            } else {
+                console.log(error);
+            }
         }
     }
     
