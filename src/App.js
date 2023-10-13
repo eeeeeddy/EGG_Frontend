@@ -11,29 +11,34 @@ import Author from './Author';
 import History from './History';
 import Dashboard from './Dashboard';
 import SavePaper from './SavePaper';
+import Detail_graph from './Detail_graph';
+import { UserProvider } from './UserContext';
 
 function App() {
 
     return (
-        <BrowserRouter>
-            <div className='my-1'>
-                <Routes>
-                    <Route path="/" element={<Main />} />
-                    <Route path="/search" element={<Search />} />
-                    <Route path="/Detail" element={<Detail />} />
-                    <Route path="/search/:searchQuery" element={<Search />} />
-                    <Route path="/Detail/:article_id" element={<Detail />} />
-                    <Route path="/About" element={<About />} />
-                    <Route path="/Pricing" element={<Pricing />} />
-                    <Route path="/Login" element={<Login />} />
-                    <Route path="/Author" element={<Author />} />
-                    <Route path="/Author/:authorId" element={<Author />} />
-                    <Route path="/History" element={<History />} />
-                    <Route path="/Dashboard" element={<Dashboard />} />
-                    <Route path="/SavePaper" element={<SavePaper/>} />
-                </Routes>
-            </div>
-        </BrowserRouter>
+        <UserProvider>
+            <BrowserRouter>
+                <div className='my-1'>
+                    <Routes>
+                        <Route path="/" element={<Main />} />
+                        <Route path="/search" element={<Search />} />
+                        <Route path="/Detail" element={<Detail />} />
+                        <Route path="/search/:searchQuery" element={<Search />} />
+                        <Route path="/Detail/:article_id" element={<Detail />} />
+                        <Route path="/About" element={<About />} />
+                        <Route path="/Pricing" element={<Pricing />} />
+                        <Route path="/Login" element={<Login />} />
+                        <Route path="/Author" element={<Author />} />
+                        <Route path="/Author/:authorId" element={<Author />} />
+                        <Route path="/History" element={<History />} />
+                        <Route path="/Dashboard" element={<Dashboard />} />
+                        <Route path="/SavePaper" element={<SavePaper />} />
+                        <Route path="/Detail_graph" element={<Detail_graph />} />
+                    </Routes>
+                </div>
+            </BrowserRouter>
+        </UserProvider>
     )
 }
 export default App;
