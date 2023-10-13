@@ -171,7 +171,7 @@ function Detail() {
             .style('fill', d => 'rgba(255, 255, 0, 0.8') // 노드 색상
             .style('stroke', (d) => {
                 // return d.pub_year === publishYear ? 'rgba(255, 0, 0)' : 'rgba(255, 255, 0, 0.8)'
-                if (d.pub_year === publishYear && d.category === category) {
+                if (d.pub_year === publishYear || d.category === category) {
                     return 'rgba(255, 0, 0)'; // 두 조건이 모두 충족될 때의 테두리 색상
                 } else {
                     return 'rgba(255, 255, 0, 0.8)'; // 조건이 충족되지 않을 때의 테두리 색상
