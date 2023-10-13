@@ -53,7 +53,6 @@ function Main() {
 
     return (
         <div>
-
             <div className='Navbar'>
                 <EggMainNavbar />
             </div>
@@ -85,19 +84,28 @@ function Main() {
                         {isShowInfo ? 'Category △' : 'Category ▽'} </button>
                     {isShowInfo && (
                         <div className="showDescript">
-                            <p className="mt-2" style={{ textAlign: 'center' }}></p>
+                            <p style={{ textAlign: 'center' }}></p>
                             <ul>
-                                <li>AI</li>
-                                <li>DataBase</li>
-                                <li>Graphics</li>
+                                <li>ML</li>
+                                <li>Network</li>
+                                <li>Databases</li>
+                                <li>Software</li>
+                                <li>Operating System</li>
+                                <li>Computer Vision</li>
+                                <li>Security</li>
+                                <li>Computation</li>
+                                <li>Hardware</li>
+                                <li>Programming Language</li>
                                 <li>Data Structure</li>
+                                <li>Robotics</li>
+                                <li>Mathematics</li>
                             </ul>
                         </div>)}
                     <button className="descriptShowButton2" type="button" onClick={handleShowButtonClick2}>
                         {isShowInfo2 ? 'How to use it △' : 'How to use it ▽'} </button>
                     {isShowInfo2 && (
                         <div className="showDescript2">
-                            <p className="mt-2" style={{ textAlign: 'center' }}></p>
+                            <p style={{ textAlign: 'center' }}></p>
                             <p> 이 페이지는 영국에서 시작하여....</p>
                         </div>)}
                     {/* </div> */}

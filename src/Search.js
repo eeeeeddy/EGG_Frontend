@@ -56,9 +56,9 @@ function Search() {
             <div className="paper-container">
                 <div className="paper-text" style={{ float: 'left' }}>
                     <p style={TextStyle}>
-                        {params.searchQuery
-                            ? `'${decodeURIComponent(params.searchQuery)}' 에 대한 논문 검색 결과`
-                            : '에 대한 논문 검색 결과'}</p>
+                    {params.searchQuery
+                        ? <span>Search results for '<b>{decodeURIComponent(params.searchQuery)}</b>'</span>
+                        : 'Search results for'}</p>
                     <h3 style={TextStyle}><b>Choose Article for Graph :</b></h3>
                     <br />
                 </div>

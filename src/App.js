@@ -9,10 +9,12 @@ import Pricing from './Pricing';
 import Login from './Login';
 import Author from './Author';
 import History from './History';
-import Dashboard from './Dashboard';
+import Dashboard from './Dashboard_article';
 import SavePaper from './SavePaper';
 import Detail_graph from './Detail_graph';
 import { UserProvider } from './UserContext';
+import Dashboard_article from './Dashboard_article';
+import Dashboard_author from './Dashboard_author';
 
 function App() {
 
@@ -32,9 +34,10 @@ function App() {
                         <Route path="/Author" element={<Author />} />
                         <Route path="/Author/:authorId" element={<Author />} />
                         <Route path="/History" element={<History />} />
-                        <Route path="/Dashboard" element={<Dashboard />} />
                         <Route path="/SavePaper" element={<SavePaper />} />
                         <Route path="/Detail_graph" element={<Detail_graph />} />
+                        <Route path="/Dashboard_article" element={<Dashboard_article />} />
+                        <Route path="/Dashboard_author" element={<Dashboard_author />} />
                     </Routes>
                 </div>
             </BrowserRouter>

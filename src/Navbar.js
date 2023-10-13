@@ -12,6 +12,7 @@ function EggNavbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showDashboardMenu, setShowDashboardMenu] = useState(false);
 
   const navigate = useNavigate();
   const { updateEmail } = useUser();
@@ -177,9 +178,15 @@ function EggNavbar() {
 						</form>
 						<Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
 						<Nav>
-							<Nav.Link style={{ color: 'black' }} href="/Dashboard">Dashboard</Nav.Link>
+            <Dropdown align="end" show={showDashboardMenu} onToggle={(isOpen) => setShowDashboardMenu(isOpen)}>
+							<Dropdown.Toggle variant="link" id="dashboard-dropdown">Dashboard</Dropdown.Toggle>
+              <Dropdown.Menu>
+                  <Dropdown.Item as={Link} to="/Dashboard_article"> Article </Dropdown.Item>
+									<Dropdown.Item as={Link} to="/Dashboard_author"> Author </Dropdown.Item>
+              </Dropdown.Menu>
+              </Dropdown>
 							<Nav.Link style={{ color: 'black' }} href="/About">About</Nav.Link>
-							<Nav.Link style={{ color: 'black' }} href="/Pricing">Pricing</Nav.Link>
+              <Nav.Link style={{ color: 'black' }} href="/Pricing">Pricing</Nav.Link>
 							<Dropdown align="end" show={showProfileMenu} onToggle={(isOpen) => setShowProfileMenu(isOpen)}>
 							<Dropdown.Toggle variant="link" id="profile-dropdown">
 								<svg width="24" height="24" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
@@ -187,18 +194,22 @@ function EggNavbar() {
 								<path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
 								</svg>
 							</Dropdown.Toggle>
-							<Dropdown.Menu>
 								{loggedIn ? (
 								<>
+                <Dropdown.Menu>
 									<Dropdown.Item><span style={{ color: "gray" }}>{userEmail}</span></Dropdown.Item>
 									<Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
 									<Dropdown.Item onClick={handleSaveClick}>Save</Dropdown.Item>
 									<Dropdown.Item as={Link} to="/history"> History </Dropdown.Item>
+									{/* <Dropdown.Item as={Link} to="/About"> About </Dropdown.Item> */}
+                  </Dropdown.Menu>
 								</>
 								) : (
+                <Dropdown.Menu>
 								<Dropdown.Item onClick={handleLoginClick}>Login <span style={{ color: "gray", fontSize: "medium" }}>or</span> Signup</Dropdown.Item>
-								)}
-							</Dropdown.Menu>
+                {/* <Dropdown.Item as={Link} to="/About"> About </Dropdown.Item> */}
+                </Dropdown.Menu>
+                )}
 							</Dropdown>
 						</Nav>
 						</Navbar.Collapse>
