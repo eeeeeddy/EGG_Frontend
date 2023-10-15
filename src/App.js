@@ -11,7 +11,7 @@ import Author from './Author';
 import History from './History';
 import Dashboard from './Dashboard';
 import SavePaper from './SavePaper';
-import Detail_graph from './Detail_graph';
+import Detail_FilterTest from './Detail_FilterTest';
 import { UserProvider } from './UserContext';
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
                         <Route path="/History" element={<History />} />
                         <Route path="/Dashboard" element={<Dashboard />} />
                         <Route path="/SavePaper" element={<SavePaper />} />
-                        <Route path="/Detail_graph" element={<Detail_graph />} />
+                        <Route path="/Detail_FilterTest" element={<Detail_FilterTest />} />
                     </Routes>
                 </div>
             </BrowserRouter>

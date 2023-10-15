@@ -63,7 +63,7 @@
 
 .bottomButtonGroup {
     position: absolute;
-    bottom: 0px;
+    bottom: 160px;
     left: calc(100%);
     border: none;
     cursor: pointer;
@@ -112,4 +112,8 @@
     background-color: #f5f5f5; /* 노드 정보 영역 배경색 설정 */
     overflow-y: auto; /* 노드 정보가 넘칠 경우 스크롤바 추가 */
     height: 100%;
+}
+
+#filterBar {
+    font-size: small;
 }

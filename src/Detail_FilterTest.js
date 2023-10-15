@@ -5,7 +5,7 @@ import EggNavbar from './Navbar';
 import * as d3 from 'd3';
 import data from './data.json';
 
-function Detail_graph() {
+function Detail_FilterTest() {
     const svgRef = useRef(null);
     const [selectedNode, setSelectedNode] = useState(null); // 선택한 노드 정보를 저장할 상태 변수
     const [fixedNode, setFixedNode] = useState(null); // 고정된 노드 정보를 저장할 상태 변수
@@ -360,4 +360,4 @@ function Detail_graph() {
         </div>
     );
 }
-export default Detail_graph;
+export default Detail_FilterTest;

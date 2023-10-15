@@ -17,15 +17,13 @@ function Detail() {
     const [highlightedText, setHighlightedText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isShowHelp, setIsShowHelp] = useState(false);
-    const [isAuthorModalOpen, setIsAuthorModalOpen] = useState(false);
+    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const svgRef = useRef(null);
+    const [articleNode, setArticleNode] = useState([]); // 논문 노드 선언
     const [selectedNode, setSelectedNode] = useState(null); // 선택한 노드 정보를 저장할 상태 변수
     const [fixedNode, setFixedNode] = useState(null); // 고정된 노드 정보를 저장할 상태 변수
     const initialScale = 1; // 초기 스크롤 배율
-    //const graphData = data; // graph JSON 데이터
-    //const nodes = graphData.nodes;
     const navigate = useNavigate();
-    // const { history, updateHistory } = useUser();`
     const [selectedPaper, setSelectedPaper] = useState(null);
     const { userEmail, updateHistory } = useUser();
     const params = useParams();
@@ -33,7 +31,18 @@ function Detail() {
     const [nodes, setNodes] = useState([]);
     const [links, setLinks] = useState([]);
     const [publishYear, setPublishYear] = useState(0);
+    const [mainAuthor, setMainAuthor] = useState("");
     const [category, setCategory] = useState("");
+    const [journalName, setjournalName] = useState("");
+    const [citation, setCitation] = useState(0);
+    // const sortedNodes = [...nodes]; // 기존 배열을 복사합니다.
+    // const articleNodeIndex = sortedNodes.findIndex(node => node.article_id === articleNode.article_id);
+
+    // // graphData 정렬 (검색한 논문이 배열의 맨 앞에 위치하도록)
+    // if (articleNodeIndex !== -1) {
+    //     const [articleNode] = sortedNodes.splice(articleNodeIndex, 1);
+    //     sortedNodes.unshift(articleNode); // 첫 번째 요소로 이동합니다.
+    // }
 
     useEffect(() => {
         // URL 파라미터로부터 검색어를 가져옵니다.
@@ -49,7 +58,8 @@ function Detail() {
         const articleIds = Array.isArray(params.article_id) ? params.article_id.join('+') : params.article_id;
 
         // Fast API 엔드포인트에 GET 요청을 보냅니다.
-        axios.get(`http://15.165.247.85/Detail/${articleIds}`)
+        // axios.get(`http://15.165.247.85/Detail/${articleIds}`)
+        axios.get(`https://67fd-15-165-247-85.ngrok.io/Detail/${articleIds}`)
             .then((response) => {
                 // 데이터 불러오기 완료 후 로딩 상태 변경
                 setIsLoading(false);
@@ -64,6 +74,9 @@ function Detail() {
 
                 const temp2 = response.data.links
                 setLinks(temp2)
+
+                const temp3 = response.data.nodes.find(node => node.article_id === params.article_id)
+                setArticleNode(temp3)
             })
             .catch((error) => {
                 setIsLoading(false);
@@ -71,11 +84,12 @@ function Detail() {
             });
     }, [params.article_id]); // 배열 안의 값이 변하면 통신하면서 화면을 렌더링함.
 
-    // useEffect(() => {
-    //     console.log("graphData", graphData);
-    //     console.log("nodes", nodes)
-    //     console.log("links", links)
-    // }, [graphData, nodes, links])
+    useEffect(() => {
+        console.log("graphData", graphData);
+        console.log("nodes", nodes)
+        console.log("links", links)
+        console.log("articleNode", articleNode);
+    }, [graphData, nodes, links, articleNode])
 
     useEffect(() => {
         console.log('User Email 변경:', userEmail);
@@ -83,11 +97,9 @@ function Detail() {
     }, [userEmail]);
 
     useEffect(() => {
-        // 그래프 생성되면 detailResult부분 수정 필요
-        if (detailResult.length > 0) {
-            setIsLoading(false);
-        }
-    }, [detailResult]);
+        setCurrentYear(new Date().getFullYear());
+        console.log("현재 연도", currentYear)
+    }, []);
 
     const toggleLeftPage = () => {
         setIsLeftPageOpen(!isLeftPageOpen);
@@ -98,23 +110,17 @@ function Detail() {
     }
 
     const AuthorClick = (authorId) => {
-        console.log('AuthorClick called with author_id:', authorId);
         if (authorId !== 'None') {
             setSelectedAuthorId(authorId);
-            // openModal();
             navigate(`/Author/${authorId}`);
-            console.log(authorId)
         } else {
             alert("KCI 내에 등록된 저자 아이디가 없습니다.")
         }
     }
 
-    const openModal = () => {
-        setIsAuthorModalOpen(true);
-    }
-
-    const closeModal = () => {
-        setIsAuthorModalOpen(false);
+    const handleMainAuthor = (event) => {
+        const temp = event.target.value;
+        setMainAuthor(temp);
     }
 
     const handlePublishYear = (event) => {
@@ -125,6 +131,16 @@ function Detail() {
     const handleCategory = (event) => {
         const temp = event.target.value;
         setCategory(temp);
+    }
+
+    const handleJournalName = (event) => {
+        const temp = event.target.value;
+        setjournalName(temp);
+    }
+
+    const handleCitation = (event) => {
+        const temp = event.target.value;
+        setCitation(parseInt(temp));
     }
 
     const handleGraphFilter = () => {
@@ -170,8 +186,7 @@ function Detail() {
             .attr('r', d => (d.citation + 5) * 3)
             .style('fill', d => 'rgba(255, 255, 0, 0.8') // 노드 색상
             .style('stroke', (d) => {
-                // return d.pub_year === publishYear ? 'rgba(255, 0, 0)' : 'rgba(255, 255, 0, 0.8)'
-                if (d.pub_year === publishYear || d.category === category) {
+                if (d.pub_year > publishYear || d.category === category || d.author_name === mainAuthor || d.citation === citation || d.journal_name === journalName) {
                     return 'rgba(255, 0, 0)'; // 두 조건이 모두 충족될 때의 테두리 색상
                 } else {
                     return 'rgba(255, 255, 0, 0.8)'; // 조건이 충족되지 않을 때의 테두리 색상
@@ -204,7 +219,11 @@ function Detail() {
                     .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
                     .style('fill', 'rgba(255, 255, 0, 0.8)') // 색상 원래대로 복원
                     .style('stroke', (d) => {
-                        return d.pub_year === publishYear ? 'rgba(255, 0, 0)' : 'rgba(255, 255, 0, 0.8)'
+                        if (d.pub_year > publishYear || d.category === category || d.author_name === mainAuthor || d.citation === citation || d.journal_name === journalName) {
+                            return 'rgba(255, 0, 0)'; // 두 조건이 모두 충족될 때의 테두리 색상
+                        } else {
+                            return 'rgba(255, 255, 0, 0.8)'; // 조건이 충족되지 않을 때의 테두리 색상
+                        }
                     })
                     .style('stroke-width', 1);
             }
@@ -288,10 +307,15 @@ function Detail() {
         window.open(kciUrl);
     }
 
+    const ClickOpenDashboard = (article_id) => {
+        const dashboardUrl = 'http://3.35.150.101:5601/app/dashboards#/view/c3722570-674b-11ee-9c7c-191f0524dd00?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))'
+        window.open(dashboardUrl)
+    }
+
     // graph 생성
     useEffect(() => {
-        const width = 1000;
-        const height = 750;
+        const width = 900;
+        const height = 850;
 
         // SVG 요소 초기화
         const svg = d3.select(svgRef.current)
@@ -330,9 +354,7 @@ function Detail() {
             .attr('class', 'node')
             .attr('r', d => (d.citation + 5) * 3)
             .style('fill', d => 'rgba(255, 255, 0, 0.8') // 노드 색상
-            .style('stroke', (d) => {
-                return d.pub_year === publishYear ? 'rgba(255, 0, 0)' : 'rgba(255, 255, 0, 0.8)'
-            });
+            .style('stroke', d => 'rgba(255, 255, 0, 0.8)');
 
         const label = svg.selectAll('.label')
             .data(nodes)
@@ -509,22 +531,22 @@ function Detail() {
                                 </div>
                             </div>
                             {/* 그래프 그려진 논문 리스트 */}
-                            <div className='mt-2' style={{ maxHeight: '750px', overflowY: 'auto' }}>
+                            <div className='mt-2' style={{ maxHeight: '650px', overflowY: 'auto' }}>
                                 {nodes.map((node) => {
-                                    const author2_name = Array.isArray(node.author2_name) ? node.author2_name.join(',') : node.author2_name;
+                                    const author_group = Array.isArray(node.author2_name) ? node.author_name + ',' + node.author2_name.join(',') : node.author2_name;
                                     if (node.article_id) {
                                         const regex = new RegExp(`(${searchQuery})`, 'gi');
                                         const titleWithHighlight = node.title_ko.replace(regex, (match) => `<span class="highlighted">${match}</span>`);
-                                        const author1WithHighlight = node.author_name.replace(regex, (match) => `<span class="highlited">${match}</span>`);
-                                        const author2WithHighlight = author2_name.replace(regex, (match) => `<span class="highlited">${match}</span>`);
+                                        const authorWithHighlight = author_group.replace(regex, (match) => `<span class="highlited">${match}</span>`);
                                         const yearWithHighlight = node.pub_year.toString().replace(regex, (match) => `<span class="highlighted">${match}</span>`);
                                         const abstractWithHighlight = node.abstract_ko.replace(regex, (match) => `<span class="highlighted">${match}</span>`);
+                                        // const isHighlighted = articleNode.article_id === node.article_id;
+                                        // const articleStyle = isHighlighted ? { backgroundColor: 'rgba(204, 255, 204, 0.7' } : {};
                                         return (
-                                            <div className="articleList" key={node.article_id}>
+                                            <div className="articleList" key={node.article_id} >
                                                 <p className='mt-3'>
                                                     <b><span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
-                                                    <span className='left-page-author' dangerouslySetInnerHTML={{ __html: author1WithHighlight }}></span><br />
-                                                    <span className='left-page-author' dangerouslySetInnerHTML={{ __html: author2WithHighlight }}></span><br />
+                                                    <span className='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span><br />
                                                     <span className='left-page-year' dangerouslySetInnerHTML={{ __html: yearWithHighlight }}></span><br />
                                                     <span className='paperbox-p' dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span>
                                                 </p>
@@ -575,36 +597,28 @@ function Detail() {
                 {/* graph-section */}
                 <div className='col-md-7'>
                     {/* filter */}
-                    <div className='col-md-9 mt-4 collapse' id="filterBar" style={{ marginLeft: "12rem" }}> {/* 마진 부여 수정 필요 */}
+                    <div className='col-md-5 mt-4 collapse' id="filterBar" style={{ marginLeft: "12rem", zIndex: "2", position: "absolute" }}> {/* 마진 부여 수정 필요 */}
                         <div className='row g-2'>
                             <div className="col-md">
                                 <form className='form-floating'>
-                                    <input class="form-control form-control-sm" type="text" id="mainAuthor" placeholder="" />
+                                    <input class="form-control form-control-sm" type="text" id="mainAuthor" placeholder="" onChange={handleMainAuthor} />
                                     <label for="mainAuthor">Main Author</label>
                                 </form>
                             </div>
                             <div className='col-md'>
                                 <form className='form-floating'>
-                                    <input class="form-control form-control-sm" type="text" id="citationNumber" placeholder="" />
+                                    <input class="form-control form-control-sm" type="text" id="citationNumber" placeholder="" onChange={handleCitation} />
                                     <label for="citationNumber">Citation</label>
                                 </form>
                             </div>
                             <div className='col-md'>
                                 <div class="form-floating">
                                     <select class="form-select" id="publishYear" onChange={handlePublishYear} value={publishYear}>
-                                        {/* <select class="form-select" id="publishYear"> */}
-                                        <option value="2023">2023</option>
-                                        <option value="2022">2022</option>
-                                        <option value="2021">2021</option>
-                                        <option value="2020">2020</option>
-                                        <option value="2019">2019</option>
-                                        <option value="2018">2018</option>
-                                        <option value="2017">2017</option>
-                                        <option value="2016">2016</option>
-                                        <option value="2015">2015</option>
-                                        <option value="2014">2014</option>
-                                        <option value="2013">2013</option>
-                                        <option value="2012">2012</option>
+                                        <option selected>Open this select menu</option>
+                                        <option value={currentYear-1}>최근 1년</option>
+                                        <option value={currentYear-5}>최근 5년</option>
+                                        <option value={currentYear-10}>최근 10년</option>
+                                        <option value={currentYear-20}>최근 20년</option>
                                     </select>
                                     <label for="publishYear">Publish Year</label>
                                 </div>
@@ -615,21 +629,36 @@ function Detail() {
                                 <div class="form-floating">
                                     <select class="form-select" id="category" onChange={handleCategory} value={category}>
                                         <option selected>Open this select menu</option>
-                                        <option value="AI">Artificial Intelligence</option>
-                                        <option value="DB">Database</option>
-                                        <option value="CS">Computer Science</option>
-                                        <option value="GP">Graphics</option>
+                                        <option value="ML">Machine Learning</option>
+                                        <option value="Network">Network</option>
+                                        <option value="Databases">Databases</option>
+                                        <option value="Software">Software</option>
+                                        <option value="Operating System">Operating System</option>
+                                        <option value="Computer Vision">Computer Vision</option>
+                                        <option value="Security">Security</option>
+                                        <option value="Graphics">Graphics</option>
+                                        <option value="Computation">Computation</option>
+                                        <option value="Hardware">Hardware</option>
+                                        <option value="Programming Language">Programming Language</option>
+                                        <option value="Data Structure">Data Structure</option>
+                                        <option value="Robotics">Robotics</option>
+                                        <option value="Mathematics">Mathematics</option>
                                     </select>
                                     <label htmlFor="category">Category</label>
                                 </div>
                             </div>
                             <div className='col-md'>
                                 <div class="form-floating">
-                                    <select class="form-select" id="journalName">
+                                    <select class="form-select" id="journalName" onChange={handleJournalName} value={journalName}>
                                         <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        <option value="한국데이터정보과학회지">한국 데이터 정보 과학회지</option>
+                                        <option value="정보과학회 컴퓨팅의 실제 논문지">정보과학회 컴퓨팅의 실제 논문지</option>
+                                        <option value="정보과학회논문지">정보과학회논문지</option>
+                                        <option value="정보과학회논문지 : 소프트웨어 및 응용">정보과학회논문지 : 소프트웨어 및 응용</option>
+                                        <option value="정보과학회논문지 : 시스템 및 이론">정보과학회논문지 : 시스템 및 이론</option>
+                                        <option value="정보과학회논문지 : 정보통신">정보과학회논문지 : 정보통신</option>
+                                        <option value="정보과학회논문지 : 데이타베이스">정보과학회논문지 : 데이타베이스</option>
+                                        <option value="데이타베이스연구">데이타베이스연구</option>
                                     </select>
                                     <label htmlFor="journalName">Journal</label>
                                 </div>
@@ -637,7 +666,6 @@ function Detail() {
                             <div className='col-md'>
                                 <div class="form-floating">
                                     <button className='btn btn-success' type='button' onClick={handleGraphFilter} >Apply</button>
-                                    {/* <button className='btn btn-success' type='button' >Apply</button> */}
                                 </div>
                             </div>
                         </div>
@@ -645,31 +673,37 @@ function Detail() {
                     {/* graph */}
                     <div className="svg-container">
                         <div className='graph'>
-                            <svg ref={svgRef}></svg>
+                            {isLoading ? (
+                                <div className="spinner-border text-info mt-5" role="status"></div>
+                            ) : (
+                                <svg ref={svgRef} width="100%" height="100%"></svg>
+                            )}
                         </div>
                     </div>
                 </div>
 
                 {/* right-section */}
-                <div className='col-md-3 mt-4 bg-white border-start' style={{ maxHeight: '900px', overflowY: 'auto' }}>
+                <div className='col-md-3 mt-4 bg-white border-start' style={{ maxHeight: '700px', overflowY: 'auto' }}>
                     <div className="d-flex justify-content-center me-3">
                         {fixedNode || selectedNode ? (
                             <div className='' style={{ width: '450px' }}>
                                 <h5 style={{ textAlign: 'left' }}><strong>{(fixedNode || selectedNode).title_ko}</strong></h5>
-                                <p style={{ textAlign: 'left' }}>
+                                <a style={{ textAlign: 'left' }}>
                                     {(fixedNode || selectedNode).author_name.split(',').map((author, index) => (
                                         <span key={index} onClick={() => AuthorClick((fixedNode || selectedNode).author_id.split(',')[index])} style={{ cursor: 'pointer' }}>{author.trim()} </span>
                                     ))}
-                                </p>
-                                <p style={{ textAlign: 'left' }}>
                                     {(fixedNode || selectedNode).author2_name.map((author, index) => (
                                         <span key={index} onClick={() => AuthorClick((fixedNode || selectedNode).author2_id[index])} style={{ cursor: 'pointer' }}>{author.trim()} </span>
                                     ))}
-                                </p>
-                                <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).pub_year} {(fixedNode || selectedNode).journal_name}</p>
-                                <p style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).citation} citation</p>
-                                <div className="d-flex mb-2">
+                                </a>
+                                <br/>
+                                <a style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).pub_year} {(fixedNode || selectedNode).journal_name}</a>
+                                <br/>
+                                <a style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).citation} citation</a>
+                                <br/>
+                                <div className="d-flex mt-3 mb-2">
                                     <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenKCI((fixedNode || selectedNode).article_id)}>Open in KCI</button>
+                                    <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenDashboard((fixedNode || selectedNode).article_id)}>Dashboard</button>
                                     <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => handleSaveNode((fixedNode || selectedNode).article_id, userEmail)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
                                             <path fillRule="evenodd"
@@ -684,20 +718,25 @@ function Detail() {
                         ) : (nodes.length > 0 ? (
                             <div className='' style={{ width: '450px' }}>
                                 <h5 style={{ textAlign: 'left' }}><strong>{nodes[0].title_ko}</strong></h5>
-                                <p style={{ textAlign: 'left' }}>
+                                <a style={{ textAlign: 'left' }}>
                                     {nodes[0].author_name.split(',').map((author, index) => (
-                                        <span key={index} onClick={() => AuthorClick(nodes[0].author_id.split(',')[index])} style={{ cursor: 'pointer' }}>{author.trim()} </span>
+                                        <span key={index} onClick={() => AuthorClick(nodes[0].author_id.split(',')[index])} style={{ cursor: 'pointer', marginRight: '5px' }}>
+                                            {author.trim()}
+                                        </span>
                                     ))}
-                                </p>
-                                <p style={{ textAlign: 'left' }}>
                                     {nodes[0].author2_name.map((author, index) => (
-                                        <span key={index} onClick={() => AuthorClick(nodes[0].author2_id[index])} style={{ cursor: 'pointer' }}>{author.trim()} </span>
+                                        <span key={index} onClick={() => AuthorClick(nodes[0].author2_id[index])} style={{ cursor: 'pointer', marginRight: '5px' }}>
+                                            {author.trim()}
+                                        </span>
                                     ))}
-                                </p>
-                                <p style={{ textAlign: 'left' }}>{nodes[0].pub_year} {nodes[0].journal_name}</p>
-                                <p style={{ textAlign: 'left' }}>{nodes[0].citation} citation</p>
-                                <div className="d-flex mb-3">
+                                </a>
+                                <br />
+                                <a style={{ textAlign: 'left' }}>{nodes[0].pub_year} {nodes[0].journal_name}</a>
+                                <br />
+                                <a style={{ textAlign: 'left' }}>{nodes[0].citation} citation</a>
+                                <div className="d-flex mt-3 mb-3">
                                     <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenKCI(nodes[0].article_id)}>Open in KCI</button>
+                                    <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenDashboard(nodes[0].article_id)}>Dashboard</button>
                                     <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => handleSaveNode(nodes[0].article_id, userEmail)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
                                             <path fillRule="evenodd"
@@ -710,13 +749,6 @@ function Detail() {
                             </div>
                         ) : null)}
                     </div>
-                </div>
-
-                {/* 저자 모달 창 */}
-                <div className={`col-md-9 z-1 mt-4 bg-white position-absolute ${isAuthorModalOpen ? 'd-block' : 'd-none'}`}>
-                    {isAuthorModalOpen && (
-                        <Author authorId={selectedAuthorId} onClose={closeModal} />
-                    )}
                 </div>
             </div>
         </div>
