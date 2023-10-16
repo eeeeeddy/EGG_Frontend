@@ -52,13 +52,13 @@ function Main() {
     };
 
     return (
-        <div>
-
+        <div style={{ fontFamily: 'MaruBuri-Regular' }}>
             <div className='Navbar'>
                 <EggMainNavbar />
             </div>
 
             <div className='MainBody'>
+                <div style={{height:"20px"}}></div>
                 <h1>Explore academic papers in a visual graph</h1><br />
                 <h3>To start, enter a paper identifier</h3><br />
 
@@ -76,32 +76,38 @@ function Main() {
                             onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
                         />
                     </div>
-                    <button className='searchButton' type='button' onClick={handleSearchClick}><b>검색</b></button>
+                    <button className='searchButton' type='button' onClick={handleSearchClick}><b>Search</b></button>
                 </div>
-
-
-                <div className='descript'>
-                    <button className="descriptShowButton" type="button" onClick={handleShowButtonClick}>
-                        {isShowInfo ? 'Category △' : 'Category ▽'} </button>
-                    {isShowInfo && (
-                        <div className="showDescript">
-                            <p className="mt-2" style={{ textAlign: 'center' }}></p>
-                            <ul>
-                                <li>AI</li>
-                                <li>DataBase</li>
-                                <li>Graphics</li>
-                                <li>Data Structure</li>
-                            </ul>
-                        </div>)}
-                    <button className="descriptShowButton2" type="button" onClick={handleShowButtonClick2}>
-                        {isShowInfo2 ? 'How to use it △' : 'How to use it ▽'} </button>
-                    {isShowInfo2 && (
-                        <div className="showDescript2">
-                            <p className="mt-2" style={{ textAlign: 'center' }}></p>
-                            <p> 이 페이지는 영국에서 시작하여....</p>
-                        </div>)}
-                    {/* </div> */}
-                </div>
+                <div style={{ height: "30px" }}></div>
+            </div>
+            <div className='descript'>
+                <button className="descriptShowButton" type="button" onClick={handleShowButtonClick}>
+                    {isShowInfo ? 'Category △' : 'Category ▽'} </button>
+                {isShowInfo && (
+                    <div className="showDescript">
+                        <p className="mt-2" style={{ textAlign: 'center' }}></p>
+                        <ul>
+                            <li>ML</li>
+                            <li>Network</li>
+                            <li>Databases</li>
+                            <li>Computer Vision</li>
+                            <li>Security</li>
+                            <li>Graphics</li>
+                            <li>Computation</li>
+                            <li>Hardware</li>
+                            <li>Programming Language</li>
+                            <li>Data Structure</li>
+                            <li>Robotics</li>
+                            <li>Mathematics</li>
+                        </ul>
+                    </div>)}
+                <button className="descriptShowButton2" type="button" onClick={handleShowButtonClick2}>
+                    {isShowInfo2 ? 'How to use it △' : 'How to use it ▽'} </button>
+                {isShowInfo2 && (
+                    <div className="showDescript2">
+                        <p className="mt-2" style={{ textAlign: 'center' }}></p>
+                        <p> 이 페이지는 영국에서 시작하여....</p>
+                    </div>)}
             </div>
         </div>
     );

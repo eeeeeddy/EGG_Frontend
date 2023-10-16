@@ -1,8 +1,15 @@
+.Navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100; /* 다른 요소 위에 표시되도록 설정 */
+}
+
 .paper-text {
     font-size: medium;
 }
 .paper-container {
-    margin-top: 5%;
+    margin-top: 10%;
     display: flex;
     flex-direction: column;
     align-items:center;

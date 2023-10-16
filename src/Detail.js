@@ -58,8 +58,13 @@ function Detail() {
         const articleIds = Array.isArray(params.article_id) ? params.article_id.join('+') : params.article_id;
 
         // Fast API 엔드포인트에 GET 요청을 보냅니다.
-        // axios.get(`http://15.165.247.85/Detail/${articleIds}`)
-        axios.get(`https://67fd-15-165-247-85.ngrok.io/Detail/${articleIds}`)
+        axios.get(`http://15.165.247.85/Detail/${articleIds}`)
+        // axios.get(`https://67fd-15-165-247-85.ngrok.io/Detail/${articleIds}`, {
+        //     headers: {
+        //         'Content-Tvpe':'application/json',
+        //         'ngrok-skip-browser-warning': '69420'
+        //     }
+        // })
             .then((response) => {
                 // 데이터 불러오기 완료 후 로딩 상태 변경
                 setIsLoading(false);
@@ -145,8 +150,8 @@ function Detail() {
 
     const handleGraphFilter = () => {
 
-        const width = 1000;
-        const height = 750;
+        const width = 900;
+        const height = 850;
 
         // 해당 코드 추가: 이전 노드와 링크를 제거
         d3.select(svgRef.current).selectAll('.node').remove();
@@ -184,12 +189,12 @@ function Detail() {
             .enter().append('circle')
             .attr('class', 'node')
             .attr('r', d => (d.citation + 5) * 3)
-            .style('fill', d => 'rgba(255, 255, 0, 0.8') // 노드 색상
+            .style('fill', d => 'rgba(163, 177, 138, 0.7)') // 노드 색상
             .style('stroke', (d) => {
                 if (d.pub_year > publishYear || d.category === category || d.author_name === mainAuthor || d.citation === citation || d.journal_name === journalName) {
-                    return 'rgba(255, 0, 0)'; // 두 조건이 모두 충족될 때의 테두리 색상
+                    return 'rgba(174, 32, 18)'; // 두 조건이 모두 충족될 때의 테두리 색상
                 } else {
-                    return 'rgba(255, 255, 0, 0.8)'; // 조건이 충족되지 않을 때의 테두리 색상
+                    return 'rgba(163, 177, 138, 0.7)'; // 조건이 충족되지 않을 때의 테두리 색상
                 }
             });
 
@@ -207,7 +212,7 @@ function Detail() {
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', (d.citation + 5) * 3 + 5) // 노드 크기를 키워 hover 효과 표시
-                .style('fill', 'rgba(255, 204, 0, 0.8') // 색상 및 투명도(0.5)
+                .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 및 투명도(0.5)
                 .style('stroke', 'rgba(255, 51, 51, 0.5') // 노드 테두리 색상
                 .style('stroke-width', 3); // 노드 테두리 두께
         });
@@ -217,12 +222,12 @@ function Detail() {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
                     .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
-                    .style('fill', 'rgba(255, 255, 0, 0.8)') // 색상 원래대로 복원
+                    .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 원래대로 복원
                     .style('stroke', (d) => {
                         if (d.pub_year > publishYear || d.category === category || d.author_name === mainAuthor || d.citation === citation || d.journal_name === journalName) {
-                            return 'rgba(255, 0, 0)'; // 두 조건이 모두 충족될 때의 테두리 색상
+                            return 'rgba(174, 32, 18)'; // 두 조건이 모두 충족될 때의 테두리 색상
                         } else {
-                            return 'rgba(255, 255, 0, 0.8)'; // 조건이 충족되지 않을 때의 테두리 색상
+                            return 'rgba(163, 177, 138, 0.7)'; // 조건이 충족되지 않을 때의 테두리 색상
                         }
                     })
                     .style('stroke-width', 1);
@@ -353,8 +358,8 @@ function Detail() {
             .enter().append('circle')
             .attr('class', 'node')
             .attr('r', d => (d.citation + 5) * 3)
-            .style('fill', d => 'rgba(255, 255, 0, 0.8') // 노드 색상
-            .style('stroke', d => 'rgba(255, 255, 0, 0.8)');
+            .style('fill', d => 'rgba(163, 177, 138, 0.7)') // 노드 색상
+            .style('stroke', d => 'rgba(163, 177, 138, 0.7)');
 
         const label = svg.selectAll('.label')
             .data(nodes)
@@ -370,7 +375,7 @@ function Detail() {
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', (d.citation + 5) * 3 + 5) // 노드 크기를 키워 hover 효과 표시
-                .style('fill', 'rgba(255, 204, 0, 0.8') // 색상 및 투명도(0.5)
+                .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 및 투명도(0.5)
                 .style('stroke', 'rgba(255, 51, 51, 0.5') // 노드 테두리 색상
                 .style('stroke-width', 3); // 노드 테두리 두께
         });
@@ -380,7 +385,7 @@ function Detail() {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
                     .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
-                    .style('fill', 'rgba(255, 255, 0, 0.8)') // 색상 원래대로 복원
+                    .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 원래대로 복원
                     .style('stroke-width', 0);
             }
         });
@@ -425,7 +430,7 @@ function Detail() {
 
         simulation.alpha(1).restart();
         console.log("메인")
-    }, [publishYear, fixedNode, links, nodes]);
+    }, [fixedNode, links, nodes, initialScale]);
 
     // console.log(svgRef.current)
     // console.log("initialScale:", initialScale); // initialScale 값 확인
@@ -496,13 +501,12 @@ function Detail() {
     }
 
     return (
-        <div>
+        <div style={{fontFamily:'MaruBuri-Regular'}}>
             <div className='Navbar'>
                 <EggNavbar />
             </div>
 
-            <div className='row'>
-
+            <div className='row mt-5'>
                 {/* left-page */}
                 <div className='col-md-2 mt-4'>
                     <div className={`leftPage ${isLeftPageOpen ? 'closed' : 'open'}`} style={{ width: "400px", height: "100%" }}>
@@ -570,9 +574,10 @@ function Detail() {
                                                 <hr className='mt-0' />
                                                 <p className='text-start'>Each node is an academic paper related to the origin paper.</p>
                                                 <ul>
-                                                    <li className='text-start'>Papers are ~</li>
+                                                    <li className='text-start'>Papers are arranged according to their similarity (this is not a citation tree)</li>
                                                     <li className='text-start'>Node SIZE is the number of citations</li>
                                                     <li className='text-start'>Node color is the publishing year</li>
+                                                    <li className='text-start'>Papers are arranged according to their similarity (this is not a citation tree)</li>
                                                 </ul>
                                             </div>
                                         )}
@@ -582,7 +587,7 @@ function Detail() {
                                         </svg>
                                     </span>
                                     <div className='mt-2'></div> {/* 버튼 간격을 위한 div 태그 */}
-                                    <span className='text-success' id="centerButton" >
+                                    <span className='text-success' id="centerButton">
                                         <svg className='text-success' width="38" height="38" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16" >
                                             <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
                                             <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
@@ -674,7 +679,7 @@ function Detail() {
                     <div className="svg-container">
                         <div className='graph'>
                             {isLoading ? (
-                                <div className="spinner-border text-info mt-5" role="status"></div>
+                                <div className="spinner-border text-success mt-5" role="status"></div>
                             ) : (
                                 <svg ref={svgRef} width="100%" height="100%"></svg>
                             )}

@@ -42,7 +42,7 @@ function SavePaper() {
   }
 
   return (
-    <div>
+    <div style={{ fontFamily: 'MaruBuri-Regular' }}>
       <div className='App'>
         <EggNavbar />
       </div>

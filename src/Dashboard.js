@@ -9,13 +9,14 @@ const Dashboard = () => {
             <div className='Navbar'>
                 <EggNavbar />
             </div>
-
-            <iframe
-                src={kibanaDashboardURL}
-                width="100%"
-                height="900px"
-                title="Kibana Dashboard"
-            ></iframe>
+            <div className='main' style={{marginTop:"62px"}}>
+                <iframe
+                    src={kibanaDashboardURL}
+                    width="100%"
+                    height="900px"
+                    title="Kibana Dashboard"
+                ></iframe>
+            </div>
         </div>
     );
 };

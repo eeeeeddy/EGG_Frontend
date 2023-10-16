@@ -76,8 +76,8 @@
 }
 
 #helpModal {
-    width: 300px;
-    height: 220px;
+    width: 320px;
+    height: 280px;
     bottom: 100%;
     left: 0;
     /* 도움말 모달 위치가 버튼과 얼마나 떨어져있는지 조정하는 요소 */

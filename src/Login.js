@@ -3,7 +3,7 @@ import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import axios from 'axios';
 
 function Login(props) {
-    const { email: initialEmail } = props; 
+    const { email: initialEmail } = props;
     const [email, setEmail] = useState(props.email || '');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState('');
@@ -11,7 +11,7 @@ function Login(props) {
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
-    
+
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
@@ -27,19 +27,19 @@ function Login(props) {
                 email,
                 password,
             });
-            
+
             // 여기에서 로그인 성공 여부를 확인
             if (response.status === 200) {
                 console.log(response.data.message);
                 // 로그인 성공 시 부모 컴포넌트로 이메일과 비밀번호 전달
 
-                localStorage.setItem('accessToken',response.data.accessToken)
+                localStorage.setItem('accessToken', response.data.accessToken)
                 props.onLoginSuccess(email, response.data, password);
             } else {
                 // 서버 응답이 성공(200 OK)이 아닌 경우 오류 메시지 표시
                 setLoginError('Invalid email or password');
             }
-    
+
         } catch (error) {
             console.error('Error logging in', error);
             if (error.response && error.response.status === 400) {
@@ -59,8 +59,8 @@ function Login(props) {
             setPassword('');
         };
     };
-    
-    
+
+
     const handleEmailKeyPress = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault(); // Enter 키의 기본 동작(새 줄 추가)을 방지합니다.
@@ -69,7 +69,7 @@ function Login(props) {
     };
 
     return (
-        <Container className="panel">
+        <Container className="panel" style={{ fontFamily: 'MaruBuri-Regular' }}>
             <Form>
                 <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                     <Col sm>
@@ -105,7 +105,7 @@ function Login(props) {
                             Login
                         </Button>
                     </div>
-                    {loginError && <p style={{ color: 'red'}}>{loginError}</p>}
+                    {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
                 </div>
             </Form>
         </Container>

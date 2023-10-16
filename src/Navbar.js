@@ -157,13 +157,13 @@ function EggNavbar() {
   };
   
 	return (
-		<div>
-			<nav className="navbar navbar-expand-lg navbar-light bg-light">
+		<div style={{fontFamily:'MaruBuri-Regular'}}>
+			<nav className="navbar navbar-expand-lg" style={{backgroundColor:"#dad7cd"}}>
 				<div className="container-fluid">
 					<a className="navbar-brand" href="/">
 						<img src="/ditto_logo.jpg" alt="" width="32" height="32" className="d-inline-block align-text-top" />
 					</a>
-					<a className="navbar-brand" href="/">EGG</a>
+					<a className="navbar-brand" href="/">E G G</a>
 					<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span className="navbar-toggler-icon"></span>
 					</button>

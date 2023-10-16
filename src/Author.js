@@ -65,7 +65,7 @@ function Author() {
         datasets: [{
             label: 'Publication',
             data: pubYearData,
-            backgroundColor: 'rgba(75, 192, 192, 0.6)', // 막대 색상
+            backgroundColor: '#588157', // 막대 색상
         }],
     };
 
@@ -74,7 +74,7 @@ function Author() {
         datasets: [{
             label: 'Category',
             data: categoryData,
-            backgroundColor: 'rgba(75, 192, 192, 0.6)', // 막대 색상
+            backgroundColor: '#588157', // 막대 색상
         }],
     };
 
@@ -97,8 +97,8 @@ function Author() {
         setIsLoading(true);
 
         // Fast API 엔드포인트에 GET 요청을 보냅니다.
-        //axios.get(`http://15.165.247.85/Author/${params.authorId}`)
-        axios.get(`https://67fd-15-165-247-85.ngrok.io/Author/${params.authorId}`)
+        axios.get(`http://15.165.247.85/Author/${params.authorId}`)
+        // axios.get(`https://67fd-15-165-247-85.ngrok.io/Author/${params.authorId}`)
             .then((response) => {
                 setIsLoading(false);
                 console.log("서버에서 받아온 결과", response.data);
@@ -178,26 +178,26 @@ function Author() {
             const imgData = canvas.toDataURL('image/png');
 
             // jsPDF를 사용하여 PDF 생성
-            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdf = new jsPDF('1', 'mm', [210, 297]);
             pdf.addImage(imgData, 'PNG', 10, 10, 190, 0);
 
             // PDF 저장
-            // pdf.save('exported-content.pdf');
+            pdf.save('exported-content.pdf');
 
             // PDF를 새 창으로 열기
-            const newWindow = window.open('', '_blank');
-            newWindow.document.open();
-            newWindow.document.write('<html><body>');
-            newWindow.document.write('<embed width="100%" height="100%" name="plugin" src="' + pdf.output('datauristring') + '" type="application/pdf">');
-            newWindow.document.write('</body></html>');
-            newWindow.document.close();
+            // const newWindow = window.open('', '_blank');
+            // newWindow.document.open();
+            // newWindow.document.write('<html><body>');
+            // newWindow.document.write('<embed width="100%" height="100%" name="plugin" src="' + pdf.output('datauristring') + '" type="application/pdf">');
+            // newWindow.document.write('</body></html>');
+            // newWindow.document.close();
         });
     };
 
     // graph 생성
     useEffect(() => {
-        const width = 1000;
-        const height = 700;
+        const width = 900;
+        const height = 750;
 
         // SVG 요소 초기화
         const svg = d3.select(svgRef.current)
@@ -235,8 +235,8 @@ function Author() {
             .enter().append('circle')
             .attr('class', 'node')
             .attr('r', d => d.impactfactor + 5)
-            .style('fill', d => 'rgba(255, 255, 0, 0.8') // 노드 색상
-            .style('stroke', d => 'rgba(255, 255, 0, 0.8)');
+            .style('fill', d => 'rgba(163, 177, 138, 0.7)') // 노드 색상
+            .style('stroke', d => 'rgba(163, 177, 138, 0.7)');
 
         const label = svg.selectAll('.label')
             .data(nodes)
@@ -252,7 +252,7 @@ function Author() {
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', d.impactfactor) // 노드 크기를 키워 hover 효과 표시
-                .style('fill', 'rgba(255, 204, 0, 0.8') // 색상 및 투명도(0.5)
+                .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 및 투명도(0.5)
                 .style('stroke', 'rgba(255, 51, 51, 0.5') // 노드 테두리 색상
                 .style('stroke-width', 3); // 노드 테두리 두께
         });
@@ -262,7 +262,7 @@ function Author() {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
                     .attr('r', d.impactfactor) // 노드 크기 원래대로 복원
-                    .style('fill', 'rgba(255, 255, 0, 0.8)') // 색상 원래대로 복원
+                    .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 원래대로 복원
                     .style('stroke-width', 0);
             }
         });
@@ -317,19 +317,19 @@ function Author() {
     }
 
     return (
-        <div>
+        <div style={{fontFamily:'MaruBuri-Regular'}}>
 
             <div className='Navbar'>
                 <EggNavbar />
             </div>
 
-            <div className='row'>
+            <div className='row mt-5'>
                 {/* left section */}
                 <div className='col-md-4 mt-4 border-end' style={{ maxHeight: '900px', overflowY: 'auto' }}>
-                    <div className="ms-4" style={{ overflow: 'scroll' }}>
+                    <div className="ms-3" style={{ overflow: 'scroll' }}>
                         <button className='btn btn-success btn-sm ms-1' onClick={handleExportToPDF}>Export to PDF</button>
                         <button className='btn btn-success btn-sm ms-1' onClick={() => ClickOpenKCI(params.authorId)}>Open KCI</button>
-                        <button className='btn btn-success btn-sm ms-1'>Filter</button>
+                        {/* <button className='btn btn-success btn-sm ms-1'>Filter</button> */}
                         <hr />
                         {isLoading ? (
                             <div className="spinner-border text-success" role="status"></div>
@@ -350,14 +350,14 @@ function Author() {
                                 <h5>Word Cloud</h5>
                                 <p>
                                     {[...new Set(nodes[0].word_cloud)].map((word, index) => (
-                                        <button className='btn btn-primary btn-sm me-1 mt-1' key={index}>{word}</button>
+                                        <button className='btn btn-primary btn-sm me-1 mt-1' style={{backgroundColor:"#A3B18A", borderColor:"#A3B18A"}} key={index}>{word}</button>
                                     ))}
                                 </p>
                                 <hr />
-                                <h5>발행연도 막대그래프</h5>
+                                <h5>Publish Year</h5>
                                 <canvas ref={pubYearChartJsCanvasRef} style={{ maxWidth: '100%' }}></canvas>
                                 <hr />
-                                <h5>분야 막대그래프</h5>
+                                <h5>Category</h5>
                                 <canvas ref={categoryChartJsCanvasRef} style={{ maxWidth: '100%' }}></canvas>
                                 <hr />
                             </div>
@@ -368,9 +368,9 @@ function Author() {
                 {/* Graph section */}
                 <div className='col-md-8'>
                     <div className="svg-container">
-                        <div className='graph'>
+                        <div className='graph' style={{marginTop:"100px"}}>
                             {isLoading ? (
-                                <div className="spinner-border text-info mt-5" role="status"></div>
+                                <div className="spinner-border text-success mt-5" role="status"></div>
                             ) : (
                                 <svg ref={svgRef}></svg>
                             )}

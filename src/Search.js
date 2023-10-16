@@ -48,8 +48,8 @@ function Search() {
     };
 
     return (
-        <div>
-            <div className='App'>
+        <div style={{fontFamily:'MaruBuri-Regular'}}>
+            <div className='Navbar'>
                 <EggNavbar />
             </div>
 
