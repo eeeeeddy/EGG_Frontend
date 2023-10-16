@@ -30,19 +30,20 @@ function Detail() {
     const [graphData, setGraphData] = useState(null);
     const [nodes, setNodes] = useState([]);
     const [links, setLinks] = useState([]);
-    const [publishYear, setPublishYear] = useState(0);
+    const [publishYear, setPublishYear] = useState(2024);
     const [mainAuthor, setMainAuthor] = useState("");
     const [category, setCategory] = useState("");
     const [journalName, setjournalName] = useState("");
     const [citation, setCitation] = useState(0);
-    // const sortedNodes = [...nodes]; // 기존 배열을 복사합니다.
-    // const articleNodeIndex = sortedNodes.findIndex(node => node.article_id === articleNode.article_id);
+    const [sortedNode, setSortedNode] = useState([]);
 
-    // // graphData 정렬 (검색한 논문이 배열의 맨 앞에 위치하도록)
-    // if (articleNodeIndex !== -1) {
-    //     const [articleNode] = sortedNodes.splice(articleNodeIndex, 1);
-    //     sortedNodes.unshift(articleNode); // 첫 번째 요소로 이동합니다.
-    // }
+    // 그래프 색상 관련 변수
+    const defaultEdgeColor = 'rgba(0, 0, 0, 0.2)';
+    const defaultNodeColor = 'rgba(163, 177, 138, 0.7)';
+    const selectedNodeColor = 'rgba(255, 159, 28, 0.8)';
+    const hoverDefaultNodeColor = 'rgba(58, 90, 64, 0.8)';
+    const hoverSelectedNodeColor = 'rgba(251, 86, 7, 0.8)';
+    const filteredNodeColor = 'rgba(234, 12, 231, 0.5)';
 
     useEffect(() => {
         // URL 파라미터로부터 검색어를 가져옵니다.
@@ -59,12 +60,6 @@ function Detail() {
 
         // Fast API 엔드포인트에 GET 요청을 보냅니다.
         axios.get(`http://15.165.247.85/Detail/${articleIds}`)
-        // axios.get(`https://67fd-15-165-247-85.ngrok.io/Detail/${articleIds}`, {
-        //     headers: {
-        //         'Content-Tvpe':'application/json',
-        //         'ngrok-skip-browser-warning': '69420'
-        //     }
-        // })
             .then((response) => {
                 // 데이터 불러오기 완료 후 로딩 상태 변경
                 setIsLoading(false);
@@ -82,6 +77,10 @@ function Detail() {
 
                 const temp3 = response.data.nodes.find(node => node.article_id === params.article_id)
                 setArticleNode(temp3)
+
+                const sorted = [...temp1];
+                sorted.sort((a, b) => b.origin_check - a.origin_check);
+                setSortedNode(sorted);
             })
             .catch((error) => {
                 setIsLoading(false);
@@ -95,6 +94,14 @@ function Detail() {
         console.log("links", links)
         console.log("articleNode", articleNode);
     }, [graphData, nodes, links, articleNode])
+
+    useEffect(() => {
+        console.log("mainAuthor", mainAuthor);
+        console.log("citation", citation);
+        console.log("publishYear", publishYear);
+        console.log("category", category);
+        console.log("journalName", journalName);
+    }, [mainAuthor, citation, journalName, category, publishYear])
 
     useEffect(() => {
         console.log('User Email 변경:', userEmail);
@@ -181,7 +188,7 @@ function Detail() {
             .data(links)
             .enter().append('line')
             .attr('class', 'link')
-            .style('stroke', 'rgba(0, 0, 0, 0.2')  // 간선 색상
+            .style('stroke', defaultEdgeColor)  // 간선 색상
             .style('stroke-width', 1); // 간선 두께
 
         const node = svg.selectAll('.node')
@@ -189,14 +196,24 @@ function Detail() {
             .enter().append('circle')
             .attr('class', 'node')
             .attr('r', d => (d.citation + 5) * 3)
-            .style('fill', d => 'rgba(163, 177, 138, 0.7)') // 노드 색상
-            .style('stroke', (d) => {
-                if (d.pub_year > publishYear || d.category === category || d.author_name === mainAuthor || d.citation === citation || d.journal_name === journalName) {
-                    return 'rgba(174, 32, 18)'; // 두 조건이 모두 충족될 때의 테두리 색상
+            .style('fill', (d) => { // 노드 색상
+                if (d.pub_year > publishYear || d.category == category || d.author_name == mainAuthor || d.citation == citation || d.journal_name == journalName) {
+                    return filteredNodeColor; // 두 조건이 모두 충족될 때의 테두리 색상
+                } else if (d.origin_check != 0) {
+                    return selectedNodeColor;
                 } else {
-                    return 'rgba(163, 177, 138, 0.7)'; // 조건이 충족되지 않을 때의 테두리 색상
+                    return defaultNodeColor
                 }
-            });
+            })
+            // .style('stroke', (d) => {
+            //     if (d.pub_year > publishYear || d.category == category || d.author_name == mainAuthor || d.citation == citation || d.journal_name == journalName) {
+            //         return filteredNodeColor; // 두 조건이 모두 충족될 때의 테두리 색상
+            //     } else if (d.origin_check != 0) {
+            //         return selectedNodeColor; // 조건이 충족되지 않을 때의 테두리 색상
+            //     } else {
+            //         return defaultNodeColor;
+            //     }
+            // });
 
         const label = svg.selectAll('.label')
             .data(graphData.nodes)
@@ -212,9 +229,13 @@ function Detail() {
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', (d.citation + 5) * 3 + 5) // 노드 크기를 키워 hover 효과 표시
-                .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 및 투명도(0.5)
-                .style('stroke', 'rgba(255, 51, 51, 0.5') // 노드 테두리 색상
-                .style('stroke-width', 3); // 노드 테두리 두께
+                .style('fill', d => {
+                    if (d.origin_check != 0) { // 색상 및 투명도(0.5)
+                        return hoverSelectedNodeColor;
+                    } else {
+                        return hoverDefaultNodeColor;
+                    }
+                })
         });
 
         node.on('mouseout', (event, d) => {
@@ -222,15 +243,13 @@ function Detail() {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
                     .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
-                    .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 원래대로 복원
-                    .style('stroke', (d) => {
-                        if (d.pub_year > publishYear || d.category === category || d.author_name === mainAuthor || d.citation === citation || d.journal_name === journalName) {
-                            return 'rgba(174, 32, 18)'; // 두 조건이 모두 충족될 때의 테두리 색상
+                    .style('fill', d => {
+                        if (d.origin_check != 0) {
+                            return selectedNodeColor;
                         } else {
-                            return 'rgba(163, 177, 138, 0.7)'; // 조건이 충족되지 않을 때의 테두리 색상
+                            return defaultNodeColor;
                         }
                     })
-                    .style('stroke-width', 1);
             }
         });
 
@@ -350,7 +369,7 @@ function Detail() {
             .data(links)
             .enter().append('line')
             .attr('class', 'link')
-            .style('stroke', 'rgba(0, 0, 0, 0.2')  // 간선 색상
+            .style('stroke', defaultEdgeColor)  // 간선 색상
             .style('stroke-width', 1); // 간선 두께
 
         const node = svg.selectAll('.node')
@@ -358,8 +377,13 @@ function Detail() {
             .enter().append('circle')
             .attr('class', 'node')
             .attr('r', d => (d.citation + 5) * 3)
-            .style('fill', d => 'rgba(163, 177, 138, 0.7)') // 노드 색상
-            .style('stroke', d => 'rgba(163, 177, 138, 0.7)');
+            .style('fill', (d) => { // 노드 색상
+                if (d.origin_check != 0) {
+                    return selectedNodeColor;
+                } else {
+                    return defaultNodeColor
+                }
+            })
 
         const label = svg.selectAll('.label')
             .data(nodes)
@@ -375,9 +399,13 @@ function Detail() {
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', (d.citation + 5) * 3 + 5) // 노드 크기를 키워 hover 효과 표시
-                .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 및 투명도(0.5)
-                .style('stroke', 'rgba(255, 51, 51, 0.5') // 노드 테두리 색상
-                .style('stroke-width', 3); // 노드 테두리 두께
+                .style('fill', d => {
+                    if (d.origin_check != 0) { // 색상 및 투명도(0.5)
+                        return hoverSelectedNodeColor;
+                    } else {
+                        return hoverDefaultNodeColor;
+                    }
+                })
         });
 
         node.on('mouseout', (event, d) => {
@@ -385,8 +413,13 @@ function Detail() {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
                     .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
-                    .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 원래대로 복원
-                    .style('stroke-width', 0);
+                    .style('fill', d => {
+                        if (d.origin_check != 0) {
+                            return selectedNodeColor;
+                        } else {
+                            return defaultNodeColor;
+                        }
+                    })
             }
         });
 
@@ -473,6 +506,7 @@ function Detail() {
             abstract_ko: selectedPaper.abstract_ko,
             abstract_en: selectedPaper.abstract_en,
             userEmail: userEmail,
+            category: selectedPaper.category,
         };
         console.log("articleid :", selectedPaper.article_id);
         console.log("userEmail:", userEmail);
@@ -501,7 +535,7 @@ function Detail() {
     }
 
     return (
-        <div style={{fontFamily:'MaruBuri-Regular'}}>
+        <div style={{ fontFamily: 'MaruBuri-Regular' }}>
             <div className='Navbar'>
                 <EggNavbar />
             </div>
@@ -536,7 +570,7 @@ function Detail() {
                             </div>
                             {/* 그래프 그려진 논문 리스트 */}
                             <div className='mt-2' style={{ maxHeight: '650px', overflowY: 'auto' }}>
-                                {nodes.map((node) => {
+                                {sortedNode.map((node) => {
                                     const author_group = Array.isArray(node.author2_name) ? node.author_name + ',' + node.author2_name.join(',') : node.author2_name;
                                     if (node.article_id) {
                                         const regex = new RegExp(`(${searchQuery})`, 'gi');
@@ -544,10 +578,10 @@ function Detail() {
                                         const authorWithHighlight = author_group.replace(regex, (match) => `<span class="highlited">${match}</span>`);
                                         const yearWithHighlight = node.pub_year.toString().replace(regex, (match) => `<span class="highlighted">${match}</span>`);
                                         const abstractWithHighlight = node.abstract_ko.replace(regex, (match) => `<span class="highlighted">${match}</span>`);
-                                        // const isHighlighted = articleNode.article_id === node.article_id;
-                                        // const articleStyle = isHighlighted ? { backgroundColor: 'rgba(204, 255, 204, 0.7' } : {};
+                                        const isHighlighted = node.origin_check !== 0;
+                                        const articleStyle = isHighlighted ? { backgroundColor: 'rgba(163, 177, 138, 0.3)' } : {};
                                         return (
-                                            <div className="articleList" key={node.article_id} >
+                                            <div className="articleList" key={node.article_id} style={articleStyle}>
                                                 <p className='mt-3'>
                                                     <b><span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
                                                     <span className='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span><br />
@@ -619,11 +653,11 @@ function Detail() {
                             <div className='col-md'>
                                 <div class="form-floating">
                                     <select class="form-select" id="publishYear" onChange={handlePublishYear} value={publishYear}>
-                                        <option selected>Open this select menu</option>
-                                        <option value={currentYear-1}>최근 1년</option>
-                                        <option value={currentYear-5}>최근 5년</option>
-                                        <option value={currentYear-10}>최근 10년</option>
-                                        <option value={currentYear-20}>최근 20년</option>
+                                        <option selected value="2024">Open this select menu</option>
+                                        <option value={currentYear - 1}>최근 1년</option>
+                                        <option value={currentYear - 5}>최근 5년</option>
+                                        <option value={currentYear - 10}>최근 10년</option>
+                                        <option value={currentYear - 20}>최근 20년</option>
                                     </select>
                                     <label for="publishYear">Publish Year</label>
                                 </div>
@@ -633,7 +667,7 @@ function Detail() {
                             <div className='col-md'>
                                 <div class="form-floating">
                                     <select class="form-select" id="category" onChange={handleCategory} value={category}>
-                                        <option selected>Open this select menu</option>
+                                        <option selected value="default">Open this select menu</option>
                                         <option value="ML">Machine Learning</option>
                                         <option value="Network">Network</option>
                                         <option value="Databases">Databases</option>
@@ -655,7 +689,7 @@ function Detail() {
                             <div className='col-md'>
                                 <div class="form-floating">
                                     <select class="form-select" id="journalName" onChange={handleJournalName} value={journalName}>
-                                        <option selected>Open this select menu</option>
+                                        <option selected value="default">Open this select menu</option>
                                         <option value="한국데이터정보과학회지">한국 데이터 정보 과학회지</option>
                                         <option value="정보과학회 컴퓨팅의 실제 논문지">정보과학회 컴퓨팅의 실제 논문지</option>
                                         <option value="정보과학회논문지">정보과학회논문지</option>
@@ -701,14 +735,15 @@ function Detail() {
                                         <span key={index} onClick={() => AuthorClick((fixedNode || selectedNode).author2_id[index])} style={{ cursor: 'pointer' }}>{author.trim()} </span>
                                     ))}
                                 </a>
-                                <br/>
+                                <br />
                                 <a style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).pub_year} {(fixedNode || selectedNode).journal_name}</a>
-                                <br/>
+                                <br />
                                 <a style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).citation} citation</a>
-                                <br/>
-                                <div className="d-flex mt-3 mb-2">
+                                <br />
+                                <div className="d-flex mt-3 mb-3">
                                     <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenKCI((fixedNode || selectedNode).article_id)}>Open in KCI</button>
-                                    <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenDashboard((fixedNode || selectedNode).article_id)}>Dashboard</button>
+                                    <button className='btn btn-warning btn-sm me-2' type='button' onClick={() => addOrigin((fixedNode || selectedNode).article_id)}>+ Add Origin</button>
+                                    {/* <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenDashboard((fixedNode || selectedNode).article_id)}>Dashboard</button> */}
                                     <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => handleSaveNode((fixedNode || selectedNode).article_id, userEmail)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
                                             <path fillRule="evenodd"
@@ -716,9 +751,14 @@ function Detail() {
                                         </svg> Save
                                     </button>
                                 </div>
-                                <button className='btn btn-warning btn-sm mb-3' type='button' onClick={() => addOrigin((fixedNode || selectedNode).article_id)}>+ Add Origin</button>
+                                {/* <button className='btn btn-warning btn-sm mb-3' type='button' onClick={() => addOrigin((fixedNode || selectedNode).article_id)}>+ Add Origin</button> */}
                                 <p className="abstract" style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).abstract_ko}</p>
-                                {/* 다른 노드 정보 필드를 추가할 수 있음 */}
+                                <hr />
+                                <p>Keyword</p>
+                                <p>{(fixedNode || selectedNode).keys.map((key, index) => (
+                                    <button className='btn btn-primary btn-sm me-1 mt-1' style={{ backgroundColor: "#A3B18A", borderColor: "#A3B18A" }} key={index}>{key}</button>
+                                ))}
+                                </p>
                             </div>
                         ) : (nodes.length > 0 ? (
                             <div className='' style={{ width: '450px' }}>
@@ -741,7 +781,7 @@ function Detail() {
                                 <a style={{ textAlign: 'left' }}>{nodes[0].citation} citation</a>
                                 <div className="d-flex mt-3 mb-3">
                                     <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenKCI(nodes[0].article_id)}>Open in KCI</button>
-                                    <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenDashboard(nodes[0].article_id)}>Dashboard</button>
+                                    {/* <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenDashboard(nodes[0].article_id)}>Dashboard</button> */}
                                     <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => handleSaveNode(nodes[0].article_id, userEmail)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
                                             <path fillRule="evenodd"
@@ -750,7 +790,12 @@ function Detail() {
                                     </button>
                                 </div>
                                 <p className="abstract" style={{ textAlign: 'left' }}>{nodes[0].abstract_ko}</p>
-                                {/* 다른 노드 정보 필드를 추가할 수 있음 */}
+                                <hr />
+                                <p>Keyword</p>
+                                <p>{nodes[0].keys.map((key, index) => (
+                                    <button className='btn btn-primary btn-sm me-1 mt-1' style={{ backgroundColor: "#A3B18A", borderColor: "#A3B18A" }} key={index}>{key}</button>
+                                ))}
+                                </p>
                             </div>
                         ) : null)}
                     </div>

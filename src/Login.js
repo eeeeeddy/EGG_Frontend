@@ -69,46 +69,48 @@ function Login(props) {
     };
 
     return (
-        <Container className="panel" style={{ fontFamily: 'MaruBuri-Regular' }}>
-            <Form>
-                <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                    <Col sm>
-                        <Form.Control
-                            type="email"
-                            placeholder="E-mail"
-                            onChange={handleEmailChange}
-                            onKeyDown={handleEmailKeyPress}
-                            value={email}
-                        />
-                    </Col>
-                </Form.Group>
-                <div>
-                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+        <div style={{ fontFamily: 'MaruBuri-Regular' }}>
+            <Container className="panel">
+                <Form>
+                    <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                         <Col sm>
                             <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                onChange={handlePasswordChange}
+                                type="email"
+                                placeholder="E-mail"
+                                onChange={handleEmailChange}
                                 onKeyDown={handleEmailKeyPress}
-                                value={password}
+                                value={email}
                             />
                         </Col>
                     </Form.Group>
-                    <br />
-                    <div className="d-grid gap-1">
-                        <Button
-                            variant="secondary"
-                            type="button"
-                            onClick={handleLoginClick}
-                            onKeyDown={handleEmailKeyPress}
-                        >
-                            Login
-                        </Button>
+                    <div>
+                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+                            <Col sm>
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Password"
+                                    onChange={handlePasswordChange}
+                                    onKeyDown={handleEmailKeyPress}
+                                    value={password}
+                                />
+                            </Col>
+                        </Form.Group>
+                        <br />
+                        <div className="d-grid gap-1">
+                            <Button
+                                variant="secondary"
+                                type="button"
+                                onClick={handleLoginClick}
+                                onKeyDown={handleEmailKeyPress}
+                            >
+                                Login
+                            </Button>
+                        </div>
+                        {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
                     </div>
-                    {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
-                </div>
-            </Form>
-        </Container>
+                </Form>
+            </Container>
+        </div>
     );
 }
 

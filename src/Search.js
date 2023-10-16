@@ -64,7 +64,7 @@ function Search() {
                 </div>
                 <div>
                     {isLoading ? (
-                        <div className="spinner-border text-info" role="status"></div>
+                        <div className="spinner-border text-success" role="status"></div>
                     ) : (
                         <div className="paper-box-container">
                             {searchResult.length > 0 ? (

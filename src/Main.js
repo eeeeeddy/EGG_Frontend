@@ -65,22 +65,29 @@ function Main() {
                 {/* 검색창 */}
                 <div className='search'>
                     <div className='searchInput'>
-                        <img src='/search_icon2.png' alt='돋보기 아이콘' className='searchIcon' />
+                        {/* <img src='/search_icon2.png' alt='돋보기 아이콘' className='searchIcon' /> */}
                         <input
                             className='search-input' type='search'
                             autoComplete='off'
                             aria-live='polite'
-                            placeholder='논문제목, 저자, 키워드를 입력하세요'
+                            placeholder='논문 제목, 키워드를 입력하세요'
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
+                            style={{borderRadius: "45px", textAlign:"center"}}
                         />
                     </div>
                     <button className='searchButton' type='button' onClick={handleSearchClick}><b>Search</b></button>
                 </div>
                 <div style={{ height: "30px" }}></div>
             </div>
-            <div className='descript'>
+            <div className='d-flex justify-content-center mt-3 mb-0'>
+                <p>10,000 articles in Korean</p>
+            </div>
+            <div className='d-flex justify-content-center'>
+                <a href="/About" style={{color: "#588157", textDecoration: "None"}}>How to Use it</a>
+            </div>
+            {/* <div className='descript'>
                 <button className="descriptShowButton" type="button" onClick={handleShowButtonClick}>
                     {isShowInfo ? 'Category △' : 'Category ▽'} </button>
                 {isShowInfo && (
@@ -108,7 +115,7 @@ function Main() {
                         <p className="mt-2" style={{ textAlign: 'center' }}></p>
                         <p> 이 페이지는 영국에서 시작하여....</p>
                     </div>)}
-            </div>
+            </div> */}
         </div>
     );
 }

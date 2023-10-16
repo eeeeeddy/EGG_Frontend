@@ -68,3 +68,9 @@
   border-color:  hsl(28, 100%, 50%);
   position: absolute;
   }
+
+  .item-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

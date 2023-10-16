@@ -98,7 +98,6 @@ function Author() {
 
         // Fast API 엔드포인트에 GET 요청을 보냅니다.
         axios.get(`http://15.165.247.85/Author/${params.authorId}`)
-        // axios.get(`https://67fd-15-165-247-85.ngrok.io/Author/${params.authorId}`)
             .then((response) => {
                 setIsLoading(false);
                 console.log("서버에서 받아온 결과", response.data);
@@ -328,6 +327,7 @@ function Author() {
                 <div className='col-md-4 mt-4 border-end' style={{ maxHeight: '900px', overflowY: 'auto' }}>
                     <div className="ms-3" style={{ overflow: 'scroll' }}>
                         <button className='btn btn-success btn-sm ms-1' onClick={handleExportToPDF}>Export to PDF</button>
+                        <button className='btn btn-success btn-sm ms-1'>Dashboard</button>
                         <button className='btn btn-success btn-sm ms-1' onClick={() => ClickOpenKCI(params.authorId)}>Open KCI</button>
                         {/* <button className='btn btn-success btn-sm ms-1'>Filter</button> */}
                         <hr />

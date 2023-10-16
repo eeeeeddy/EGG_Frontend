@@ -150,7 +150,7 @@ function EggMainNavbar() {
             <nav className="navbar navbar-expand-lg" style={{backgroundColor:"#dad7cd"}}>
                 <div className="container-fluid">
                     <a className="navbar-brand" href="/">
-                        <img src="/ditto_logo.jpg" alt="" width="32" height="32" className="d-inline-block align-text-top" />
+                        <img src="/EGG_logo.png" alt="" width="32" height="32" className="d-inline-block align-text-top" />
                     </a>
                     <a className="navbar-brand" href="/">E G G</a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

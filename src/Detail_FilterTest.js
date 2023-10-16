@@ -15,6 +15,10 @@ function Detail_FilterTest() {
     const links = graphData.links;
     const [publishYear, setPublishYear] = useState(0);
     const [category, setCategory] = useState("");
+    const [mainAuthor, setMainAuthor] = useState("");
+    const [citation, setCitation] = useState(0);
+    const [journalName, setjournalName] = useState("");
+
 
     const handlePublishYear = (event) => {
         const temp = event.target.value;
@@ -24,6 +28,21 @@ function Detail_FilterTest() {
     const handleCategory = (event) => {
         const temp = event.target.value;
         setCategory(temp);
+    }
+
+    const handleMainAuthor = (event) => {
+        const temp = event.target.value;
+        setMainAuthor(temp);
+    }
+
+    const handleJournalName = (event) => {
+        const temp = event.target.value;
+        setjournalName(temp);
+    }
+
+    const handleCitation = (event) => {
+        const temp = event.target.value;
+        setCitation(parseInt(temp));
     }
 
     const resetZoom = () => {
@@ -74,7 +93,7 @@ function Detail_FilterTest() {
             .style('fill', d => 'rgba(255, 255, 0, 0.8') // 노드 색상
             .style('stroke', (d) => {
                 // return d.pub_year === publishYear ? 'rgba(255, 0, 0)' : 'rgba(255, 255, 0, 0.8)'
-                if (d.pub_year === publishYear || d.category === category) {
+                if (d.journal_name === journalName) {
                     return 'rgba(255, 0, 0)'; // 두 조건이 모두 충족될 때의 테두리 색상
                 } else {
                     return 'rgba(255, 255, 0, 0.8)'; // 조건이 충족되지 않을 때의 테두리 색상
@@ -106,10 +125,6 @@ function Detail_FilterTest() {
                 d3.select(event.currentTarget)
                     .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
                     .style('fill', 'rgba(255, 255, 0, 0.8)') // 색상 원래대로 복원
-                    .style('stroke', (d) => {
-                        return d.pub_year === publishYear ? 'rgba(255, 0, 0)' : 'rgba(255, 255, 0, 0.8)'
-                    })
-                    .style('stroke-width', 1);
             }
         });
 
@@ -287,19 +302,20 @@ function Detail_FilterTest() {
                         <div className='row g-2'>
                             <div className="col-md">
                                 <form className='form-floating'>
-                                    <input class="form-control form-control-sm" type="text" id="mainAuthor" placeholder="" />
+                                    <input class="form-control form-control-sm" type="text" id="mainAuthor" placeholder="" onChange={handleMainAuthor}/>
                                     <label for="mainAuthor">Main Author</label>
                                 </form>
                             </div>
                             <div className='col-md'>
                                 <form className='form-floating'>
-                                    <input class="form-control form-control-sm" type="text" id="citationNumber" placeholder="" />
+                                    <input class="form-control form-control-sm" type="text" id="citationNumber" placeholder="" onChange={handleCitation}/>
                                     <label for="citationNumber">Citation</label>
                                 </form>
                             </div>
                             <div className='col-md'>
                                 <div class="form-floating">
                                     <select class="form-select" id="publishYear" onChange={handlePublishYear} value={publishYear}>
+                                        <option selected>default</option>
                                         <option value="2023">2023</option>
                                         <option value="2022">2022</option>
                                         <option value="2021">2021</option>
@@ -332,10 +348,10 @@ function Detail_FilterTest() {
                             </div>
                             <div className='col-md'>
                                 <div class="form-floating">
-                                    <select class="form-select" id="journalName">
+                                    <select class="form-select" id="journalName" onChange={handleJournalName} value={journalName}>
                                         <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
+                                        <option value="한국 정보 과학회">한국 정보 과학회</option>
+                                        <option value="미국 정보 과학회">미국</option>
                                         <option value="3">Three</option>
                                     </select>
                                     <label htmlFor="journalName">Journal</label>
