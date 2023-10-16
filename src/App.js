@@ -9,7 +9,6 @@ import Pricing from './Pricing';
 import Login from './Login';
 import Author from './Author';
 import History from './History';
-import Dashboard from './Dashboard_article';
 import SavePaper from './SavePaper';
 import Detail_graph from './Detail_graph';
 import { UserProvider } from './UserContext';

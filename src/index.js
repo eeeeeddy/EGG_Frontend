@@ -11,9 +11,9 @@ import { UserProvider } from './UserContext'; // UserProvider를 import
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     // <React.StrictMode> // 페이지가 두 번씩 렌더링되서 주석처리함.
-    <UserProvider> {/* UserProvider로 App을 감싸기 */}
+    // <UserProvider> {/* UserProvider로 App을 감싸기 */}
       <App />
-    </UserProvider>
+    // </UserProvider>
     // </React.StrictMode>
 );
 

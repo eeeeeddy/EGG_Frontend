@@ -6,7 +6,7 @@ import SignUp from './SignUp';
 import { useUser } from './UserContext';
 import { Link } from 'react-router-dom';
 import axios from './AxiosConfig';
-import SavePaper from './SavePaper';
+import './css/Navbar.css';
 
 function EggMainNavbar() {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -146,22 +146,23 @@ function EggMainNavbar() {
   };
   
 	return (
-		<div>
-			<nav className="navbar navbar-expand-lg navbar-light bg-light">
-				<div className="container-fluid">
-					<a className="navbar-brand" href="/">
-						<img src="/ditto_logo.jpg" alt="" width="32" height="32" className="d-inline-block align-text-top" />
+		<div style={{margin:0, padding:0}}>
+			< Nav className="navbar navbar-expand-lg bg-white custom-shadow">
+				<div className="container-fluid" style={{paddingLeft:9, paddingTop:0}}>
+					<a className="navbar-brand" href="/" style={{ paddingTop:0}} >
+						<img src="/logimg2.png" alt="로고" width="53" height="48" className="d-inline-block align-text-top float-left mt-0 ml-5"/>
+            {/* <img src="/ditto_logo.jpg" alt="로고" width="50" height="47" className="d-inline-block align-text-top float-left mt-0"/> */}
 					</a>
-					<a className="navbar-brand" href="/">EGG</a>
+					<a className="navbar-brand" href="/" style={{color:'#374D9A'}}><b>EGG Graph</b></a>
 					<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span className="navbar-toggler-icon"></span>
 					</button>
 					<div className="collapse navbar-collapse" id="navbarSupportedContent">
 						<Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
 						<Nav>
-							<Nav.Link style={{ color: 'black' }} href="/Dashboard">Dashboard</Nav.Link>
-							<Nav.Link style={{ color: 'black' }} href="/About">About</Nav.Link>
-							<Nav.Link style={{ color: 'black' }} href="/Pricing">Pricing</Nav.Link>
+							<Nav.Link style={{ color: '#374D9A' }} href="/Dashboard">Dashboard</Nav.Link>
+							<Nav.Link style={{ color: '#374D9A' }} href="/About">About</Nav.Link>
+							<Nav.Link style={{ color: '#374D9A' }} href="/Pricing">Pricing</Nav.Link>
 							<Dropdown align="end" show={showProfileMenu} onToggle={(isOpen) => setShowProfileMenu(isOpen)}>
 							<Dropdown.Toggle variant="link" id="profile-dropdown">
 								<svg width="24" height="24" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
@@ -192,7 +193,7 @@ function EggMainNavbar() {
 						</div>
 					)}
 					</div>
-				</nav>
+				</Nav>
 			<Modal show={showLoginModal} onHide={handleClose}>
 				<Modal.Header closeButton>
 				<Modal.Title>Log in <span style={{ color: "gray", fontSize: "medium" }}>or</span> Sign up</Modal.Title>

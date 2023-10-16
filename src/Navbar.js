@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 import { Navbar, Nav, Modal, Dropdown, Form, Row, Col, Container, Button } from 'react-bootstrap';
 import Login from './Login';
 import SignUp from './SignUp';
 import { useUser } from './UserContext';
 import { Link } from 'react-router-dom';
 import axios from './AxiosConfig';
-import SavePaper from './SavePaper';
+import './css/Navbar.css';
+import { style } from 'd3';
 
 function EggNavbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showDashboardMenu, setShowDashboardMenu] = useState(false);
+  const params = useParams();
 
   const navigate = useNavigate();
   const { updateEmail } = useUser();
@@ -27,6 +29,15 @@ function EggNavbar() {
   const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken') || '');
   const [showLogoutSuccessMessage, setShowLogoutSuccessMessage] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(false);
+  
+  useEffect(() => {
+    // URL 파라미터로부터 검색어를 가져옵니다.
+    const { searchQuery } = params;
+
+    // Spring Boot API 엔드포인트에 GET 요청을 보냅니다.
+    axios.get(`/search/_search/${params.searchQuery}`)
+      
+}, [searchQuery, params]);
 
   useEffect(() => {
     const storedAccessToken = localStorage.getItem('accessToken');
@@ -40,6 +51,28 @@ function EggNavbar() {
     }
   }, []);
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      if (searchQuery.trim() === '') {
+        window.alert('검색어를 입력하세요.');
+      } else {
+        navigate(`/search/${encodeURIComponent(searchQuery)}`);
+        // navigate(`/detail/${encodeURIComponent(searchQuery)}`);
+
+      }
+    }
+  };
+
+  const handleSearchClick = () => {
+    if (searchQuery.trim() === '') {
+      window.alert('검색어를 입력하세요.');
+    } else {
+      navigate(`/search/${encodeURIComponent(searchQuery)}`);
+      // navigate(`/detail/${encodeURIComponent(searchQuery)}`);
+
+    }
+  };
+  
   const handleLoginClick = () => {
     setEmail('');
     setIsRegistering(false);
@@ -74,16 +107,6 @@ function EggNavbar() {
     setLoggedIn(true);
     setUserEmail(email);
     updateEmail(email);
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      if (searchQuery.trim() === '') {
-        window.alert('검색어를 입력하세요.');
-      } else {
-        navigate(`/search/${encodeURIComponent(searchQuery)}`);
-      }
-    }
   };
 
   const isValidEmail = (email) => {
@@ -158,23 +181,28 @@ function EggNavbar() {
   };
   
 	return (
-		<div>
-			<nav className="navbar navbar-expand-lg navbar-light bg-light">
-				<div className="container-fluid">
-					<a className="navbar-brand" href="/">
-						<img src="/ditto_logo.jpg" alt="" width="32" height="32" className="d-inline-block align-text-top" />
+		<div style={{margin:0, padding:0}}>
+			< Nav className="navbar navbar-expand-lg bg-white custom-shadow">
+				<div className="container-fluid" style={{paddingLeft:0, paddingTop:0}}>
+					<a className="navbar-brand" href="/" style={{ paddingTop:0}} >
+						<img src="/ditto_logo.jpg" alt="로고" width="50" height="47" className="d-inline-block align-text-top float-left mt-0"/>
 					</a>
-					<a className="navbar-brand" href="/">EGG</a>
+					<a className="navbar-brand" href="/" style={{color:'#374D9A'}}><b>EGG Graph</b></a>
 					<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span className="navbar-toggler-icon"></span>
 					</button>
 					<div className="collapse navbar-collapse" id="navbarSupportedContent">
-						<form className="d-flex">
-							<input className="form-control me-2 rounded-pill"
-								type="search" placeholder="Search for a paper" aria-label="Search"
-								onChange={(e) => setSearchQuery(e.target.value)}
-								onKeyDown={handleKeyDown} />
-							<button className="btn btn-outline-success rounded-pill" type="submit">Search</button>
+						<form className="d-flex" style={{ position: 'relative',width:240, height:43}}>
+							<input className="form form-control custom-form"
+								type="search" 
+                placeholder="검색어를 입력하세요."
+                // placeholder={decodeURIComponent(params.searchQuery)}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+							<button className="btn btn-outline-success custom-btn"
+              type="button" onClick={handleSearchClick}>Search</button>
 						</form>
 						<Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
 						<Nav>
@@ -185,8 +213,8 @@ function EggNavbar() {
 									<Dropdown.Item as={Link} to="/Dashboard_author"> Author </Dropdown.Item>
               </Dropdown.Menu>
               </Dropdown>
-							<Nav.Link style={{ color: 'black' }} href="/About">About</Nav.Link>
-              <Nav.Link style={{ color: 'black' }} href="/Pricing">Pricing</Nav.Link>
+							<Nav.Link style={{ color: '#374D9A' }} href="/About">About</Nav.Link>
+              <Nav.Link style={{ color: '#374D9A' }} href="/Pricing">Pricing</Nav.Link>
 							<Dropdown align="end" show={showProfileMenu} onToggle={(isOpen) => setShowProfileMenu(isOpen)}>
 							<Dropdown.Toggle variant="link" id="profile-dropdown">
 								<svg width="24" height="24" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
@@ -221,7 +249,7 @@ function EggNavbar() {
 						</div>
 					)}
 					</div>
-				</nav>
+				</Nav>
 			<Modal show={showLoginModal} onHide={handleClose}>
 				<Modal.Header closeButton>
 				<Modal.Title>Log in <span style={{ color: "gray", fontSize: "medium" }}>or</span> Sign up</Modal.Title>

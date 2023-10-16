@@ -18,13 +18,12 @@ function SavePaper() {
   }, []);
 
   const handleDeletePaper = (articleId) => {
-    if (articleId) { // articleId가 유효한 경우에만 요청을 보내도록 수정
-      console.log("article", articleId);
+    if (articleId) {
       axios
         .delete(`/api/save/papers/${articleId}`)
         .then((response) => {
           // 성공적으로 삭제된 경우 클라이언트에서도 해당 항목을 제거
-          setSavedPapers(savedPapers.filter(paper => paper.articleId !== articleId)); // article_id -> articleId로 수정
+          setSavedPapers(savedPapers.filter(paper => paper.articleId !== articleId));
         })
         .catch((error) => {
           console.error('논문 삭제 중 오류가 발생했습니다:', error);
@@ -35,7 +34,7 @@ function SavePaper() {
   }
 
   const ClickOpenKCI = (article_id) => {
-    const kciUrl = `https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=` + article_id;
+    const kciUrl = `https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=${article_id}`;
     console.log(kciUrl);
     // 새 창으로 KCI 링크 열기
     window.open(kciUrl);
@@ -49,12 +48,14 @@ function SavePaper() {
       <div className="save-container">
         <h2 className="save-title">Save Papers</h2>
         <ul className="save-list">
-          {savedPapers.map((paper, idx) => (
-            <li key={idx} className="save-item">
+          {savedPapers.map((paper) => (
+            <li key={paper.articleId} className="save-item">
               <p className='save-item-title' onClick={() => ClickOpenKCI(paper.articleId)}>{paper.title_ko}</p>
               <p className="save-item-author">{paper.author_name}</p>
               <p className="save-item-abstract">{paper.abstract_ko}</p>
-              <button className="btn btn-outline-success rounded-pill" type="submit" onClick={() => handleDeletePaper(paper.articleId)}>Delete</button>
+              <button className="btn btn-outline-success custom2-btn"
+                type="submit" onClick={() => handleDeletePaper(paper.articleId)}>Delete
+              </button>
             </li>
           ))}
         </ul>

@@ -1,33 +1,29 @@
+/* Main.css */
+.main{
+    z-index: 999;
+}
 .MainBody {
-    margin-top: 10%;
+    padding-top: 8%;
+    padding-left: 13%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: flex-start;
     max-width: 100%;
     position: relative;
     flex: 1;
-    /* background-color: rgba(253, 248, 216, 0.926); */
-    background-image: url('/public/library-university-books-1556469-wallhere.com.png');
-    /* 이미지 파일 경로를 맞게 지정하세요 */
-    background-size: cover;
-    /* 이미지를 컨테이너에 맞게 확대/축소 */
-    background-position: center;
-    /* 이미지를 가운데 정렬 */
-    background-repeat: no-repeat;
-    /* 이미지 반복 없음 */
-    opacity: 70%;
-    /* 배경 색상 및 투명도 설정 */
+    background-color: rgba(252, 218, 0, 0.126);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.083); /* 그림자 효과 추가 */
+    z-index: 6 ;
 }
 
+
 .MainBody h1 {
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    color: #374D9A;
 }
 
 .MainBody h3 {
-    color: white;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    color: #354789e4;
+    margin-bottom: 25px;
 }
 
 .search {
@@ -36,86 +32,131 @@
 }
 
 .searchInput {
-    width: 600px;
+    width: 590px;
+    height: 70px;
     display: flex;
-    float: left;
     align-items: center;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 45px;
-    align-items: center;
+    border: 1px solid hsla(50, 100%, 50%, 0.411);
+    border-radius: 15px;
     justify-content: center;
+    background-color: white;
 }
 
 .searchButton {
-    margin: 4px 8px;
-    background-color: #007bffc5;
+    background-color: hsl(28, 100%, 50%);
+    margin-right: 5px;
     color: #fff;
     border: none;
     cursor: pointer;
     float: right;
-    width: 100px;
-    height: 47px;
-    border-radius: 45px;
-}
-
-.searchIcon {
-    margin-top: 2px;
-    margin-left: 10px;
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
+    width: 140px;
+    height: 85%;
+    border-radius: 15px;
 }
 
 .search-input {
     width: 100%;
     padding: 10px;
     margin-right: 10px;
-    border: none;
+    border: 1px hsl(28, 100%, 50%);
     outline: none;
-    background-color: #ffffff !important;
-    /* 배경색 적용이 안되어 강제적용 */
+    background-color: #ffffff;
+}
+
+.foot {
+    margin-left: 8%;
 }
 
 .descript {
-    /* position: fixed; */
-    margin-top: 5%;
-    bottom: 5%;
+    bottom: 0%;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-.descriptShowButton,
+.descriptShowButton {
+    background-color: transparent;
+    color: #3f3e3e;
+    display: inline-block;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 50px solid #374c9a33;
+    border-bottom: 0px;
+    width: 200px;
+    height: 0px;
+    position: relative;
+    transition: top 0.3s ease-in-out;
+    /* z-index: -1; */
+}
+
+.descriptShowButton .buttonText {
+    position: relative;
+    top: -40px;
+}
+
+.descriptShowButton.clicked {
+    top: 205px;
+    background-color: transparent;
+    color: #3f3e3e;
+    display: inline-block;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 50px solid #374c9a33;
+    border-bottom: 0px;
+    width: 200px;
+    height: 0px;
+    position: relative;
+    transition: top 0.3s ease-in-out;
+}
+
 .descriptShowButton2 {
     background-color: transparent;
     color: #3f3e3e;
-    background-color: #e5e5e584;
-    border: none;
-    cursor: pointer;
-    width: 180px;
-    height: 40px;
+    display: inline-block;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 50px solid hsla(28, 100%, 50%, 0.23);
+    border-bottom: 0px;
+    width: 200px;
+    height: 0px;
     position: relative;
-    margin-left: 7px;
+    transition: top 0.3s ease-in-out;
+    z-index: 0;
+}
+
+.descriptShowButton2 .buttonText2 {
+    position: relative;
+    top: -40px;
+}
+
+.descriptShowButton2.clicked {
+    top: 200px; /* Adjust the height as needed */
+    border-top: 0px;
+    border-bottom: 50px solid hsla(28, 100%, 50%, 0.23);
 }
 
 .showDescript,
 .showDescript2 {
+    top: -200px; /* 초기 위치를 위로 설정 */
     position: absolute;
     width: 500px;
-    max-height: 200px;
+    max-height: 0px; /* 초기에 숨겨진 상태로 시작 */
     background-color: white;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.114);
-    padding: 6px;
-    overflow-y: auto;
+    overflow-y: hidden;
     border-radius: 7px;
-    z-index: 2;
-    top: 100%;
-    /* show-button 바로 아래로 위치하도록 설정 */
-    left: 50%;
-    /* 가로 가운데 정렬 */
-    transform: translateX(-50%);
-    /* 수평 가운데 정렬 */
-    margin-left: 5px;
+    z-index: 1;
+    transition: top 0.3s ease-in-out, max-height 0.3s ease-in-out;
+}
+
+
+.showDescript.show {   
+    top: 535px; /* 나타날 때의 위치를 조절 */
+    max-height: 200px; /* 나타날 때의 높이를 조절 */
+    z-index: 1; /* MainBody 위로 이동 */
+
+}
+.showDescript.hide {
+    top: -200px; /* 숨길 때의 위치를 위로 조절 */
+    max-height: 0px; /* 숨길 때의 높이를 0으로 조절 */
+    z-index: -1; /* MainBody 위로 이동 */
+
 }

@@ -7,7 +7,7 @@
     font-size: 30px;
     font-weight: bolder;
     text-align: center;
-    color: rgba(0, 0, 255, 0.763);
+    color: #374D9A;
   }
   
   .history-list {
@@ -15,12 +15,13 @@
     font-size: small;
   }
   
-  .history-item {
-    border-top: 1px solid #ccc;
+  .history-item {   
+    border-top: 2px solid #374D9A;
     padding: 20px 20px ;
   }
   
   .history-item-title {
+    color: rgb(85, 83, 83);
     text-align: left;
     font-weight: 500;
     font-size: medium;
@@ -29,13 +30,17 @@
   }
   
   .history-item-title:hover {
-    color:rgba(0, 0, 255, 0.763) ;
+    color:hsl(28, 100%, 50%);
   }
 
+  .history-item-author{
+    color: rgb(85, 83, 83);
+  }
   .history-item-abstract {
     max-height: 3em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: rgb(85, 83, 83);
   }
   

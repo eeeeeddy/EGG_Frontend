@@ -1,12 +1,21 @@
+.body{
+    background-color: rgba(252, 218, 0, 0.126);
+}
 .paper-text {
     font-size: medium;
+    color:#374D9A;
+    margin-left: 25%;
 }
+.paper-text-p{
+    font-size: 29px;
+}
+
 .paper-container {
-    margin-top: 5%;
+    margin-top: 3%;
     display: flex;
     flex-direction: column;
-    align-items:center;
-    justify-content: flex-start ;
+    /* align-items:center; */
+    justify-content: flex-start ; 
 }
 .paper-box-container{
     display: flex;
@@ -16,18 +25,34 @@
 }
 
 .paper-box {
+    /* border-radius: 40px ; */
+    background-color: white;
     border: none;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.4);
     padding: 20px;
     margin-bottom: 30px;
-    max-width: 60%; 
+    max-width: 50%; 
     cursor: pointer;
 }
 
+.paper-box h4{
+    color: rgb(92, 91, 91);
+}
 .paper-box p{
     font-size: 15px;
     word-wrap: break-word;
-    color: gray;
+    color: rgb(153, 151, 151);
+}
+.paperbox-author {
+    float: left; /* 왼쪽으로 부유하도록 지정 */
+    width: 90%;
+    max-height: 1.2em; /* 원하는 높이(한 줄)를 설정하세요 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.paperbox-year {
+    float: right; /* 오른쪽으로 부유하도록 지정 */
 }
 .paperbox-p {
     display: -webkit-box;
@@ -36,5 +61,5 @@
     overflow: hidden;
     text-overflow: ellipsis;
     word-wrap: break-word;
-    color: black;
+    color: rgb(92, 91, 91);
 }

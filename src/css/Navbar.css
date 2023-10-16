@@ -1,0 +1,29 @@
+.custom-shadow {
+    box-shadow: 0 3px 0px rgba(0, 0, 0, 0.083); /* 그림자 스타일을 조절합니다. */
+    height: 50px;
+    padding: 0px;
+}
+
+.form-control.custom-form{
+    border-radius: 25px;
+    border-color: #374D9A;
+    /* width: 80%; */
+    color: #374D9A;
+}
+
+.btn-outline-success.custom-btn { 
+    background-color:#374D9A;
+    border-radius: 25px;
+    color: white;
+    border-color: #374D9A;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+  }
+
+.btn-outline-success.custom-btn:hover {
+    background-color: #374D9A;
+    border-color: #374D9A;
+    color: white; 
+  }

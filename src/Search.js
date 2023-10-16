@@ -1,5 +1,3 @@
-// Search.js
-
 import './css/Search.css';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -48,21 +46,21 @@ function Search() {
     };
 
     return (
-        <div>
+        <div className='body'>
             <div className='App'>
                 <EggNavbar />
             </div>
 
             <div className="paper-container">
-                <div className="paper-text" style={{ float: 'left' }}>
-                    <p style={TextStyle}>
+                <div className="paper-text" >
+                    <p className='paper-text-p'>
                     {params.searchQuery
-                        ? <span>Search results for '<b>{decodeURIComponent(params.searchQuery)}</b>'</span>
-                        : 'Search results for'}</p>
-                    <h3 style={TextStyle}><b>Choose Article for Graph :</b></h3>
+                        ? <span style={{fontSize:18}}>Showing paper suggestions fo  '{decodeURIComponent(params.searchQuery)}'</span>
+                        : 'Search results for'} <br />
+                   <b>Choose a article to build a graph :</b> </p>
                     <br />
                 </div>
-                <div>
+                <div >
                     {isLoading ? (
                         <div className="spinner-border text-info" role="status"></div>
                     ) : (
@@ -73,9 +71,9 @@ function Search() {
                                 <div key={result.articleID} className="paper-box"
                                     onClick={() => handlePaperBoxClick(result.articleID)}>
                                     <h4>{result.titleKor}</h4>
-                                    <p>{result.authors}<br />
-                                        {result.pubYear}<br /><br />
-                                        <span className='paperbox-p'>{result.abstractKor}</span></p>
+                                    <p><span className='paperbox-author'>{result.authors}</span> 
+                                        <span className='paperbox-year'>{result.pubYear}</span><br /><br />
+                                    <span className='paperbox-p'>"{result.abstractKor}"</span></p>
                                 </div>
                             ))
                             ) : (
@@ -86,6 +84,7 @@ function Search() {
                     )}
                 </div>
             </div>
+            <div style={{height:500}}></div>
         </div>
     );
 }
