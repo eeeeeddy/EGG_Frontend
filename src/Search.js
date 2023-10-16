@@ -48,7 +48,7 @@ function Search() {
     };
 
     return (
-        <div style={{fontFamily:'MaruBuri-Regular'}}>
+        <div style={{ fontFamily: 'MaruBuri-Regular' }}>
             <div className='Navbar'>
                 <EggNavbar />
             </div>
@@ -69,19 +69,19 @@ function Search() {
                         <div className="paper-box-container">
                             {searchResult.length > 0 ? (
                                 searchResult.map((result) => (
-                                // 검색 결과를 여기서 필요한대로 렌더링하세요.
-                                <div key={result.articleID} className="paper-box"
-                                    onClick={() => handlePaperBoxClick(result.articleID)}>
-                                    <h4>{result.titleKor}</h4>
-                                    <p>{result.authors}<br />
-                                        {result.pubYear}<br /><br />
-                                        <span className='paperbox-p'>{result.abstractKor}</span></p>
-                                </div>
-                            ))
+                                    // 검색 결과를 여기서 필요한대로 렌더링하세요.
+                                    <div key={result.articleID} className="paper-box"
+                                        onClick={() => handlePaperBoxClick(result.articleID)}>
+                                        <h4>{result.titleKor}</h4>
+                                        <p><span className='paperbox-author'>{result.authors}</span>
+                                            <span className='paperbox-year'>{result.pubYear}</span><br /><br />
+                                            <span className='paperbox-p'>"{result.abstractKor}"</span></p>
+                                    </div>
+                                ))
                             ) : (
                                 <h4>검색 결과가 없습니다.</h4>
                             )
-                        }
+                            }
                         </div>
                     )}
                 </div>

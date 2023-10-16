@@ -45,3 +45,15 @@
     word-wrap: break-word;
     color: black;
 }
+
+.paperbox-author {
+    float: left; /* 왼쪽으로 부유하도록 지정 */
+    width: 90%;
+    max-height: 1.3em; /* 원하는 높이(한 줄)를 설정하세요 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.paperbox-year {
+    float: right; /* 오른쪽으로 부유하도록 지정 */
+}
