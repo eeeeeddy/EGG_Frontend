@@ -349,7 +349,7 @@ function Author() {
                                 <hr />
                                 <h5>Word Cloud</h5>
                                 <p>
-                                    {[...new Set(nodes[0].word_cloud)].map((word, index) => (
+                                    {[...new Set(authorNode.word_cloud)].map((word, index) => (
                                         <button className='btn btn-primary btn-sm me-1 mt-1' style={{backgroundColor:"#A3B18A", borderColor:"#A3B18A"}} key={index}>{word}</button>
                                     ))}
                                 </p>

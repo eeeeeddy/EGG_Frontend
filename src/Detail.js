@@ -31,10 +31,10 @@ function Detail() {
     const [nodes, setNodes] = useState([]);
     const [links, setLinks] = useState([]);
     const [publishYear, setPublishYear] = useState(2024);
-    const [mainAuthor, setMainAuthor] = useState("");
-    const [category, setCategory] = useState("");
-    const [journalName, setjournalName] = useState("");
-    const [citation, setCitation] = useState(0);
+    const [mainAuthor, setMainAuthor] = useState("default");
+    const [category, setCategory] = useState("default");
+    const [journalName, setjournalName] = useState("default");
+    const [citation, setCitation] = useState(-1);
     const [sortedNode, setSortedNode] = useState([]);
 
     // 그래프 색상 관련 변수
@@ -485,7 +485,7 @@ function Detail() {
 
         if (!userEmail) {
             console.error("유효하지 않은 사용자 이메일: userEmail이 없습니다.");
-            alert("This service requires login."); // 로그인이 필요함을 알림
+            alert("로그인 후 사용 가능한 서비스입니다."); // 로그인이 필요함을 알림
             // 사용자 이메일이 없음을 사용자에게 알릴 수 있습니다.
             return;
         }
@@ -522,12 +522,13 @@ function Detail() {
                     }
                 })
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 console.log('저장완료')
+                alert("저장이 완료되었습니다.")
             }
         } catch (error) {
             if (error.response && error.response.status === 409) {
-                alert('This paper has already been saved.');
+                alert('이미 저장된 논문입니다.');
             } else {
                 console.log(error);
             }
@@ -653,7 +654,7 @@ function Detail() {
                             <div className='col-md'>
                                 <div class="form-floating">
                                     <select class="form-select" id="publishYear" onChange={handlePublishYear} value={publishYear}>
-                                        <option selected value="2024">Open this select menu</option>
+                                        <option selected value={currentYear + 1000}>Open this select menu</option>
                                         <option value={currentYear - 1}>최근 1년</option>
                                         <option value={currentYear - 5}>최근 5년</option>
                                         <option value={currentYear - 10}>최근 10년</option>
