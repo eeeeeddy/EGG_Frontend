@@ -177,7 +177,7 @@ function Author() {
             const imgData = canvas.toDataURL('image/png');
 
             // jsPDF를 사용하여 PDF 생성
-            const pdf = new jsPDF('1', 'mm', [210, 297]);
+            const pdf = new jsPDF('1', 'mm', [297, 210]);
             pdf.addImage(imgData, 'PNG', 10, 10, 190, 0);
 
             // PDF 저장
@@ -322,7 +322,7 @@ function Author() {
                 <EggNavbar />
             </div>
 
-            <div className='row mt-5'>
+            <div className='row mt-5 contentToExport' ref={contentToExportRef}>
                 {/* left section */}
                 <div className='col-md-4 mt-4 border-end' style={{ maxHeight: '900px', overflowY: 'auto' }}>
                     <div className="ms-3" style={{ overflow: 'scroll' }}>
@@ -335,17 +335,27 @@ function Author() {
                             <div className="spinner-border text-success" role="status"></div>
                         ) : (
                             // contentToExportRef에 ref를 추가하여 내용을 참조
-                            <div className='contentToExport' ref={contentToExportRef}>
+                            <div >
                                 <h2>{authorNode.author1Name}</h2>
                                 <a>{authorNode.author1Inst}</a>
-                                <br />
-                                <a>Total Paper: {authorNode.articleIDs.length}</a>
                                 <br />
                                 <a>Total Cited: {authorNode.impactfactor}</a>
                                 <br />
                                 <a>Average Cited: {authorNode.articleIDs.length === 0 ? 0 : (authorNode.impactfactor / authorNode.articleIDs.length).toFixed(2)}</a>
                                 <br />
                                 <a>H-Index: {authorNode.H_index}</a>
+                                <a>Total Paper: {authorNode.articleIDs.length}</a>
+                                <br />
+                                <div>
+                                    <span>Paper : </span>
+                                    <br />
+                                    {[...new Set(authorNode.titleKor)].map((title, index) => (
+                                        <React.Fragment key={index}>
+                                            - {title}
+                                            {index < authorNode.titleKor.length - 1 && <br />}
+                                        </React.Fragment>
+                                    ))}
+                                </div>
                                 <hr />
                                 <h5>Word Cloud</h5>
                                 <p>

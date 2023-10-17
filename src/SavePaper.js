@@ -107,21 +107,25 @@ function SavePaper() {
                     <option value="Mathematics">Mathematics</option>
                 </select>
                 <br />
-                <ul className="save-list">
-                    {savedPapers
-                        .filter(paper => !category || paper.category === category)
-                        .map((paper, idx) => (
-                            <li key={idx} className="save-item">
-                                <div className="item-container">
-                                    <p className='save-item-title' onClick={() => ClickOpenKCI(paper.articleId)}>{paper.title_ko}</p>
-                                    <button className='btn btn-primary btn-sm me-1 mt-1' style={{ backgroundColor: getCategoryColor(paper.category), borderColor: getCategoryColor(paper.category) }}>{paper.category}</button>
-                                </div>
-                                <p className="save-item-author">{paper.author_name}</p>
-                                <p className="save-item-abstract">{paper.abstract_ko}</p>
-                                <button className="btn btn-outline-success rounded-pill" type="submit" onClick={() => handleDeletePaper(paper.articleId)}>Delete</button>
-                            </li>
-                        ))}
-                </ul>
+                {savedPapers.length === 0 ? (
+                    <h3 className="no-saved-papers" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center',marginTop:85 }}>저장된 논문이 없습니다.</h3>
+                ) : (
+                    <ul className="save-list">
+                        {savedPapers
+                            .filter(paper => !category || paper.category === category)
+                            .map((paper, idx) => (
+                                <li key={idx} className="save-item">
+                                    <div className="item-container">
+                                        <p className='save-item-title' onClick={() => ClickOpenKCI(paper.articleId)}>{paper.title_ko}</p>
+                                        <button className='btn btn-primary btn-sm me-1 mt-1' style={{ backgroundColor: getCategoryColor(paper.category), borderColor: getCategoryColor(paper.category) }}>{paper.category}</button>
+                                    </div>
+                                    <p className="save-item-author">{paper.author_name}</p>
+                                    <p className="save-item-abstract">{paper.abstract_ko}</p>
+                                    <button className="btn btn-outline-success rounded-pill" type="submit" onClick={() => handleDeletePaper(paper.articleId)}>Delete</button>
+                                </li>
+                            ))}
+                    </ul>
+                )}
             </div>
         </div>
     );
