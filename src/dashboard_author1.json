@@ -1,0 +1,266 @@
+{
+    "_g": {
+        "filters": [],
+        "refreshInterval": {
+            "pause": false,
+            "value": 10000
+        },
+        "time": {
+            "from": "now-15m",
+            "to": "now"
+        }
+    },
+    "_a": {
+        "description": "",
+        "filters": [
+            {
+                "$state": {
+                    "store": "appState"
+                },
+                "meta": {
+                    "alias": false,
+                    "disabled": false,
+                    "index": "0c7b2e20-6caf-11ee-bcc4-15d4aa6898f0",
+                    "key": "author1ID",
+                    "negate": false,
+                    "params": {
+                        "query": "CRT000303850"
+                    },
+                    "type": "phrase"
+                },
+                "query": {
+                    "match_phrase": {
+                        "author1ID": "CRT000303850"
+                    }
+                }
+            }
+        ],
+        "fullScreenMode": false,
+        "options": {
+            "hidePanelTitles": false,
+            "syncColors": false,
+            "useMargins": true
+        },
+        "panels": [
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "references": [
+                            {
+                                "id": "0c7b2e20-6caf-11ee-bcc4-15d4aa6898f0",
+                                "name": "indexpattern-datasource-current-indexpattern",
+                                "type": "index-pattern"
+                            },
+                            {
+                                "id": "0c7b2e20-6caf-11ee-bcc4-15d4aa6898f0",
+                                "name": "indexpattern-datasource-layer-9ba52e2a-350c-46dc-a4a9-06b987b8fd76",
+                                "type": "index-pattern"
+                            }
+                        ]
+                    },
+                    "state": {
+                        "datasourceStates": {
+                            "indexpattern": {
+                                "layers": {
+                                    "9ba52e2a-350c-46dc-a4a9-06b987b8fd76": {
+                                        "columnOrder": [
+                                            "3bc91e6b-9a3d-4d48-b026-04a90cb0888c",
+                                            "4670dd93-cfde-4e3a-9553-079f31d2450a"
+                                        ],
+                                        "columns": {
+                                            "3bc91e6b-9a3d-4d48-b026-04a90cb0888c": {
+                                                "dataType": "string",
+                                                "isBucketed": false,
+                                                "label": "Top values of author2Names",
+                                                "operationType": "terms",
+                                                "params": {
+                                                    "missingBucket": false,
+                                                    "orderBy": {
+                                                        "columnId": "4670dd93-cfde-4e3a-9553-079f31d2450a",
+                                                        "type": "column"
+                                                    },
+                                                    "orderDirection": "desc",
+                                                    "otherBucket": false,
+                                                    "size": 5
+                                                },
+                                                "scale": "ordinal",
+                                                "sourceField": "author2Names"
+                                            },
+                                            "4670dd93-cfde-4e3a-9553-079f31d2450a": {
+                                                "dataType": "number",
+                                                "isBucketed": false,
+                                                "label": "Count of records",
+                                                "operationType": "count",
+                                                "scale": "ratio",
+                                                "sourceField": "Records"
+                                            }
+                                        },
+                                        "incompleteColumns": []
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "filters": [],
+                    "query": {
+                        "language": "kuery",
+                        "query": ""
+                    },
+                    "visualization": {
+                        "axisTitlesVisibilitySettings": {
+                            "x": false,
+                            "yLeft": false,
+                            "yRight": false
+                        },
+                        "fittingFunction": "None",
+                        "gridlinesVisibilitySettings": {
+                            "x": false,
+                            "yLeft": false,
+                            "yRight": false
+                        },
+                        "labelsOrientation": {
+                            "x": 0,
+                            "yLeft": 0,
+                            "yRight": 0
+                        },
+                        "layers": [
+                            {
+                                "accessors": [
+                                    "4670dd93-cfde-4e3a-9553-079f31d2450a"
+                                ],
+                                "layerId": "9ba52e2a-350c-46dc-a4a9-06b987b8fd76",
+                                "layerType": "data",
+                                "seriesType": "bar_horizontal",
+                                "xAccessor": "3bc91e6b-9a3d-4d48-b026-04a90cb0888c",
+                                "yConfig": [
+                                    {
+                                        "color": "#5342ba",
+                                        "forAccessor": "4670dd93-cfde-4e3a-9553-079f31d2450a"
+                                    }
+                                ]
+                            }
+                        ],
+                        "legend": {
+                            "isVisible": false,
+                            "position": "right"
+                        },
+                        "preferredSeriesType": "bar_horizontal",
+                        "tickLabelsVisibilitySettings": {
+                            "x": false,
+                            "yLeft": false,
+                            "yRight": false
+                        },
+                        "valueLabels": "hide",
+                        "yLeftExtent": {
+                            "mode": "full"
+                        },
+                        "yRightExtent": {
+                            "mode": "full"
+                        }
+                    }
+                },
+                "title": "",
+                "type": "lens",
+                "visualizationType": "lnsXY"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "references": [
+                            {
+                                "id": "0c7b2e20-6caf-11ee-bcc4-15d4aa6898f0",
+                                "name": "indexpattern-datasource-current-indexpattern",
+                                "type": "index-pattern"
+                            },
+                            {
+                                "id": "0c7b2e20-6caf-11ee-bcc4-15d4aa6898f0",
+                                "name": "indexpattern-datasource-layer-322d7fbf-1f2e-409d-9b98-969085182819",
+                                "type": "index-pattern"
+                            }
+                        ]
+                    },
+                    "state": {
+                        "datasourceStates": {
+                            "indexpattern": {
+                                "layers": {
+                                    "322d7fbf-1f2e-409d-9b98-969085182819": {
+                                        "columnOrder": [
+                                            "de3eeb6c-90d1-4149-8a01-679446c71e3f",
+                                            "cd06f7b3-3d51-479f-8c8b-d8cb936afdf9"
+                                        ],
+                                        "columns": {
+                                            "cd06f7b3-3d51-479f-8c8b-d8cb936afdf9": {
+                                                "dataType": "number",
+                                                "isBucketed": false,
+                                                "label": "Count of records",
+                                                "operationType": "count",
+                                                "scale": "ratio",
+                                                "sourceField": "Records"
+                                            },
+                                            "de3eeb6c-90d1-4149-8a01-679446c71e3f": {
+                                                "dataType": "string",
+                                                "isBucketed": true,
+                                                "label": "Top values of c2Inst",
+                                                "operationType": "terms",
+                                                "params": {
+                                                    "missingBucket": false,
+                                                    "orderBy": {
+                                                        "columnId": "cd06f7b3-3d51-479f-8c8b-d8cb936afdf9",
+                                                        "type": "column"
+                                                    },
+                                                    "orderDirection": "desc",
+                                                    "otherBucket": false,
+                                                    "size": 5
+                                                },
+                                                "scale": "ordinal",
+                                                "sourceField": "c2Inst"
+                                            }
+                                        },
+                                        "incompleteColumns": []
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "filters": [],
+                    "query": {
+                        "language": "kuery",
+                        "query": ""
+                    },
+                    "visualization": {
+                        "layers": [
+                            {
+                                "categoryDisplay": "default",
+                                "groups": [
+                                    "de3eeb6c-90d1-4149-8a01-679446c71e3f"
+                                ],
+                                "layerId": "322d7fbf-1f2e-409d-9b98-969085182819",
+                                "layerType": "data",
+                                "legendDisplay": "default",
+                                "metric": "cd06f7b3-3d51-479f-8c8b-d8cb936afdf9",
+                                "nestedLegend": false,
+                                "numberDisplay": "percent"
+                            }
+                        ],
+                        "palette": {
+                            "name": "positive",
+                            "type": "palette"
+                        },
+                        "shape": "donut"
+                    }
+                },
+                "title": "",
+                "type": "lens",
+                "visualizationType": "lnsPie"
+            }
+        ],
+        "query": {
+            "language": "kuery",
+            "query": ""
+        },
+        "tags": [],
+        "timeRestore": false,
+        "title": "Author",
+        "viewMode": "view"
+    }
+}

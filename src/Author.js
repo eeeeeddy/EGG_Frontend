@@ -3,7 +3,7 @@ import { Document, Page, Text, pdf, Font } from '@react-pdf/renderer';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import EggNavbar from './Navbar';
 import * as d3 from 'd3';
 import Chart from 'chart.js/auto';
@@ -35,6 +35,7 @@ function Author() {
     const [isLoading, setIsLoading] = useState(true);
     const contentToExportRef = useRef(null);
     const params = useParams();
+    const navigate = useNavigate();
     const svgRef = useRef(null);
     const initialScale = 1; // 초기 스크롤 배율
     const [selectedNode, setSelectedNode] = useState(null); // 선택한 노드 정보를 저장할 상태 변수
@@ -315,8 +316,12 @@ function Author() {
         window.open(kciUrl);
     }
 
+    const ClickOpenDashboard = (author_id) => {
+        navigate(`/AuthorDashboard/${author_id}`);
+    }
+
     return (
-        <div style={{fontFamily:'MaruBuri-Regular'}}>
+        <div style={{ fontFamily: 'MaruBuri-Regular' }}>
 
             <div className='Navbar'>
                 <EggNavbar />
@@ -327,7 +332,7 @@ function Author() {
                 <div className='col-md-4 mt-4 border-end' style={{ maxHeight: '900px', overflowY: 'auto' }}>
                     <div className="ms-3" style={{ overflow: 'scroll' }}>
                         <button className='btn btn-success btn-sm ms-1' onClick={handleExportToPDF}>Export to PDF</button>
-                        <button className='btn btn-success btn-sm ms-1'>Dashboard</button>
+                        <button className='btn btn-success btn-sm ms-1' onClick={() => ClickOpenDashboard(params.authorId)}>Dashboard</button>
                         <button className='btn btn-success btn-sm ms-1' onClick={() => ClickOpenKCI(params.authorId)}>Open KCI</button>
                         {/* <button className='btn btn-success btn-sm ms-1'>Filter</button> */}
                         <hr />
@@ -344,23 +349,23 @@ function Author() {
                                 <a>Average Cited: {authorNode.articleIDs.length === 0 ? 0 : (authorNode.impactfactor / authorNode.articleIDs.length).toFixed(2)}</a>
                                 <br />
                                 <a>H-Index: {authorNode.H_index}</a>
-                                <a>Total Paper: {authorNode.articleIDs.length}</a>
                                 <br />
-                                <div>
-                                    <span>Paper : </span>
-                                    <br />
+                                <a>Total Paper: {authorNode.articleIDs.length}</a>
+                                <hr />
+                                <h5>Articles</h5>
+                                <p>
                                     {[...new Set(authorNode.titleKor)].map((title, index) => (
                                         <React.Fragment key={index}>
-                                            - {title}
+                                            • {title}
                                             {index < authorNode.titleKor.length - 1 && <br />}
                                         </React.Fragment>
                                     ))}
-                                </div>
+                                </p>
                                 <hr />
                                 <h5>Word Cloud</h5>
                                 <p>
                                     {[...new Set(authorNode.word_cloud)].map((word, index) => (
-                                        <button className='btn btn-primary btn-sm me-1 mt-1' style={{backgroundColor:"#A3B18A", borderColor:"#A3B18A"}} key={index}>{word}</button>
+                                        <button className='btn btn-primary btn-sm me-1 mt-1' style={{ backgroundColor: "#A3B18A", borderColor: "#A3B18A" }} key={index}>{word}</button>
                                     ))}
                                 </p>
                                 <hr />
@@ -378,7 +383,7 @@ function Author() {
                 {/* Graph section */}
                 <div className='col-md-8'>
                     <div className="svg-container">
-                        <div className='graph' style={{marginTop:"100px"}}>
+                        <div className='graph' style={{ marginTop: "100px" }}>
                             {isLoading ? (
                                 <div className="spinner-border text-success mt-5" role="status"></div>
                             ) : (

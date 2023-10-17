@@ -1,0 +1,282 @@
+{
+    "_g": {
+        "filters": [],
+        "refreshInterval": {
+            "pause": false,
+            "value": 0
+        },
+        "time": {
+            "from": "now-15m",
+            "to": "now"
+        }
+    },
+    "_a": {
+        "description": "",
+        "filters": [
+            {
+                "$state": {
+                    "store": "appState"
+                },
+                "meta": {
+                    "alias": false,
+                    "disabled": false,
+                    "index": "2bcd7090-6c0e-11ee-994a-19c632230212",
+                    "key": "author2IDs",
+                    "negate": false,
+                    "params": {
+                        "query": "CRT000303850"
+                    },
+                    "type": "phrase"
+                },
+                "query": {
+                    "match_phrase": {
+                        "author2IDs": "CRT000303850"
+                    }
+                }
+            }
+        ],
+        "fullScreenMode": false,
+        "options": {
+            "hidePanelTitles": false,
+            "syncColors": false,
+            "useMargins": true
+        },
+        "panels": [
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "references": [
+                            {
+                                "id": "0c7b2e20-6caf-11ee-bcc4-15d4aa6898f0",
+                                "name": "indexpattern-datasource-current-indexpattern",
+                                "type": "index-pattern"
+                            },
+                            {
+                                "id": "0c7b2e20-6caf-11ee-bcc4-15d4aa6898f0",
+                                "name": "indexpattern-datasource-layer-9ba52e2a-350c-46dc-a4a9-06b987b8fd76",
+                                "type": "index-pattern"
+                            }
+                        ]
+                    },
+                    "state": {
+                        "datasourceStates": {
+                            "indexpattern": {
+                                "layers": {
+                                    "9ba52e2a-350c-46dc-a4a9-06b987b8fd76": {
+                                        "columnOrder": [
+                                            "2df2fdf6-bff5-417b-9025-821c48955b63",
+                                            "4670dd93-cfde-4e3a-9553-079f31d2450a"
+                                        ],
+                                        "columns": {
+                                            "2df2fdf6-bff5-417b-9025-821c48955b63": {
+                                                "dataType": "string",
+                                                "isBucketed": false,
+                                                "label": "Top values of author1Name",
+                                                "operationType": "terms",
+                                                "params": {
+                                                    "missingBucket": false,
+                                                    "orderBy": {
+                                                        "columnId": "4670dd93-cfde-4e3a-9553-079f31d2450a",
+                                                        "type": "column"
+                                                    },
+                                                    "orderDirection": "desc",
+                                                    "otherBucket": false,
+                                                    "size": 18
+                                                },
+                                                "scale": "ordinal",
+                                                "sourceField": "author1Name"
+                                            },
+                                            "4670dd93-cfde-4e3a-9553-079f31d2450a": {
+                                                "dataType": "number",
+                                                "isBucketed": false,
+                                                "label": "Count of records",
+                                                "operationType": "count",
+                                                "scale": "ratio",
+                                                "sourceField": "Records"
+                                            }
+                                        },
+                                        "incompleteColumns": []
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "filters": [],
+                    "query": {
+                        "language": "kuery",
+                        "query": ""
+                    },
+                    "visualization": {
+                        "axisTitlesVisibilitySettings": {
+                            "x": false,
+                            "yLeft": false,
+                            "yRight": false
+                        },
+                        "fittingFunction": "None",
+                        "gridlinesVisibilitySettings": {
+                            "x": false,
+                            "yLeft": false,
+                            "yRight": false
+                        },
+                        "labelsOrientation": {
+                            "x": 0,
+                            "yLeft": 0,
+                            "yRight": 0
+                        },
+                        "layers": [
+                            {
+                                "accessors": [
+                                    "4670dd93-cfde-4e3a-9553-079f31d2450a"
+                                ],
+                                "layerId": "9ba52e2a-350c-46dc-a4a9-06b987b8fd76",
+                                "layerType": "data",
+                                "seriesType": "bar",
+                                "xAccessor": "2df2fdf6-bff5-417b-9025-821c48955b63",
+                                "yConfig": [
+                                    {
+                                        "color": "#fff705",
+                                        "forAccessor": "4670dd93-cfde-4e3a-9553-079f31d2450a"
+                                    }
+                                ]
+                            }
+                        ],
+                        "legend": {
+                            "isVisible": false,
+                            "position": "right"
+                        },
+                        "preferredSeriesType": "bar",
+                        "tickLabelsVisibilitySettings": {
+                            "x": false,
+                            "yLeft": false,
+                            "yRight": false
+                        },
+                        "valueLabels": "hide",
+                        "yLeftExtent": {
+                            "mode": "full"
+                        },
+                        "yRightExtent": {
+                            "mode": "full"
+                        }
+                    }
+                },
+                "gridData": {
+                    "h": 16,
+                    "i": "dbd151a5-9731-4aa1-b0fb-3494e7cd0b62",
+                    "w": 30,
+                    "x": 1,
+                    "y": 0
+                },
+                "panelIndex": "dbd151a5-9731-4aa1-b0fb-3494e7cd0b62",
+                "title": "누구 연구에 참여했게요",
+                "type": "lens",
+                "version": "7.17.13"
+            },
+            {
+                "embeddableConfig": {
+                    "attributes": {
+                        "references": [
+                            {
+                                "id": "0c7b2e20-6caf-11ee-bcc4-15d4aa6898f0",
+                                "name": "indexpattern-datasource-current-indexpattern",
+                                "type": "index-pattern"
+                            },
+                            {
+                                "id": "0c7b2e20-6caf-11ee-bcc4-15d4aa6898f0",
+                                "name": "indexpattern-datasource-layer-322d7fbf-1f2e-409d-9b98-969085182819",
+                                "type": "index-pattern"
+                            }
+                        ]
+                    },
+                    "state": {
+                        "datasourceStates": {
+                            "indexpattern": {
+                                "layers": {
+                                    "322d7fbf-1f2e-409d-9b98-969085182819": {
+                                        "columnOrder": [
+                                            "e9cd6f36-5f03-4088-89ac-6c4ed5990075",
+                                            "cd06f7b3-3d51-479f-8c8b-d8cb936afdf9"
+                                        ],
+                                        "columns": {
+                                            "cd06f7b3-3d51-479f-8c8b-d8cb936afdf9": {
+                                                "dataType": "number",
+                                                "isBucketed": false,
+                                                "label": "Count of records",
+                                                "operationType": "count",
+                                                "scale": "ratio",
+                                                "sourceField": "Records"
+                                            },
+                                            "e9cd6f36-5f03-4088-89ac-6c4ed5990075": {
+                                                "dataType": "string",
+                                                "isBucketed": true,
+                                                "label": "Top values of c1Inst",
+                                                "operationType": "terms",
+                                                "params": {
+                                                    "missingBucket": false,
+                                                    "orderBy": {
+                                                        "columnId": "cd06f7b3-3d51-479f-8c8b-d8cb936afdf9",
+                                                        "type": "column"
+                                                    },
+                                                    "orderDirection": "desc",
+                                                    "otherBucket": false,
+                                                    "size": 5
+                                                },
+                                                "scale": "ordinal",
+                                                "sourceField": "c1Inst"
+                                            }
+                                        },
+                                        "incompleteColumns": []
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "filters": [],
+                    "query": {
+                        "language": "kuery",
+                        "query": ""
+                    },
+                    "visualization": {
+                        "layers": [
+                            {
+                                "categoryDisplay": "default",
+                                "groups": [
+                                    "e9cd6f36-5f03-4088-89ac-6c4ed5990075"
+                                ],
+                                "layerId": "322d7fbf-1f2e-409d-9b98-969085182819",
+                                "layerType": "data",
+                                "legendDisplay": "default",
+                                "metric": "cd06f7b3-3d51-479f-8c8b-d8cb936afdf9",
+                                "nestedLegend": false,
+                                "numberDisplay": "percent"
+                            }
+                        ],
+                        "palette": {
+                            "name": "positive",
+                            "type": "palette"
+                        },
+                        "shape": "donut"
+                    }
+                },
+                "gridData": {
+                    "h": 16,
+                    "i": "80534dc4-5e45-49ee-8164-303ed5fd8051",
+                    "w": 16,
+                    "x": 31,
+                    "y": 0
+                },
+                "panelIndex": "80534dc4-5e45-49ee-8164-303ed5fd8051",
+                "title": "어디 기관이 이 사람 연구에 참여했게요",
+                "type": "lens",
+                "version": "7.17.13"
+            }
+        ],
+        "query": {
+            "language": "kuery",
+            "query": ""
+        },
+        "tags": [],
+        "timeRestore": false,
+        "title": "Author 2",
+        "viewMode": "view"
+    }
+}

@@ -1,4 +1,3 @@
-
 import './css/Detail.css';
 import React, { useState, useEffect, useRef } from 'react';
 import EggNavbar from './Navbar';
@@ -19,7 +18,6 @@ function Detail() {
     const [isShowHelp, setIsShowHelp] = useState(false);
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const svgRef = useRef(null);
-    const [articleNode, setArticleNode] = useState([]); // 논문 노드 선언
     const [selectedNode, setSelectedNode] = useState(null); // 선택한 노드 정보를 저장할 상태 변수
     const [fixedNode, setFixedNode] = useState(null); // 고정된 노드 정보를 저장할 상태 변수
     const initialScale = 1; // 초기 스크롤 배율
@@ -39,11 +37,18 @@ function Detail() {
 
     // 그래프 색상 관련 변수
     const defaultEdgeColor = 'rgba(0, 0, 0, 0.2)';
-    const defaultNodeColor = 'rgba(163, 177, 138, 0.7)';
+    const defaultNodeColor = 'rgba(88, 129, 87, 0.7)';
     const selectedNodeColor = 'rgba(255, 159, 28, 0.8)';
-    const hoverDefaultNodeColor = 'rgba(58, 90, 64, 0.8)';
-    const hoverSelectedNodeColor = 'rgba(251, 86, 7, 0.8)';
-    const filteredNodeColor = 'rgba(234, 12, 231, 0.5)';
+    const hoverDefaultNodeColor = 'rgba(52, 78, 65, 0.8)';
+    const hoverSelectedNodeColor = 'rgba(232, 93, 4, 0.8)';
+    const filteredNodeColor = 'rgba(255, 51, 51, 0.7)';
+    const yearColor = ['rgba(88, 129, 87, 0.1)', 'rgba(88, 129, 87, 0.3)', 'rgba(88, 129, 87, 0.5)', 'rgba(58, 90, 64, 0.6)', 'rgba(58, 90, 64, 0.9)'];
+
+    // const reset = () => {
+    //     svg.transition()
+    //         .duration(750)
+    //         .call(zoomRef.current.transform, d3.zoomIdentity);
+    // };
 
     useEffect(() => {
         // URL 파라미터로부터 검색어를 가져옵니다.
@@ -75,8 +80,8 @@ function Detail() {
                 const temp2 = response.data.links
                 setLinks(temp2)
 
-                const temp3 = response.data.nodes.find(node => node.article_id === params.article_id)
-                setArticleNode(temp3)
+                // const temp3 = response.data.nodes.find(node => node.article_id === params.article_id)
+                // setArticleNode(temp3)
 
                 const sorted = [...temp1];
                 sorted.sort((a, b) => b.origin_check - a.origin_check);
@@ -92,8 +97,7 @@ function Detail() {
         console.log("graphData", graphData);
         console.log("nodes", nodes)
         console.log("links", links)
-        console.log("articleNode", articleNode);
-    }, [graphData, nodes, links, articleNode])
+    }, [graphData, nodes, links])
 
     useEffect(() => {
         console.log("mainAuthor", mainAuthor);
@@ -158,7 +162,7 @@ function Detail() {
     const handleGraphFilter = () => {
 
         const width = 900;
-        const height = 850;
+        const height = 700;
 
         // 해당 코드 추가: 이전 노드와 링크를 제거
         d3.select(svgRef.current).selectAll('.node').remove();
@@ -197,23 +201,36 @@ function Detail() {
             .attr('class', 'node')
             .attr('r', d => (d.citation + 5) * 3)
             .style('fill', (d) => { // 노드 색상
+                if (d.origin_check != 0) {
+                    return selectedNodeColor;
+                } else if (d.pub_year >= 2000 && d.pub_year <= 2005) {
+                    return yearColor[0]
+                } else if (d.pub_year > 2005 && d.pub_year <= 2010) {
+                    return yearColor[1]
+                } else if (d.pub_year > 2010 && d.pub_year <= 2015) {
+                    return yearColor[2]
+                } else if (d.pub_year > 2015 && d.pub_year <= 2020) {
+                    return yearColor[3]
+                } else {
+                    return yearColor[4]
+                }
+            })
+            .style('stroke', (d) => {
                 if (d.pub_year > publishYear || d.category == category || d.author_name == mainAuthor || d.citation == citation || d.journal_name == journalName) {
                     return filteredNodeColor; // 두 조건이 모두 충족될 때의 테두리 색상
                 } else if (d.origin_check != 0) {
-                    return selectedNodeColor;
+                    return selectedNodeColor; // 조건이 충족되지 않을 때의 테두리 색상
                 } else {
-                    return defaultNodeColor
+                    return defaultNodeColor;
                 }
             })
-            // .style('stroke', (d) => {
-            //     if (d.pub_year > publishYear || d.category == category || d.author_name == mainAuthor || d.citation == citation || d.journal_name == journalName) {
-            //         return filteredNodeColor; // 두 조건이 모두 충족될 때의 테두리 색상
-            //     } else if (d.origin_check != 0) {
-            //         return selectedNodeColor; // 조건이 충족되지 않을 때의 테두리 색상
-            //     } else {
-            //         return defaultNodeColor;
-            //     }
-            // });
+            .style('stroke-width', (d) => {
+                if (d.pub_year > publishYear || d.category == category || d.author_name == mainAuthor || d.citation == citation || d.journal_name == journalName) {
+                    return 3; // 두 조건이 모두 충족될 때의 테두리 색상
+                } else {
+                    return 0;
+                }
+            })
 
         const label = svg.selectAll('.label')
             .data(graphData.nodes)
@@ -243,11 +260,19 @@ function Detail() {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
                     .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
-                    .style('fill', d => {
+                    .style('fill', (d) => { // 노드 색상
                         if (d.origin_check != 0) {
                             return selectedNodeColor;
+                        } else if (d.pub_year >= 2000 && d.pub_year <= 2005) {
+                            return yearColor[0]
+                        } else if (d.pub_year > 2005 && d.pub_year <= 2010) {
+                            return yearColor[1]
+                        } else if (d.pub_year > 2010 && d.pub_year <= 2015) {
+                            return yearColor[2]
+                        } else if (d.pub_year > 2015 && d.pub_year <= 2020) {
+                            return yearColor[3]
                         } else {
-                            return defaultNodeColor;
+                            return yearColor[4]
                         }
                     })
             }
@@ -288,9 +313,7 @@ function Detail() {
             label.attr('font-size', 10 / currentScale);
         }
 
-        // // 초기 배율 설정
-        // svg.call(d3.zoom().transform, d3.zoomIdentity.scale(initialScale));
-        console.log("필터")
+        console.log("필터링 적용")
     }
 
     const ClickOpenKCI = (article_id) => {
@@ -339,7 +362,7 @@ function Detail() {
     // graph 생성
     useEffect(() => {
         const width = 900;
-        const height = 850;
+        const height = 700;
 
         // SVG 요소 초기화
         const svg = d3.select(svgRef.current)
@@ -377,11 +400,26 @@ function Detail() {
             .enter().append('circle')
             .attr('class', 'node')
             .attr('r', d => (d.citation + 5) * 3)
+            // .style('fill', (d) => { // 노드 색상
+            //     if (d.origin_check != 0) {
+            //         return selectedNodeColor;
+            //     } else {
+            //         return defaultNodeColor
+            //     }
+            // })
             .style('fill', (d) => { // 노드 색상
                 if (d.origin_check != 0) {
                     return selectedNodeColor;
+                } else if (d.pub_year >= 2000 && d.pub_year <= 2005) {
+                    return yearColor[0]
+                } else if (d.pub_year > 2005 && d.pub_year <= 2010) {
+                    return yearColor[1]
+                } else if (d.pub_year > 2010 && d.pub_year <= 2015) {
+                    return yearColor[2]
+                } else if (d.pub_year > 2015 && d.pub_year <= 2020) {
+                    return yearColor[3]
                 } else {
-                    return defaultNodeColor
+                    return yearColor[4]
                 }
             })
 
@@ -413,11 +451,19 @@ function Detail() {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
                     .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
-                    .style('fill', d => {
+                    .style('fill', (d) => { // 노드 색상
                         if (d.origin_check != 0) {
                             return selectedNodeColor;
+                        } else if (d.pub_year >= 2000 && d.pub_year <= 2005) {
+                            return yearColor[0]
+                        } else if (d.pub_year > 2005 && d.pub_year <= 2010) {
+                            return yearColor[1]
+                        } else if (d.pub_year > 2010 && d.pub_year <= 2015) {
+                            return yearColor[2]
+                        } else if (d.pub_year > 2015 && d.pub_year <= 2020) {
+                            return yearColor[3]
                         } else {
-                            return defaultNodeColor;
+                            return yearColor[4]
                         }
                     })
             }
@@ -458,15 +504,9 @@ function Detail() {
             label.attr('font-size', 10 / currentScale);
         }
 
-        // 초기 배율 설정
-        svg.call(d3.zoom().transform, d3.zoomIdentity.scale(initialScale));
-
-        simulation.alpha(1).restart();
-        console.log("메인")
-    }, [fixedNode, links, nodes, initialScale]);
-
-    // console.log(svgRef.current)
-    // console.log("initialScale:", initialScale); // initialScale 값 확인
+        console.log("초기 그래프")
+        
+    }, [fixedNode, links, nodes]);
 
     const addOrigin = (article_id) => {
         console.log(params.article_id + '+' + article_id)
@@ -544,7 +584,7 @@ function Detail() {
             <div className='row mt-5'>
                 {/* left-page */}
                 <div className='col-md-2 mt-4'>
-                    <div className={`leftPage ${isLeftPageOpen ? 'closed' : 'open'}`} style={{ width: "400px", height: "100%" }}>
+                    <div className={`leftPage ${isLeftPageOpen ? 'closed' : 'open'}`} style={{ width: "400px", height: "700px" }}>
                         <div className='pt-1' style={{ overflow: "scroll" }}>
                             <div className='d-flex'>
                                 {/* 돋보기 이미지 */}
@@ -640,35 +680,35 @@ function Detail() {
                     <div className='col-md-5 mt-4 collapse' id="filterBar" style={{ marginLeft: "12rem", zIndex: "2", position: "absolute" }}> {/* 마진 부여 수정 필요 */}
                         <div className='row g-2'>
                             <div className="col-md">
-                                <form className='form-floating'>
-                                    <input class="form-control form-control-sm" type="text" id="mainAuthor" placeholder="" onChange={handleMainAuthor} />
-                                    <label for="mainAuthor">Main Author</label>
+                                <form className=''>
+                                    <input class="form-control form-control-sm" type="text" id="mainAuthor" placeholder="Main Author" onChange={handleMainAuthor} />
+                                    {/* <label for="mainAuthor">Main Author</label> */}
                                 </form>
                             </div>
                             <div className='col-md'>
-                                <form className='form-floating'>
-                                    <input class="form-control form-control-sm" type="text" id="citationNumber" placeholder="" onChange={handleCitation} />
-                                    <label for="citationNumber">Citation</label>
+                                <form className=''>
+                                    <input class="form-control form-control-sm" type="text" id="citationNumber" placeholder="Citation" onChange={handleCitation} />
+                                    {/* <label for="citationNumber">Citation</label> */}
                                 </form>
                             </div>
                             <div className='col-md'>
-                                <div class="form-floating">
-                                    <select class="form-select" id="publishYear" onChange={handlePublishYear} value={publishYear}>
-                                        <option selected value={currentYear + 1000}>Open this select menu</option>
+                                <div class="f">
+                                    <select class="form-select form-select-sm" id="publishYear" onChange={handlePublishYear} value={publishYear}>
+                                        <option selected value={currentYear + 1000}>Publish Year</option>
                                         <option value={currentYear - 1}>최근 1년</option>
                                         <option value={currentYear - 5}>최근 5년</option>
                                         <option value={currentYear - 10}>최근 10년</option>
                                         <option value={currentYear - 20}>최근 20년</option>
                                     </select>
-                                    <label for="publishYear">Publish Year</label>
+                                    {/* <label for="publishYear">Publish Year</label> */}
                                 </div>
                             </div>
                         </div>
                         <div className='row g-2 mt-2'>
                             <div className='col-md'>
-                                <div class="form-floating">
-                                    <select class="form-select" id="category" onChange={handleCategory} value={category}>
-                                        <option selected value="default">Open this select menu</option>
+                                <div class="">
+                                    <select class="form-select form-select-sm" id="category" onChange={handleCategory} value={category}>
+                                        <option selected value="default">Category</option>
                                         <option value="ML">Machine Learning</option>
                                         <option value="Network">Network</option>
                                         <option value="Databases">Databases</option>
@@ -684,13 +724,13 @@ function Detail() {
                                         <option value="Robotics">Robotics</option>
                                         <option value="Mathematics">Mathematics</option>
                                     </select>
-                                    <label htmlFor="category">Category</label>
+                                    {/* <label htmlFor="category">Category</label> */}
                                 </div>
                             </div>
                             <div className='col-md'>
-                                <div class="form-floating">
-                                    <select class="form-select" id="journalName" onChange={handleJournalName} value={journalName}>
-                                        <option selected value="default">Open this select menu</option>
+                                <div class="">
+                                    <select class="form-select form-select-sm" id="journalName" onChange={handleJournalName} value={journalName}>
+                                        <option selected value="default">Journal Name`</option>
                                         <option value="한국데이터정보과학회지">한국 데이터 정보 과학회지</option>
                                         <option value="정보과학회 컴퓨팅의 실제 논문지">정보과학회 컴퓨팅의 실제 논문지</option>
                                         <option value="정보과학회논문지">정보과학회논문지</option>
@@ -700,26 +740,32 @@ function Detail() {
                                         <option value="정보과학회논문지 : 데이타베이스">정보과학회논문지 : 데이타베이스</option>
                                         <option value="데이타베이스연구">데이타베이스연구</option>
                                     </select>
-                                    <label htmlFor="journalName">Journal</label>
+                                    {/* <label htmlFor="journalName">Journal</label> */}
                                 </div>
                             </div>
                             <div className='col-md'>
                                 <div class="form-floating">
-                                    <button className='btn btn-success' type='button' onClick={handleGraphFilter} >Apply</button>
+                                    <button className='btn btn-success btm-sm' type='button' onClick={handleGraphFilter} style={{ height: "31px", display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '14px' }}>Apply</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {/* graph */}
-                    <div className="svg-container">
-                        <div className='graph'>
-                            {isLoading ? (
-                                <div className="spinner-border text-success mt-5" role="status"></div>
-                            ) : (
+                    {isLoading ? (
+                        <div className="spinner-border text-success mt-5" role="status" style={{ marginLeft: "450px" }}></div>
+                    ) : (
+                        <div className="svg-container">
+                            <div className='graph' style={{ marginLeft: "50px" }}>
                                 <svg ref={svgRef} width="100%" height="100%"></svg>
-                            )}
+                            </div>
+                            <div className="publishYearBar">
+                                <div className="publishYearBar-item" style={{ background: 'linear-gradient(to right, rgba(88, 129, 87, 0.3), rgba(58, 90, 64, 0.9))' }}></div>
+                                <div className="publishYearBar-text-right" style={{ fontSize: '3px' }}>2000ㅤㅤㅤㅤㅤ2023</div>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 {/* right-section */}
@@ -730,10 +776,10 @@ function Detail() {
                                 <h5 style={{ textAlign: 'left' }}><strong>{(fixedNode || selectedNode).title_ko}</strong></h5>
                                 <a style={{ textAlign: 'left' }}>
                                     {(fixedNode || selectedNode).author_name.split(',').map((author, index) => (
-                                        <span key={index} onClick={() => AuthorClick((fixedNode || selectedNode).author_id.split(',')[index])} style={{ cursor: 'pointer' }}>{author.trim()} </span>
+                                        <button className="btn btn-outline-dark btn-sm mb-2 me-1" key={index} onClick={() => AuthorClick((fixedNode || selectedNode).author_id.split(',')[index])} style={{ cursor: 'pointer' }}>{author.trim()} </button>
                                     ))}
                                     {(fixedNode || selectedNode).author2_name.map((author, index) => (
-                                        <span key={index} onClick={() => AuthorClick((fixedNode || selectedNode).author2_id[index])} style={{ cursor: 'pointer' }}>{author.trim()} </span>
+                                        <button className="btn btn-outline-dark btn-sm mb-2 me-1" key={index} onClick={() => AuthorClick((fixedNode || selectedNode).author2_id[index])} style={{ cursor: 'pointer' }}>{author.trim()} </button>
                                     ))}
                                 </a>
                                 <br />
@@ -761,39 +807,39 @@ function Detail() {
                                 ))}
                                 </p>
                             </div>
-                        ) : (nodes.length > 0 ? (
+                        ) : (sortedNode.length > 0 ? (
                             <div className='' style={{ width: '450px' }}>
-                                <h5 style={{ textAlign: 'left' }}><strong>{nodes[0].title_ko}</strong></h5>
+                                <h5 style={{ textAlign: 'left' }}><strong>{sortedNode[0].title_ko}</strong></h5>
                                 <a style={{ textAlign: 'left' }}>
-                                    {nodes[0].author_name.split(',').map((author, index) => (
-                                        <span key={index} onClick={() => AuthorClick(nodes[0].author_id.split(',')[index])} style={{ cursor: 'pointer', marginRight: '5px' }}>
+                                    {sortedNode[0].author_name.split(',').map((author, index) => (
+                                        <button className="btn btn-outline-dark btn-sm mb-2 me-1" key={index} onClick={() => AuthorClick(sortedNode[0].author_id.split(',')[index])} style={{ cursor: 'pointer' }}>
                                             {author.trim()}
-                                        </span>
+                                        </button>
                                     ))}
-                                    {nodes[0].author2_name.map((author, index) => (
-                                        <span key={index} onClick={() => AuthorClick(nodes[0].author2_id[index])} style={{ cursor: 'pointer', marginRight: '5px' }}>
+                                    {sortedNode[0].author2_name.map((author, index) => (
+                                        <button className="btn btn-outline-dark btn-sm mb-2 me-1" key={index} onClick={() => AuthorClick(sortedNode[0].author2_id[index])} style={{ cursor: 'pointer' }}>
                                             {author.trim()}
-                                        </span>
+                                        </button>
                                     ))}
                                 </a>
                                 <br />
-                                <a style={{ textAlign: 'left' }}>{nodes[0].pub_year} {nodes[0].journal_name}</a>
+                                <a style={{ textAlign: 'left' }}>{sortedNode[0].pub_year} {sortedNode[0].journal_name}</a>
                                 <br />
-                                <a style={{ textAlign: 'left' }}>{nodes[0].citation} citation</a>
+                                <a style={{ textAlign: 'left' }}>{sortedNode[0].citation} citation</a>
                                 <div className="d-flex mt-3 mb-3">
-                                    <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenKCI(nodes[0].article_id)}>Open in KCI</button>
+                                    <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenKCI(sortedNode[0].article_id)}>Open in KCI</button>
                                     {/* <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenDashboard(nodes[0].article_id)}>Dashboard</button> */}
-                                    <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => handleSaveNode(nodes[0].article_id, userEmail)}>
+                                    <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => handleSaveNode(sortedNode[0].article_id, userEmail)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
                                             <path fillRule="evenodd"
                                                 d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
                                         </svg> Save
                                     </button>
                                 </div>
-                                <p className="abstract" style={{ textAlign: 'left' }}>{nodes[0].abstract_ko}</p>
+                                <p className="abstract" style={{ textAlign: 'left' }}>{sortedNode[0].abstract_ko}</p>
                                 <hr />
                                 <p>Keyword</p>
-                                <p>{nodes[0].keys.map((key, index) => (
+                                <p>{sortedNode[0].keys.map((key, index) => (
                                     <button className='btn btn-primary btn-sm me-1 mt-1' style={{ backgroundColor: "#A3B18A", borderColor: "#A3B18A" }} key={index}>{key}</button>
                                 ))}
                                 </p>
