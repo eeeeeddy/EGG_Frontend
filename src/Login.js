@@ -60,7 +60,6 @@ function Login(props) {
         };
     };
 
-
     const handleEmailKeyPress = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault(); // Enter 키의 기본 동작(새 줄 추가)을 방지합니다.

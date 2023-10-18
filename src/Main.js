@@ -1,7 +1,6 @@
 import './css/Main.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import EggMainNavbar from './MainNavbar';
 
 function Main() {
@@ -15,7 +14,6 @@ function Main() {
         setIsShowInfo(!isShowInfo);
         if (isShowInfo2 === true) {
             setIsShowInfo2(!isShowInfo2)
-
         } else {
             setIsShowInfo2(isShowInfo2)
         }
@@ -87,35 +85,6 @@ function Main() {
             <div className='d-flex justify-content-center'>
                 <a href="/About" style={{color: "#588157", textDecoration: "None"}}>How to Use it</a>
             </div>
-            {/* <div className='descript'>
-                <button className="descriptShowButton" type="button" onClick={handleShowButtonClick}>
-                    {isShowInfo ? 'Category △' : 'Category ▽'} </button>
-                {isShowInfo && (
-                    <div className="showDescript">
-                        <p className="mt-2" style={{ textAlign: 'center' }}></p>
-                        <ul>
-                            <li>ML</li>
-                            <li>Network</li>
-                            <li>Databases</li>
-                            <li>Computer Vision</li>
-                            <li>Security</li>
-                            <li>Graphics</li>
-                            <li>Computation</li>
-                            <li>Hardware</li>
-                            <li>Programming Language</li>
-                            <li>Data Structure</li>
-                            <li>Robotics</li>
-                            <li>Mathematics</li>
-                        </ul>
-                    </div>)}
-                <button className="descriptShowButton2" type="button" onClick={handleShowButtonClick2}>
-                    {isShowInfo2 ? 'How to use it △' : 'How to use it ▽'} </button>
-                {isShowInfo2 && (
-                    <div className="showDescript2">
-                        <p className="mt-2" style={{ textAlign: 'center' }}></p>
-                        <p> 이 페이지는 영국에서 시작하여....</p>
-                    </div>)}
-            </div> */}
         </div>
     );
 }

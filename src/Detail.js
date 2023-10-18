@@ -1,14 +1,12 @@
 import './css/Detail.css';
 import React, { useState, useEffect, useRef } from 'react';
 import EggNavbar from './Navbar';
-import Author from './Author';
 import * as d3 from 'd3';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUser } from './UserContext';
 import axios from 'axios';
 
 function Detail() {
-    const [detailResult, setDetailResult] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [detailQuery, setDetailQuety] = useState('');
     const [isLeftPageOpen, setIsLeftPageOpen] = useState(true);
@@ -20,7 +18,6 @@ function Detail() {
     const svgRef = useRef(null);
     const [selectedNode, setSelectedNode] = useState(null); // 선택한 노드 정보를 저장할 상태 변수
     const [fixedNode, setFixedNode] = useState(null); // 고정된 노드 정보를 저장할 상태 변수
-    const initialScale = 1; // 초기 스크롤 배율
     const navigate = useNavigate();
     const [selectedPaper, setSelectedPaper] = useState(null);
     const { userEmail, updateHistory } = useUser();
@@ -39,20 +36,14 @@ function Detail() {
     const defaultEdgeColor = 'rgba(0, 0, 0, 0.2)';
     const defaultNodeColor = 'rgba(88, 129, 87, 0.7)';
     const selectedNodeColor = 'rgba(255, 159, 28, 0.8)';
-    const hoverDefaultNodeColor = 'rgba(52, 78, 65, 0.8)';
+    const hoverDefaultNodeColor = 'rgba(8, 28, 21, 0.8)';
     const hoverSelectedNodeColor = 'rgba(232, 93, 4, 0.8)';
     const filteredNodeColor = 'rgba(255, 51, 51, 0.7)';
     const yearColor = ['rgba(88, 129, 87, 0.1)', 'rgba(88, 129, 87, 0.3)', 'rgba(88, 129, 87, 0.5)', 'rgba(58, 90, 64, 0.6)', 'rgba(58, 90, 64, 0.9)'];
 
-    // const reset = () => {
-    //     svg.transition()
-    //         .duration(750)
-    //         .call(zoomRef.current.transform, d3.zoomIdentity);
-    // };
-
     useEffect(() => {
         // URL 파라미터로부터 검색어를 가져옵니다.
-        const { detailQuery } = params;
+        // const { detailQuery } = params;
 
         if (detailQuery === 'loading') {
             setIsLoading(true);
@@ -79,9 +70,6 @@ function Detail() {
 
                 const temp2 = response.data.links
                 setLinks(temp2)
-
-                // const temp3 = response.data.nodes.find(node => node.article_id === params.article_id)
-                // setArticleNode(temp3)
 
                 const sorted = [...temp1];
                 sorted.sort((a, b) => b.origin_check - a.origin_check);
@@ -163,6 +151,8 @@ function Detail() {
 
         const width = 900;
         const height = 700;
+        const minZoom = 0.75;
+        const maxZoom = 1.5;
 
         // 해당 코드 추가: 이전 노드와 링크를 제거
         d3.select(svgRef.current).selectAll('.node').remove();
@@ -172,7 +162,10 @@ function Detail() {
         const svg = d3.select(svgRef.current)
             .attr('width', width)
             .attr('height', height)
-            .call(d3.zoom().on('zoom', zoomed)); // 줌 이벤트 핸들러 추가
+            .call(d3.zoom()
+                .scaleExtent([minZoom, maxZoom]) // 최소 및 최대 줌 레벨 설정
+                .translateExtent([[0, 0], [width + 90, height + 90]]) // 이동 가능 범위 설정
+                .on('zoom', zoomed)); // 줌 이벤트 핸들러 추가
 
         // SVG 영역에 테두리 추가
         svg.append('rect')
@@ -217,7 +210,7 @@ function Detail() {
             })
             .style('stroke', (d) => {
                 if (d.pub_year > publishYear || d.category == category || d.author_name == mainAuthor || d.citation == citation || d.journal_name == journalName) {
-                    return filteredNodeColor; // 두 조건이 모두 충족될 때의 테두리 색상
+                    return filteredNodeColor; // 조건이 모두 충족될 때의 테두리 색상
                 } else if (d.origin_check != 0) {
                     return selectedNodeColor; // 조건이 충족되지 않을 때의 테두리 색상
                 } else {
@@ -226,7 +219,7 @@ function Detail() {
             })
             .style('stroke-width', (d) => {
                 if (d.pub_year > publishYear || d.category == category || d.author_name == mainAuthor || d.citation == citation || d.journal_name == journalName) {
-                    return 3; // 두 조건이 모두 충족될 때의 테두리 색상
+                    return 3; // 조건이 모두 충족될 때의 테두리 색상
                 } else {
                     return 0;
                 }
@@ -309,11 +302,19 @@ function Detail() {
 
             // 배율을 통해 원하는 작업을 수행할 수 있습니다.
             // 예: 노드와 연결된 요소 크기 조정
-            node.attr('r', d => d.size / currentScale);
+            // node.attr('r', d => d.size / currentScale);
             label.attr('font-size', 10 / currentScale);
         }
 
         console.log("필터링 적용")
+    }
+
+    const handleResetZoom = () => {
+        // svg 요소를 선택하고 zoom 객체를 사용하여 초기 상태로 리셋
+        d3.select(svgRef.current)
+            .transition()
+            .duration(750)
+            .attr("transform", d3.zoomIdentity);
     }
 
     const ClickOpenKCI = (article_id) => {
@@ -363,12 +364,17 @@ function Detail() {
     useEffect(() => {
         const width = 900;
         const height = 700;
+        const minZoom = 0.75;
+        const maxZoom = 1.5;
 
         // SVG 요소 초기화
         const svg = d3.select(svgRef.current)
             .attr('width', width)
             .attr('height', height)
-            .call(d3.zoom().on('zoom', zoomed)); // 줌 이벤트 핸들러 추가
+            .call(d3.zoom()
+                .scaleExtent([minZoom, maxZoom]) // 최소 및 최대 줌 레벨 설정
+                .translateExtent([[0, 0], [width + 90, height + 90]]) // 이동 가능 범위 설정
+                .on('zoom', zoomed)); // 줌 이벤트 핸들러 추가
 
         svg.selectAll(".nodes").remove();
         svg.selectAll(".links").remove();
@@ -400,13 +406,6 @@ function Detail() {
             .enter().append('circle')
             .attr('class', 'node')
             .attr('r', d => (d.citation + 5) * 3)
-            // .style('fill', (d) => { // 노드 색상
-            //     if (d.origin_check != 0) {
-            //         return selectedNodeColor;
-            //     } else {
-            //         return defaultNodeColor
-            //     }
-            // })
             .style('fill', (d) => { // 노드 색상
                 if (d.origin_check != 0) {
                     return selectedNodeColor;
@@ -505,7 +504,7 @@ function Detail() {
         }
 
         console.log("초기 그래프")
-        
+
     }, [fixedNode, links, nodes]);
 
     const addOrigin = (article_id) => {
@@ -662,7 +661,7 @@ function Detail() {
                                         </svg>
                                     </span>
                                     <div className='mt-2'></div> {/* 버튼 간격을 위한 div 태그 */}
-                                    <span className='text-success' id="centerButton">
+                                    <span className='text-success' id="centerButton" onClick={handleResetZoom}>
                                         <svg className='text-success' width="38" height="38" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16" >
                                             <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
                                             <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
@@ -680,75 +679,58 @@ function Detail() {
                     <div className='col-md-5 mt-4 collapse' id="filterBar" style={{ marginLeft: "12rem", zIndex: "2", position: "absolute" }}> {/* 마진 부여 수정 필요 */}
                         <div className='row g-2'>
                             <div className="col-md">
-                                <form className=''>
-                                    <input class="form-control form-control-sm" type="text" id="mainAuthor" placeholder="Main Author" onChange={handleMainAuthor} />
-                                    {/* <label for="mainAuthor">Main Author</label> */}
-                                </form>
+                                <input className="form-control form-control-sm" type="text" id="mainAuthor" placeholder="Main Author" onChange={handleMainAuthor} />
                             </div>
                             <div className='col-md'>
-                                <form className=''>
-                                    <input class="form-control form-control-sm" type="text" id="citationNumber" placeholder="Citation" onChange={handleCitation} />
-                                    {/* <label for="citationNumber">Citation</label> */}
-                                </form>
+                                <input className="form-control form-control-sm" type="text" id="citationNumber" placeholder="Citation" onChange={handleCitation} />
                             </div>
                             <div className='col-md'>
-                                <div class="f">
-                                    <select class="form-select form-select-sm" id="publishYear" onChange={handlePublishYear} value={publishYear}>
-                                        <option selected value={currentYear + 1000}>Publish Year</option>
-                                        <option value={currentYear - 1}>최근 1년</option>
-                                        <option value={currentYear - 5}>최근 5년</option>
-                                        <option value={currentYear - 10}>최근 10년</option>
-                                        <option value={currentYear - 20}>최근 20년</option>
-                                    </select>
-                                    {/* <label for="publishYear">Publish Year</label> */}
-                                </div>
+                                <select class="form-select form-select-sm" id="publishYear" onChange={handlePublishYear} value={publishYear}>
+                                    <option selected value={currentYear + 1000}>Publish Year</option>
+                                    <option value={currentYear - 1}>최근 1년</option>
+                                    <option value={currentYear - 5}>최근 5년</option>
+                                    <option value={currentYear - 10}>최근 10년</option>
+                                    <option value={currentYear - 20}>최근 20년</option>
+                                </select>
                             </div>
                         </div>
                         <div className='row g-2 mt-2'>
                             <div className='col-md'>
-                                <div class="">
-                                    <select class="form-select form-select-sm" id="category" onChange={handleCategory} value={category}>
-                                        <option selected value="default">Category</option>
-                                        <option value="ML">Machine Learning</option>
-                                        <option value="Network">Network</option>
-                                        <option value="Databases">Databases</option>
-                                        <option value="Software">Software</option>
-                                        <option value="Operating System">Operating System</option>
-                                        <option value="Computer Vision">Computer Vision</option>
-                                        <option value="Security">Security</option>
-                                        <option value="Graphics">Graphics</option>
-                                        <option value="Computation">Computation</option>
-                                        <option value="Hardware">Hardware</option>
-                                        <option value="Programming Language">Programming Language</option>
-                                        <option value="Data Structure">Data Structure</option>
-                                        <option value="Robotics">Robotics</option>
-                                        <option value="Mathematics">Mathematics</option>
-                                    </select>
-                                    {/* <label htmlFor="category">Category</label> */}
-                                </div>
+                                <select class="form-select form-select-sm" id="category" onChange={handleCategory} value={category}>
+                                    <option selected value="default">Category</option>
+                                    <option value="ML">Machine Learning</option>
+                                    <option value="Network">Network</option>
+                                    <option value="Databases">Databases</option>
+                                    <option value="Software">Software</option>
+                                    <option value="Operating System">Operating System</option>
+                                    <option value="Computer Vision">Computer Vision</option>
+                                    <option value="Security">Security</option>
+                                    <option value="Graphics">Graphics</option>
+                                    <option value="Computation">Computation</option>
+                                    <option value="Hardware">Hardware</option>
+                                    <option value="Programming Language">Programming Language</option>
+                                    <option value="Data Structure">Data Structure</option>
+                                    <option value="Robotics">Robotics</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                </select>
                             </div>
                             <div className='col-md'>
-                                <div class="">
-                                    <select class="form-select form-select-sm" id="journalName" onChange={handleJournalName} value={journalName}>
-                                        <option selected value="default">Journal Name`</option>
-                                        <option value="한국데이터정보과학회지">한국 데이터 정보 과학회지</option>
-                                        <option value="정보과학회 컴퓨팅의 실제 논문지">정보과학회 컴퓨팅의 실제 논문지</option>
-                                        <option value="정보과학회논문지">정보과학회논문지</option>
-                                        <option value="정보과학회논문지 : 소프트웨어 및 응용">정보과학회논문지 : 소프트웨어 및 응용</option>
-                                        <option value="정보과학회논문지 : 시스템 및 이론">정보과학회논문지 : 시스템 및 이론</option>
-                                        <option value="정보과학회논문지 : 정보통신">정보과학회논문지 : 정보통신</option>
-                                        <option value="정보과학회논문지 : 데이타베이스">정보과학회논문지 : 데이타베이스</option>
-                                        <option value="데이타베이스연구">데이타베이스연구</option>
-                                    </select>
-                                    {/* <label htmlFor="journalName">Journal</label> */}
-                                </div>
+                                <select className="form-select form-select-sm" id="journalName" onChange={handleJournalName} value={journalName}>
+                                    <option selected value="default">Journal Name</option>
+                                    <option value="한국데이터정보과학회지">한국 데이터 정보 과학회지</option>
+                                    <option value="정보과학회 컴퓨팅의 실제 논문지">정보과학회 컴퓨팅의 실제 논문지</option>
+                                    <option value="정보과학회논문지">정보과학회논문지</option>
+                                    <option value="정보과학회논문지 : 소프트웨어 및 응용">정보과학회논문지 : 소프트웨어 및 응용</option>
+                                    <option value="정보과학회논문지 : 시스템 및 이론">정보과학회논문지 : 시스템 및 이론</option>
+                                    <option value="정보과학회논문지 : 정보통신">정보과학회논문지 : 정보통신</option>
+                                    <option value="정보과학회논문지 : 데이타베이스">정보과학회논문지 : 데이타베이스</option>
+                                    <option value="데이타베이스연구">데이타베이스연구</option>
+                                </select>
                             </div>
                             <div className='col-md'>
-                                <div class="form-floating">
-                                    <button className='btn btn-success btm-sm' type='button' onClick={handleGraphFilter} style={{ height: "31px", display: 'flex', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '14px' }}>Apply</span>
-                                    </button>
-                                </div>
+                                <button className='btn btn-success btm-sm' type='button' onClick={handleGraphFilter} style={{ height: "31px", display: 'flex', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '14px' }}>Apply</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -790,7 +772,6 @@ function Detail() {
                                 <div className="d-flex mt-3 mb-3">
                                     <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenKCI((fixedNode || selectedNode).article_id)}>Open in KCI</button>
                                     <button className='btn btn-warning btn-sm me-2' type='button' onClick={() => addOrigin((fixedNode || selectedNode).article_id)}>+ Add Origin</button>
-                                    {/* <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenDashboard((fixedNode || selectedNode).article_id)}>Dashboard</button> */}
                                     <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => handleSaveNode((fixedNode || selectedNode).article_id, userEmail)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
                                             <path fillRule="evenodd"
@@ -798,7 +779,6 @@ function Detail() {
                                         </svg> Save
                                     </button>
                                 </div>
-                                {/* <button className='btn btn-warning btn-sm mb-3' type='button' onClick={() => addOrigin((fixedNode || selectedNode).article_id)}>+ Add Origin</button> */}
                                 <p className="abstract" style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).abstract_ko}</p>
                                 <hr />
                                 <p>Keyword</p>
@@ -828,7 +808,6 @@ function Detail() {
                                 <a style={{ textAlign: 'left' }}>{sortedNode[0].citation} citation</a>
                                 <div className="d-flex mt-3 mb-3">
                                     <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenKCI(sortedNode[0].article_id)}>Open in KCI</button>
-                                    {/* <button className='btn btn-success btn-sm me-2' type='button' onClick={() => ClickOpenDashboard(nodes[0].article_id)}>Dashboard</button> */}
                                     <button className='btn btn-outline-danger btn-sm' type='button' onClick={() => handleSaveNode(sortedNode[0].article_id, userEmail)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
                                             <path fillRule="evenodd"

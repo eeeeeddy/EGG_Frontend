@@ -87,7 +87,7 @@ function History() {
             </div>
             <div className="history-container">
                 <h2 className="history-title">History</h2>
-                <select class="form-select form-select-sm ms-5" aria-label=".form-select-sm example" style={{ width: "300px" }} onChange={handleCategory}>
+                <select className="form-select form-select-sm ms-5" aria-label=".form-select-sm example" style={{ width: "300px" }} onChange={handleCategory}>
                     <option selected value="">ALL</option>
                     <option value="ML">Machine Learning</option>
                     <option value="Network">Network</option>

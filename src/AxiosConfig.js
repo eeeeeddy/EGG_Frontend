@@ -1,5 +1,3 @@
-// axios-config.js
-
 import axios from 'axios';
 
 // Axios 인스턴스 생성

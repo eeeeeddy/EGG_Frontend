@@ -89,7 +89,7 @@ function SavePaper() {
             </div>
             <div className="save-container">
                 <h2 className="save-title">Save Papers</h2>
-                <select class="form-select form-select-sm ms-5" aria-label=".form-select-sm example" style={{ width: "300px" }} onChange={handleCategory}>
+                <select className="form-select form-select-sm ms-5" aria-label=".form-select-sm example" style={{ width: "300px" }} onChange={handleCategory}>
                     <option selected value="">ALL</option>
                     <option value="ML">Machine Learning</option>
                     <option value="Network">Network</option>

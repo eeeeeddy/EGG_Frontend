@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+
 export function useUser() {
 	return useContext(UserContext);
 }
