@@ -19,6 +19,15 @@ function Detail_FilterTest() {
     const [citation, setCitation] = useState(0);
     const [journalName, setjournalName] = useState("");
 
+    // 그래프 색상 관련 변수
+    const defaultEdgeColor = 'rgba(0, 0, 0, 0.2)';
+    const defaultNodeColor = 'rgba(88, 129, 87, 0.7)';
+    const selectedNodeColor = 'rgba(255, 159, 28, 0.8)';
+    const hoverDefaultNodeColor = 'rgba(52, 78, 65, 0.8)';
+    const hoverSelectedNodeColor = 'rgba(232, 93, 4, 0.8)';
+    const filteredNodeColor = 'rgba(255, 51, 51, 0.7)';
+    const yearColor = ['rgba(88, 129, 87, 0.1)', 'rgba(88, 129, 87, 0.3)', 'rgba(88, 129, 87, 0.5)', 'rgba(58, 90, 64, 0.6)', 'rgba(58, 90, 64, 0.9)'];
+
 
     const handlePublishYear = (event) => {
         const temp = event.target.value;
@@ -51,8 +60,8 @@ function Detail_FilterTest() {
 
     const handleGraphFilter = () => {
 
-        const width = 1000;
-        const height = 750;
+        const width = 1500;
+        const height = 600;
 
         // 해당 코드 추가: 이전 노드와 링크를 제거
         d3.select(svgRef.current).selectAll('.node').remove();
@@ -82,7 +91,7 @@ function Detail_FilterTest() {
             .data(links)
             .enter().append('line')
             .attr('class', 'link')
-            .style('stroke', 'rgba(0, 0, 0, 0.2')  // 간선 색상
+            .style('stroke', defaultEdgeColor)  // 간선 색상
             .style('stroke-width', 1); // 간선 두께
 
         const node = svg.selectAll('.node')
@@ -90,15 +99,37 @@ function Detail_FilterTest() {
             .enter().append('circle')
             .attr('class', 'node')
             .attr('r', d => (d.citation + 5) * 3)
-            .style('fill', d => 'rgba(255, 255, 0, 0.8') // 노드 색상
-            .style('stroke', (d) => {
-                // return d.pub_year === publishYear ? 'rgba(255, 0, 0)' : 'rgba(255, 255, 0, 0.8)'
-                if (d.journal_name === journalName) {
-                    return 'rgba(255, 0, 0)'; // 두 조건이 모두 충족될 때의 테두리 색상
+            .style('fill', (d) => { // 노드 색상
+                if (d.origin_check !== 0) {
+                    return selectedNodeColor;
+                } else if (d.pub_year >= 2000 && d.pub_year <= 2005) {
+                    return yearColor[0]
+                } else if (d.pub_year > 2005 && d.pub_year <= 2010) {
+                    return yearColor[1]
+                } else if (d.pub_year > 2010 && d.pub_year <= 2015) {
+                    return yearColor[2]
+                } else if (d.pub_year > 2015 && d.pub_year <= 2020) {
+                    return yearColor[3]
                 } else {
-                    return 'rgba(255, 255, 0, 0.8)'; // 조건이 충족되지 않을 때의 테두리 색상
+                    return yearColor[4]
                 }
-            });
+            })
+            .style('stroke', (d) => {
+                if (d.pub_year > publishYear || d.category === category || d.author_name === mainAuthor || d.citation === citation || d.journal_name === journalName) {
+                    return filteredNodeColor; // 두 조건이 모두 충족될 때의 테두리 색상
+                } else if (d.origin_check !== 0) {
+                    return selectedNodeColor; // 조건이 충족되지 않을 때의 테두리 색상
+                } else {
+                    return defaultNodeColor;
+                }
+            })
+            .style('stroke-width', (d) => {
+                if (d.pub_year > publishYear || d.category === category || d.author_name === mainAuthor || d.citation === citation || d.journal_name === journalName) {
+                    return 3; // 두 조건이 모두 충족될 때의 테두리 색상
+                } else {
+                    return 0;
+                }
+            })
 
         const label = svg.selectAll('.label')
             .data(graphData.nodes)
@@ -114,9 +145,13 @@ function Detail_FilterTest() {
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', (d.citation + 5) * 3 + 5) // 노드 크기를 키워 hover 효과 표시
-                .style('fill', 'rgba(255, 204, 0, 0.8') // 색상 및 투명도(0.5)
-                .style('stroke', 'rgba(255, 51, 51, 0.5') // 노드 테두리 색상
-                .style('stroke-width', 3); // 노드 테두리 두께
+                .style('fill', d => {
+                    if (d.origin_check !== 0) { // 색상 및 투명도(0.5)
+                        return hoverSelectedNodeColor;
+                    } else {
+                        return hoverDefaultNodeColor;
+                    }
+                })
         });
 
         node.on('mouseout', (event, d) => {
@@ -124,7 +159,21 @@ function Detail_FilterTest() {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
                     .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
-                    .style('fill', 'rgba(255, 255, 0, 0.8)') // 색상 원래대로 복원
+                    .style('fill', (d) => { // 노드 색상
+                        if (d.origin_check !== 0) {
+                            return selectedNodeColor;
+                        } else if (d.pub_year >= 2000 && d.pub_year <= 2005) {
+                            return yearColor[0]
+                        } else if (d.pub_year > 2005 && d.pub_year <= 2010) {
+                            return yearColor[1]
+                        } else if (d.pub_year > 2010 && d.pub_year <= 2015) {
+                            return yearColor[2]
+                        } else if (d.pub_year > 2015 && d.pub_year <= 2020) {
+                            return yearColor[3]
+                        } else {
+                            return yearColor[4]
+                        }
+                    })
             }
         });
 
@@ -163,9 +212,7 @@ function Detail_FilterTest() {
             label.attr('font-size', 10 / currentScale);
         }
 
-        // // 초기 배율 설정
-        // svg.call(d3.zoom().transform, d3.zoomIdentity.scale(initialScale));
-        console.log("필터")
+        console.log("필터링 적용")
     }
 
     useEffect(() => {
@@ -175,13 +222,16 @@ function Detail_FilterTest() {
     // graph 생성
     useEffect(() => {
         const width = 1500;
-        const height = 750;
+        const height = 600;
 
         // SVG 요소 초기화
         const svg = d3.select(svgRef.current)
             .attr('width', width)
             .attr('height', height)
             .call(d3.zoom().on('zoom', zoomed)); // 줌 이벤트 핸들러 추가
+
+        svg.selectAll(".nodes").remove();
+        svg.selectAll(".links").remove();
 
         // SVG 영역에 테두리 추가
         svg.append('rect')
@@ -202,7 +252,7 @@ function Detail_FilterTest() {
             .data(links)
             .enter().append('line')
             .attr('class', 'link')
-            .style('stroke', 'rgba(0, 0, 0, 0.2')  // 간선 색상
+            .style('stroke', defaultEdgeColor)  // 간선 색상
             .style('stroke-width', 1); // 간선 두께
 
         const node = svg.selectAll('.node')
@@ -210,8 +260,28 @@ function Detail_FilterTest() {
             .enter().append('circle')
             .attr('class', 'node')
             .attr('r', d => (d.citation + 5) * 3)
-            .style('fill', d => 'rgba(255, 255, 0, 0.8') // 노드 색상
-            .style('stroke', d => 'rgba(255, 255, 0, 0.8)');
+            // .style('fill', (d) => { // 노드 색상
+            //     if (d.origin_check != 0) {
+            //         return selectedNodeColor;
+            //     } else {
+            //         return defaultNodeColor
+            //     }
+            // })
+            .style('fill', (d) => { // 노드 색상
+                if (d.origin_check !== 0) {
+                    return selectedNodeColor;
+                } else if (d.pub_year >= 2000 && d.pub_year <= 2005) {
+                    return yearColor[0]
+                } else if (d.pub_year > 2005 && d.pub_year <= 2010) {
+                    return yearColor[1]
+                } else if (d.pub_year > 2010 && d.pub_year <= 2015) {
+                    return yearColor[2]
+                } else if (d.pub_year > 2015 && d.pub_year <= 2020) {
+                    return yearColor[3]
+                } else {
+                    return yearColor[4]
+                }
+            })
 
         const label = svg.selectAll('.label')
             .data(nodes)
@@ -227,9 +297,13 @@ function Detail_FilterTest() {
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', (d.citation + 5) * 3 + 5) // 노드 크기를 키워 hover 효과 표시
-                .style('fill', 'rgba(255, 204, 0, 0.8') // 색상 및 투명도(0.5)
-                .style('stroke', 'rgba(255, 51, 51, 0.5') // 노드 테두리 색상
-                .style('stroke-width', 3); // 노드 테두리 두께
+                .style('fill', d => {
+                    if (d.origin_check !== 0) { // 색상 및 투명도(0.5)
+                        return hoverSelectedNodeColor;
+                    } else {
+                        return hoverDefaultNodeColor;
+                    }
+                })
         });
 
         node.on('mouseout', (event, d) => {
@@ -237,8 +311,21 @@ function Detail_FilterTest() {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
                     .attr('r', (d.citation + 5) * 3) // 노드 크기 원래대로 복원
-                    .style('fill', 'rgba(255, 255, 0, 0.8)') // 색상 원래대로 복원
-                    .style('stroke-width', 0);
+                    .style('fill', (d) => { // 노드 색상
+                        if (d.origin_check !== 0) {
+                            return selectedNodeColor;
+                        } else if (d.pub_year >= 2000 && d.pub_year <= 2005) {
+                            return yearColor[0]
+                        } else if (d.pub_year > 2005 && d.pub_year <= 2010) {
+                            return yearColor[1]
+                        } else if (d.pub_year > 2010 && d.pub_year <= 2015) {
+                            return yearColor[2]
+                        } else if (d.pub_year > 2015 && d.pub_year <= 2020) {
+                            return yearColor[3]
+                        } else {
+                            return yearColor[4]
+                        }
+                    })
             }
         });
 
@@ -277,9 +364,8 @@ function Detail_FilterTest() {
             label.attr('font-size', 10 / currentScale);
         }
 
-        // 초기 배율 설정
-        // svg.call(d3.zoom().transform, d3.zoomIdentity.scale(initialScale));
-        console.log("메인")
+        console.log("초기 그래프")
+        
     }, [fixedNode, links, nodes]);
 
     return (
@@ -287,14 +373,8 @@ function Detail_FilterTest() {
             <div className='Navbar'>
                 <EggNavbar />
             </div>
-
+            <div style={{height:"40px"}}></div>
             <div className='row'>
-                <span className='text-success' id="centerButton" onClick={resetZoom}>
-                    <svg className='text-success' width="38" height="38" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16" >
-                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
-                        <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
-                    </svg>
-                </span>
                 {/* graph-section */}
                 <div className='col-md-12'>
                     {/* filter */}
@@ -302,20 +382,20 @@ function Detail_FilterTest() {
                         <div className='row g-2'>
                             <div className="col-md">
                                 <form className='form-floating'>
-                                    <input class="form-control form-control-sm" type="text" id="mainAuthor" placeholder="" onChange={handleMainAuthor}/>
+                                    <input class="form-control form-control-sm" type="text" id="mainAuthor" placeholder="" onChange={handleMainAuthor} />
                                     <label for="mainAuthor">Main Author</label>
                                 </form>
                             </div>
                             <div className='col-md'>
                                 <form className='form-floating'>
-                                    <input class="form-control form-control-sm" type="text" id="citationNumber" placeholder="" onChange={handleCitation}/>
+                                    <input class="form-control form-control-sm" type="text" id="citationNumber" placeholder="" onChange={handleCitation} />
                                     <label for="citationNumber">Citation</label>
                                 </form>
                             </div>
                             <div className='col-md'>
                                 <div class="form-floating">
                                     <select class="form-select" id="publishYear" onChange={handlePublishYear} value={publishYear}>
-                                        <option selected>default</option>
+                                        <option selected value={9999}>default</option>
                                         <option value="2023">2023</option>
                                         <option value="2022">2022</option>
                                         <option value="2021">2021</option>
@@ -337,7 +417,7 @@ function Detail_FilterTest() {
                             <div className='col-md'>
                                 <div class="form-floating">
                                     <select class="form-select" id="category" onChange={handleCategory} value={category}>
-                                        <option selected>Open this select menu</option>
+                                        <option selected value="default">Open this select menu</option>
                                         <option value="AI">Artificial Intelligence</option>
                                         <option value="DB">Database</option>
                                         <option value="CS">Computer Science</option>
@@ -349,7 +429,7 @@ function Detail_FilterTest() {
                             <div className='col-md'>
                                 <div class="form-floating">
                                     <select class="form-select" id="journalName" onChange={handleJournalName} value={journalName}>
-                                        <option selected>Open this select menu</option>
+                                        <option selected value="default">Open this select menu</option>
                                         <option value="한국 정보 과학회">한국 정보 과학회</option>
                                         <option value="미국 정보 과학회">미국</option>
                                         <option value="3">Three</option>
@@ -362,9 +442,16 @@ function Detail_FilterTest() {
                                     <button className='btn btn-success' type='button' onClick={handleGraphFilter} >Apply</button>
                                 </div>
                             </div>
+                            <div className='col-md'>
+                                <span className='text-success' id="centerButton" onClick={resetZoom}>
+                                    <svg className='text-success' width="38" height="38" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16" >
+                                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
+                                        <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
+                                    </svg>
+                                </span>
+                            </div>
                         </div>
                     </div>
-
                 </div>
                 {/* graph */}
                 <div className="svg-container">

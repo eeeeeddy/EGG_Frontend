@@ -10,7 +10,7 @@ import Login from './Login';
 import Author from './Author';
 import History from './History';
 import Dashboard from './Dashboard';
-import Author_Dashboard from './Dashboard_Author';
+import AuthorDashboard from './Dashboard_Author';
 import SavePaper from './SavePaper';
 import Detail_FilterTest from './Detail_FilterTest';
 import { UserProvider } from './UserContext';
@@ -34,7 +34,7 @@ function App() {
                         <Route path="/Author/:authorId" element={<Author />} />
                         <Route path="/History" element={<History />} />
                         <Route path="/Dashboard" element={<Dashboard />} />
-                        <Route path="/AuthorDashboard/:authorId" element={<Author_Dashboard />} />
+                        <Route path="/AuthorDashboard/:authorId" element={<AuthorDashboard />} />
                         <Route path="/SavePaper" element={<SavePaper />} />
                         <Route path="/Detail_FilterTest" element={<Detail_FilterTest />} />
                     </Routes>

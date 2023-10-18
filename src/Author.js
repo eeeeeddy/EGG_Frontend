@@ -212,7 +212,7 @@ function Author() {
 
         // node size = (d.citation + 5) * 3
         const simulation = d3.forceSimulation(nodes)
-            .force('link', d3.forceLink(links).distance(d => d.distance))
+            .force('link', d3.forceLink(links).distance(d => d.distance)) // 노드끼리 연결된 간선 길이
             .force('charge', d3.forceManyBody().strength(-1700)) // 그래프 퍼진 정도
             .force('center', d3.forceCenter(width / 2, height / 2))
             .force('collide', d3.forceCollide().radius(20));
@@ -228,7 +228,7 @@ function Author() {
             .data(nodes)
             .enter().append('circle')
             .attr('class', 'node')
-            .attr('r', d => d.impactfactor + 5)
+            .attr('r', d => d.impactfactor + 5) // 노드 크기
             .style('fill', d => 'rgba(163, 177, 138, 0.7)') // 노드 색상
             .style('stroke', d => 'rgba(163, 177, 138, 0.7)');
 
