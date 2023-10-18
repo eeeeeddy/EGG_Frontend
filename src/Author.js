@@ -176,7 +176,7 @@ function Author() {
                 scale: 1,
             }).then((canvas2) => {
                 const imgData2 = canvas2.toDataURL('image/png');
-                pdf.addImage(imgData2, 'PNG', 8, 10, 200, 230);
+                pdf.addImage(imgData2, 'PNG', 3, 8, 210, 0);
                 
                 // PDF 저장
                 pdf.save('exported-content.pdf');
@@ -213,7 +213,7 @@ function Author() {
         // node size = (d.citation + 5) * 3
         const simulation = d3.forceSimulation(nodes)
             .force('link', d3.forceLink(links).distance(d => d.distance)) // 노드끼리 연결된 간선 길이
-            .force('charge', d3.forceManyBody().strength(-1700)) // 그래프 퍼진 정도
+            .force('charge', d3.forceManyBody().strength(-3000)) // 그래프 퍼진 정도
             .force('center', d3.forceCenter(width / 2, height / 2))
             .force('collide', d3.forceCollide().radius(20));
 
@@ -228,7 +228,7 @@ function Author() {
             .data(nodes)
             .enter().append('circle')
             .attr('class', 'node')
-            .attr('r', d => d.impactfactor + 5) // 노드 크기
+            .attr('r', d => d.scaled_impactfactor ) // 노드 크기
             .style('fill', d => 'rgba(163, 177, 138, 0.7)') // 노드 색상
             .style('stroke', d => 'rgba(163, 177, 138, 0.7)');
 
@@ -245,7 +245,7 @@ function Author() {
         node.on('mouseover', (event, d) => {
             setSelectedNode(d);
             d3.select(event.currentTarget)
-                .attr('r', d.impactfactor) // 노드 크기를 키워 hover 효과 표시
+                .attr('r', d.scaled_impactfactor) // 노드 크기를 키워 hover 효과 표시
                 .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 및 투명도(0.5)
                 .style('stroke', 'rgba(255, 51, 51, 0.5') // 노드 테두리 색상
                 .style('stroke-width', 3); // 노드 테두리 두께
@@ -255,7 +255,7 @@ function Author() {
             if (d !== fixedNode) {
                 setSelectedNode(null);
                 d3.select(event.currentTarget)
-                    .attr('r', d.impactfactor) // 노드 크기 원래대로 복원
+                    .attr('r', d.scaled_impactfactor) // 노드 크기 원래대로 복원
                     .style('fill', 'rgba(163, 177, 138, 0.7)') // 색상 원래대로 복원
                     .style('stroke-width', 0);
             }
@@ -289,10 +289,11 @@ function Author() {
 
             // 현재 줌 레벨 가져오기
             const currentScale = transform.k;
+            
 
             // 배율을 통해 원하는 작업을 수행할 수 있습니다.
             // 예: 노드와 연결된 요소 크기 조정
-            node.attr('r', d => ((d.impactfactor) / currentScale));
+            node.attr('r', d => ((d.scaled_impactfactor) / currentScale));
             label.attr('font-size', 10 / currentScale);
         }
 
@@ -323,7 +324,7 @@ function Author() {
     
     function handleMouseEnter(event, index) {
         const button = event.target;
-        button.style.color = 'blue'; // 마우스를 가져다 댔을 때 원하는 색상(예: 빨간색)으로 변경
+        button.style.color = 'orange'; // 마우스를 가져다 댔을 때 원하는 색상(예: 빨간색)으로 변경
     }
     
     function handleMouseLeave(event, index) {
@@ -340,7 +341,7 @@ function Author() {
 
             <div className='row mt-5'>
                 {/* left section */}
-                <div className='col-md-4 mt-4 border-end' style={{ maxHeight: '900px', overflowY: 'auto' }}>
+                <div className='col-md-4 mt-4 border-end pl-5 pr-5' style={{ maxHeight: '900px', overflowY: 'auto' }}>
                     <div className="ms-3" style={{ overflow: 'scroll' }}>
                         <button className='btn btn-success btn-sm ms-1' onClick={handleExportToPDF}>Export to PDF</button>
                         <button className='btn btn-success btn-sm ms-1' onClick={() => ClickOpenDashboard(params.authorId)}>Dashboard</button>
