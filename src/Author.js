@@ -14,7 +14,6 @@ function Author() {
     const params = useParams();
     const navigate = useNavigate();
     const svgRef = useRef(null);
-    const initialScale = 1; // 초기 스크롤 배율
     const [selectedNode, setSelectedNode] = useState(null); // 선택한 노드 정보를 저장할 상태 변수
     const [fixedNode, setFixedNode] = useState(null); // 고정된 노드 정보를 저장할 상태 변수
     const [authorData, setAuthorData] = useState(null);
@@ -231,7 +230,7 @@ function Author() {
             .data(links)
             .enter().append('line')
             .attr('class', 'link')
-            .style('stroke', 'rgba(0, 0, 0, 0.2')  // 간선 색상
+            .style('stroke', defaultEdgeColor)  // 간선 색상
             .style('stroke-width', 1); // 간선 두께
 
         const node = svg.selectAll('.node')

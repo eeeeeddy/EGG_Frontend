@@ -6,7 +6,6 @@ import SignUp from './SignUp';
 import { useUser } from './UserContext';
 import { Link } from 'react-router-dom';
 import axios from './AxiosConfig';
-import SavePaper from './SavePaper';
 
 function EggMainNavbar() {
     const [showLoginModal, setShowLoginModal] = useState(false);
