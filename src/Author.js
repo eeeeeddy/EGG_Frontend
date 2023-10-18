@@ -8,29 +8,6 @@ import EggNavbar from './Navbar';
 import * as d3 from 'd3';
 import Chart from 'chart.js/auto';
 
-// const PdfDocument = ({ authorResult }) => {
-//     return (
-//         <Document>
-//             <Page>
-//                 <Text>
-//                     <Text>{authorResult.name}</Text>
-//                     <Text><br /></Text>
-//                     <Text>Institution: {authorResult.institution}</Text>
-//                     <Text>Total Paper: </Text>
-//                     <Text>Total Cited: </Text>
-//                     <Text>Average Cited: </Text>
-//                     <Text>H-Index: </Text>
-//                     <Text><hr /></Text>
-//                     <Text><h5>키워드 클라우드</h5></Text>
-//                     <Text><hr /></Text>
-//                     <Text><h5>Author Graph</h5></Text>
-//                     {/* 다른 정보를 추가할 때도 각각의 <Text> 컴포넌트로 감싸야 합니다. */}
-//                 </Text>
-//             </Page>
-//         </Document>
-//     );
-// };
-
 function Author() {
     const [isLoading, setIsLoading] = useState(true);
     const contentToExportRef = useRef(null);
@@ -167,30 +144,47 @@ function Author() {
         createCategoryChartJsGraph();
     }, [category]); // Chart.js 그래프 생성
 
-    const handleExportToPDF = () => {
-        const elementToExport = contentToExportRef.current;
 
-        // HTML2Canvas를 사용하여 요소를 이미지로 캡처
-        html2canvas(elementToExport, {
-            scale: 1.5, // 캡쳐된 이미지 배율 조절 (30% 크기)
-        }).then((canvas) => {
-            // 이미지 데이터를 가져옴
-            const imgData = canvas.toDataURL('image/png');
+ const handleExportToPDF = () => {
+    const elementToExport = contentToExportRef.current;
+    const pdf = new jsPDF('1', 'mm', [210, 297]);
 
-            // jsPDF를 사용하여 PDF 생성
-            const pdf = new jsPDF('1', 'mm', [297, 210]);
-            pdf.addImage(imgData, 'PNG', 10, 10, 190, 0);
+    // 첫 번째 페이지 캡처
+    html2canvas(elementToExport, {
+            scale: 1,
+    }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        // pdf.addImage(imgData, 'PNG', 10, 10, 0, 289);
+        const pageWidth = pdf.internal.pageSize.getWidth(); // 페이지 폭
+        const pageHeight = pdf.internal.pageSize.getHeight(); // 페이지 높이
+        
+        const imgWidth = canvas.width * (pageHeight / canvas.height); // 이미지의 폭을 조정하여 세로 부분이 페이지에 맞게 표시
+        const imgHeight = pageHeight; // 페이지 높이와 일치
+        
+        const xPos = (pageWidth - imgWidth) / 2; // 수평 가운데 정렬
+        const yPos = 0; // 페이지 상단에 위치
+        
+        pdf.addImage(imgData, 'PNG', xPos, yPos, imgWidth, imgHeight);  
 
-            // PDF 저장
-            pdf.save('exported-content.pdf');
+        // 두 번째 페이지 추가
+        pdf.addPage();
+        // 두 번째 페이지에 추가할 HTML 요소 캡처
+        const elementToExport2 = document.getElementById('element2');
 
-            // PDF를 새 창으로 열기
-            // const newWindow = window.open('', '_blank');
-            // newWindow.document.open();
-            // newWindow.document.write('<html><body>');
-            // newWindow.document.write('<embed width="100%" height="100%" name="plugin" src="' + pdf.output('datauristring') + '" type="application/pdf">');
-            // newWindow.document.write('</body></html>');
-            // newWindow.document.close();
+        if (elementToExport2) {
+            html2canvas(elementToExport2, {
+                scale: 1,
+            }).then((canvas2) => {
+                const imgData2 = canvas2.toDataURL('image/png');
+                pdf.addImage(imgData2, 'PNG', 8, 10, 200, 230);
+                
+                // PDF 저장
+                pdf.save('exported-content.pdf');
+            });
+        } else {
+            // elementToExport2가 존재하지 않을 때 오류 처리
+            console.error('HTML element with id "element2" not found.');
+            }
         });
     };
 
@@ -316,8 +310,25 @@ function Author() {
         window.open(kciUrl);
     }
 
+    const ClickOpenKCI2 = (article_id) => {
+        const kciUrl = `https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=` + article_id;
+        console.log(kciUrl);
+        // 새 창으로 KCI 링크 열기
+        window.open(kciUrl);
+    }
+
     const ClickOpenDashboard = (author_id) => {
         navigate(`/AuthorDashboard/${author_id}`);
+    }
+    
+    function handleMouseEnter(event, index) {
+        const button = event.target;
+        button.style.color = 'blue'; // 마우스를 가져다 댔을 때 원하는 색상(예: 빨간색)으로 변경
+    }
+    
+    function handleMouseLeave(event, index) {
+        const button = event.target;
+        button.style.color = 'black'; // 마우스가 벗어났을 때 원래 색상(파란색)으로 변경
     }
 
     return (
@@ -327,7 +338,7 @@ function Author() {
                 <EggNavbar />
             </div>
 
-            <div className='row mt-5 contentToExport' ref={contentToExportRef}>
+            <div className='row mt-5'>
                 {/* left section */}
                 <div className='col-md-4 mt-4 border-end' style={{ maxHeight: '900px', overflowY: 'auto' }}>
                     <div className="ms-3" style={{ overflow: 'scroll' }}>
@@ -340,7 +351,7 @@ function Author() {
                             <div className="spinner-border text-success" role="status"></div>
                         ) : (
                             // contentToExportRef에 ref를 추가하여 내용을 참조
-                            <div >
+                            <div className='contentToExport' ref={contentToExportRef}>
                                 <h2>{authorNode.author1Name}</h2>
                                 <a>{authorNode.author1Inst}</a>
                                 <br />
@@ -354,12 +365,24 @@ function Author() {
                                 <hr />
                                 <h5>Articles</h5>
                                 <p>
-                                    {[...new Set(authorNode.titleKor)].map((title, index) => (
-                                        <React.Fragment key={index}>
-                                            • {title}
-                                            {index < authorNode.titleKor.length - 1 && <br />}
-                                        </React.Fragment>
-                                    ))}
+                                    {[...new Set(authorNode.titleKor)].map((title, index) => {
+                                        const articleIndex = authorNode.titleKor.indexOf(title);
+                                        const articleId = authorNode.articleIDs[articleIndex];
+                                        return (
+                                            <React.Fragment key={index}>
+                                                <span
+                                                    className='btn btn-link'
+                                                    style={{ padding: 0, margin: 0, fontSize: 'inherit', color: 'black', textDecoration: 'none' ,textAlign: 'left' }}
+                                                    onMouseEnter={(e) => handleMouseEnter(e, index)}
+                                                    onMouseLeave={(e) => handleMouseLeave(e, index)}
+                                                    onClick={() => ClickOpenKCI2(articleId)}
+                                                >
+                                                    • {title}
+                                                </span>
+                                                {index < authorNode.titleKor.length - 1 && <br />}
+                                            </React.Fragment>
+                                        );
+                                    })}
                                 </p>
                                 <hr />
                                 <h5>Word Cloud</h5>
@@ -381,7 +404,7 @@ function Author() {
                 </div>
 
                 {/* Graph section */}
-                <div className='col-md-8'>
+                <div className='col-md-8' id='element2'>
                     <div className="svg-container">
                         <div className='graph' style={{ marginTop: "100px" }}>
                             {isLoading ? (
