@@ -45,6 +45,21 @@ function Search() {
         navigate(`/Detail/${articleId}`);
     };
 
+    const [expandedAbstracts, setExpandedAbstracts] = useState([]);
+    // 요약을 전환하기 위한 함수
+    const toggleAbstract = (articleId) => {
+        if (expandedAbstracts.includes(articleId)) {
+            setExpandedAbstracts(expandedAbstracts.filter(id => id !== articleId));
+        } else {
+            setExpandedAbstracts([...expandedAbstracts, articleId]);
+        }
+    };
+
+    // 요약이 확장되었는지 확인하기 위한 함수
+    const isExpanded = (articleId) => {
+        return expandedAbstracts.includes(articleId);
+    };
+
     return (
         <div style={{ fontFamily: 'MaruBuri-Regular' }}>
             <div className='Navbar'>
@@ -68,12 +83,24 @@ function Search() {
                             {searchResult.length > 0 ? (
                                 searchResult.map((result) => (
                                     // 검색 결과를 여기서 필요한대로 렌더링하세요.
-                                    <div key={result.articleID} className="paper-box"
-                                        onClick={() => handlePaperBoxClick(result.articleID)}>
-                                        <h4>{result.titleKor}</h4>
-                                        <p><span className='paperbox-author'>{result.authors}</span>
+                                    <div key={result.articleID} className="paper-box">
+                                        <h4 onClick={() => handlePaperBoxClick(result.articleID)}>{result.titleKor}</h4>
+                                        <p>
+                                            <span className='paperbox-author'>{result.authors}</span>
                                             <span className='paperbox-year'>{result.pubYear}</span><br /><br />
-                                            <span className='paperbox-p'>"{result.abstractKor}"</span></p>
+                                            {isExpanded(result.articleID) ? (
+                                                <span className='paperbox-p'>{result.abstractKor}</span>
+                                            ) : (
+                                                <span className={`paperbox-p ${result.abstractKor.length > 130 ? 'faded' : ''}`}>
+                                                    {result.abstractKor.slice(0, 200)}...
+                                                </span>                                            )}
+                                            {/* 요약이 3줄 이상인 경우 "더 읽기" 버튼을 표시합니다. */}
+                                            {result.abstractKor.length > 3 && (
+                                                <button className='abstracKorbutton' onClick={() => toggleAbstract(result.articleID)}>
+                                                    {isExpanded(result.articleID) ? 'Show less' : 'Show more'}
+                                                </button>
+                                            )}
+                                        </p>
                                     </div>
                                 ))
                             ) : (

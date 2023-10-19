@@ -28,6 +28,8 @@
     padding: 20px;
     margin-bottom: 30px;
     max-width: 60%; 
+}
+.paper-box h4{
     cursor: pointer;
 }
 
@@ -38,7 +40,6 @@
 }
 .paperbox-p {
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* 최대 표시 줄 수 */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -46,6 +47,12 @@
     color: black;
 }
 
+.abstracKorbutton {
+    float: right; 
+    background-color: transparent;
+    border: none;
+    color: #60925f;
+}
 .paperbox-author {
     float: left; /* 왼쪽으로 부유하도록 지정 */
     width: 90%;
