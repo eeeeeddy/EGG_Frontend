@@ -222,7 +222,7 @@ function Author() {
         // node size = (d.citation + 5) * 3
         const simulation = d3.forceSimulation(nodes)
             .force('link', d3.forceLink(links).distance(d => d.distance)) // 노드끼리 연결된 간선 길이
-            .force('charge', d3.forceManyBody().strength(-2000)) // 그래프 퍼진 정도
+            .force('charge', d3.forceManyBody().strength(-2500)) // 그래프 퍼진 정도
             .force('center', d3.forceCenter(width / 2, height / 3))
             .force('collide', d3.forceCollide().radius(20));
 

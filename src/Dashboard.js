@@ -15,6 +15,7 @@ const Dashboard = () => {
     const [kibanaInstDashboardURL2, setKibanaInstDashboardURL2] = useState('http://3.35.150.101:5601/app/dashboards#/view/c5b7c800-6d93-11ee-8210-1d8145a90f2e?embed=true&');
 
     useEffect(() => {
+        console.log(instName)
         if (instName === 'ALL') {
             setKibanaInstDashboardURL1(`${baseURL1}_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))`);
             setKibanaInstDashboardURL2(`${baseURL2}_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))`);
@@ -67,7 +68,7 @@ const Dashboard = () => {
                             <Select
                                 options={options}
                                 isSearchable={true} // 검색 기능 활성화
-                                placeholder="Select an option"
+                                placeholder="Select an Institution"
                                 onChange={handleInstId}
                                 styles={{
                                     control: (provided) => ({
@@ -87,18 +88,18 @@ const Dashboard = () => {
                             <option value="대구대학교">대구대학교</option>
                             <option value="한국과학기술원">한국과학기술원</option>
                         </select> */}
-                        <iframe
-                            src={kibanaInstDashboardURL1}
-                            width="50%"
-                            height="600px"
-                            title="Kibana Dashboard"
-                        ></iframe>
-                        <iframe
-                            src={kibanaInstDashboardURL2}
-                            width="50%"
-                            height="600px"
-                            title="Kibana Dashboard"
-                        ></iframe>
+                        <div>
+                            <iframe
+                                src={kibanaInstDashboardURL1}
+                                width="50%"
+                                height="600px"
+                            ></iframe>
+                            <iframe
+                                src={kibanaInstDashboardURL2}
+                                width="50%"
+                                height="600px"
+                            ></iframe>
+                        </div>
                     </div>
                 </div>
             </div>

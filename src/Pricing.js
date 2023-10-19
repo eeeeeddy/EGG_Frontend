@@ -1,4 +1,3 @@
-import './css/Pricing.css';
 import React from 'react';
 import EggNavbar from './Navbar';
 

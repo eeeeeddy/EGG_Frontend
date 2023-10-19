@@ -2,6 +2,7 @@
   max-width: 70%;
   margin: 0 auto;
 }
+
 .history-title {
   margin: 20px 0;
   font-size: 30px;
@@ -36,6 +37,7 @@
 .history-item-author{
   color: rgb(85, 83, 83);
 }
+
 .history-item-abstract {
   max-height: 3em;
   overflow: hidden;

@@ -61,6 +61,7 @@
   top: 50%;  */
   z-index: 1; 
   }
+  
 .btn-outline-success.custom2-btn:hover{
   background-color:hsl(28, 100%, 50%);
   border-radius: 45px;

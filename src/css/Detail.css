@@ -16,15 +16,6 @@
     /* left-page를 왼쪽으로 이동하여 숨기지만, 다시 열 때 원래 위치로 돌아오도록 transform 초기화 필요 */
     transform: translateX(0%);
 }
-.paperbox-abs{
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* 최대 표시 줄 수 */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-wrap: break-word;
-    color: rgba(0, 0, 0, 0.822);
-}
 
 .articleList {
     font-size: small;
@@ -35,6 +26,7 @@
     /* box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184);  */
     transition: border-color 0.3s;
 }
+
 .articleList:hover{
     border: 2px solid  orange
     /* border-color: rgba(85, 107, 47, 0.612); */
@@ -43,7 +35,8 @@
 .abstract {
     font-size: small;
 }
-.left-page-author {
+
+#left-page-author {
     float: left; /* 왼쪽으로 부유하도록 지정 */
     /* width: 90%; */
     /* max-height: 1.3em; */
@@ -52,9 +45,20 @@
     white-space: nowrap;
     color: gray;
 }
-.left-page-year {
+
+#left-page-year {
     float: right; /* 오른쪽으로 부유하도록 지정 */
     color: gray;
+}
+
+#paperbox-abs{
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 최대 표시 줄 수 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    color: rgba(0, 0, 0, 0.822);
 }
 
 .leftButton {

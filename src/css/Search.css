@@ -29,6 +29,7 @@
     margin-bottom: 30px;
     max-width: 60%; 
 }
+
 .paper-box h4{
     cursor: pointer;
 }
@@ -38,6 +39,7 @@
     word-wrap: break-word;
     color: gray;
 }
+
 .paperbox-p {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -53,6 +55,7 @@
     border: none;
     color: #60925f;
 }
+
 .paperbox-author {
     float: left; /* 왼쪽으로 부유하도록 지정 */
     width: 90%;
@@ -61,6 +64,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .paperbox-year {
     float: right; /* 오른쪽으로 부유하도록 지정 */
 }
