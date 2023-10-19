@@ -623,10 +623,10 @@ function Detail() {
                                         return (
                                             <div className="articleList" key={node.article_id} style={articleStyle}>
                                                 <p className='mt-3'>
-                                                    <b><span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
-                                                    <span className='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span><br />
+                                                    <b>■ <span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
+                                                    <span className='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span>
                                                     <span className='left-page-year' dangerouslySetInnerHTML={{ __html: yearWithHighlight }}></span><br />
-                                                    <span className='paperbox-p' dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span>
+                                                    <span className='paperbox-abs' dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span>
                                                 </p>
                                             </div>
                                         );
@@ -644,15 +644,15 @@ function Detail() {
                                     <span className="position-relative" id="helpButton" onClick={clickHelp}>
                                         {isShowHelp && (
                                             <div className='card card-body position-absolute' id="helpModal">
-                                                <p className='text-start'><strong>How to read the graph</strong></p>
+                                                <p className='text-start'><strong>그래프 구성</strong></p>
                                                 <hr className='mt-0' />
-                                                <p className='text-start'>Each node is an academic paper related to the origin paper.</p>
                                                 <ul>
-                                                    <li className='text-start'>Papers are arranged according to their similarity (this is not a citation tree)</li>
-                                                    <li className='text-start'>Node SIZE is the number of citations</li>
-                                                    <li className='text-start'>Node color is the publishing year</li>
-                                                    <li className='text-start'>Papers are arranged according to their similarity (this is not a citation tree)</li>
+                                                <li className='text-start'>각 노드는 <span style={{color:'orange'}}>원본논문</span>과 관련된 학술 논문입니다.</li>
+                                                    <li className='text-start'>논문들은 키워드 유사성에 따라 배치됩니다.</li>
+                                                    <li className='text-start'>노드 크기는 인용 횟수를 나타냅니다.</li>
+                                                    <li className='text-start'>노드 색상은 발행 연도를 나타냅니다.</li>
                                                 </ul>
+                                                <p>이 그래프를 통해 논문의 연관성을 시각적으로 파악할 수 있으며, 각 논문의 인용 수를 크기로 비교할 수 있습니다. </p>
                                             </div>
                                         )}
                                         <svg className='text-success' width="34" height="34" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">

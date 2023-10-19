@@ -16,6 +16,15 @@
     /* left-page를 왼쪽으로 이동하여 숨기지만, 다시 열 때 원래 위치로 돌아오도록 transform 초기화 필요 */
     transform: translateX(0%);
 }
+.paperbox-abs{
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 최대 표시 줄 수 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    color: rgba(0, 0, 0, 0.822);
+}
 
 .articleList {
     font-size: small;
@@ -24,10 +33,27 @@
     padding: 5px 15px 5px 15px;
     /* 가로 세로 흐림반경 색 투명도*/
     /* box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184);  */
+    transition: backgroud-color 0.3s;
+}
+.articleList:hover{
+    background-color: rgba(85, 107, 47, 0.612);
 }
 
 .abstract {
     font-size: small;
+}
+.left-page-author {
+    float: left; /* 왼쪽으로 부유하도록 지정 */
+    /* width: 90%; */
+    /* max-height: 1.3em; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: gray;
+}
+.left-page-year {
+    float: right; /* 오른쪽으로 부유하도록 지정 */
+    color: gray;
 }
 
 .leftButton {
@@ -76,8 +102,8 @@
 }
 
 #helpModal {
-    width: 320px;
-    height: 280px;
+    width: 360px;
+    height: 230px;
     bottom: 100%;
     left: 0;
     /* 도움말 모달 위치가 버튼과 얼마나 떨어져있는지 조정하는 요소 */

@@ -157,7 +157,7 @@ function EggNavbar() {
 
     return (
         <div style={{ fontFamily: 'MaruBuri-Regular' }}>
-            <nav className="navbar navbar-expand-lg" style={{ backgroundColor: "#dad7cd" }}>
+            <nav className="navbar navbar-expand-lg" style={{ backgroundColor: "#dad7cd" , boxShadow: "0px 2px 3px rgba(0, 0, 0, 0.1)" }}>
                 <div className="container-fluid">
                     <a className="navbar-brand" href="/">
                         <img src="/EGG_logo.png" alt="" width="32" height="32" className="d-inline-block align-text-top" />
