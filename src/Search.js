@@ -89,10 +89,10 @@ function Search() {
                                             <span className='paperbox-author'>{result.authors}</span>
                                             <span className='paperbox-year'>{result.pubYear}</span><br /><br />
                                             {isExpanded(result.articleID) ? (
-                                                <span className='paperbox-p'>{result.abstractKor}</span>
+                                                <span className='paperbox-p'>"{result.abstractKor}"</span>
                                             ) : (
                                                 <span className={`paperbox-p ${result.abstractKor.length > 130 ? 'faded' : ''}`}>
-                                                    {result.abstractKor.slice(0, 200)}...
+                                                    "{result.abstractKor.slice(0, 200)}...
                                                 </span>                                            )}
                                             {/* 요약이 3줄 이상인 경우 "더 읽기" 버튼을 표시합니다. */}
                                             {result.abstractKor.length > 3 && (
