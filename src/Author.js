@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import EggNavbar from './Navbar';
 import * as d3 from 'd3';
 import Chart from 'chart.js/auto';
+import DisabledContext from 'antd/es/config-provider/DisabledContext';
 
 function Author() {
     const [isLoading, setIsLoading] = useState(true);
@@ -357,21 +358,24 @@ function Author() {
             .attr("transform", d3.zoomIdentity);
     }
 
+    const [isShowHelp, setIsShowHelp] = useState(false);
+    const clickHelp = () => {
+        setIsShowHelp(!isShowHelp)
+    }
+
     return (
-        <div style={{ fontFamily: 'MaruBuri-Regular' }}>
+        <div className="authorBody" style={{ fontFamily: 'MaruBuri-Regular',maxHeight:'100%' }}>
 
             <div className='Navbar'>
                 <EggNavbar />
             </div>
 
-            <div className='row mt-5'>
+            <div className='row mt-5' id='body'>
                 {/* left section */}
-                <div className='col-md-4 mt-4 border-end pl-5 pr-5' style={{ maxHeight: '900px', overflowY: 'auto' }}>
-                    <div className="ms-3" style={{ overflow: 'scroll' }}>
+                <div className='col-md-4 mt-4 border-end pl-5 pr-5' style={{ maxHeight: '100%', overflowY: 'auto' }}>
+                    <div className="ms-3" style={{ overflow: 'scroll'}}>
                         <button className='btn btn-success btn-sm ms-1' onClick={handleExportToPDF}>Export to PDF</button>
-                        {/* <button className='btn btn-success btn-sm ms-1' onClick={() => ClickOpenDashboard(params.authorId)}>Dashboard</button> */}
                         <button className='btn btn-success btn-sm ms-1' onClick={() => ClickOpenKCI(params.authorId)}>Open KCI</button>
-                        {/* <button className='btn btn-success btn-sm ms-1'>Filter</button> */}
                         <hr />
                         {isLoading ? (
                             <div className="spinner-border text-success" role="status"></div>
@@ -429,7 +433,7 @@ function Author() {
                     </div>
                 </div>
 
-                <div className="col-md-8 mt-4">
+                <div className="col-md-8 mt-4" style={{maxHeight:'100%'}}>
                     <ul className="nav nav-tabs" id="myTab" role="tablist">
                         <li className="nav-item" role="presentation">
                             <button className="nav-link active" id="graph-tab" data-bs-toggle="tab" data-bs-target="#graph" type="button" role="tab" aria-controls="graph" aria-selected="true">Graph</button>
@@ -438,22 +442,39 @@ function Author() {
                             <button className="nav-link" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</button>
                         </li>
                     </ul>
-                    <div className="tab-content" id="myTabContent">
-                        <div className="tab-pane fade show active" id="graph" role="tabpanel" aria-labelledby="graph-tab">
-                            <div className="svg-container" id='element2'>
-                                <div className='graph' style={{ marginTop: "0px" }}>
-                                    <span className='text-success' id="centerButton" onClick={handleResetZoom}>
-                                        <svg className='text-success' width="38" height="38" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16" >
-                                            <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
-                                            <path fillRule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
-                                        </svg>
-                                    </span>
-                                    {isLoading ? (
-                                        <div className="spinner-border text-success mt-5" role="status"></div>
-                                    ) : (
-                                        <svg ref={svgRef}></svg>
+                    <div className="tab-content" id="myTabContent"style={{height:'100vh'}}>
+                        <div className="tab-pane fade show active" id="graph" role="tabpanel" 
+                        aria-labelledby="graph-tab" style={{maxHeight:'100vh', maxWidth:900}}>
+                            {isLoading ? (
+                                    <div className="spinner-border text-success mt-5" role="status"></div>
+                                ) : (
+                                    <svg style={{maxHeight:595,maxWidth:800,marginTop:0}} ref={svgRef}></svg>
+                                )}
+                            <div className="text-center" style={{marginTop:0, left:0, marginRight:1190}}>
+                                <span className="position-relative" id="helpButton2" onClick={clickHelp}>
+                                    {isShowHelp && (
+                                        <div className='card card-body position-absolute' id="helpModal" style={{height:210,width:400}}>
+                                            <p className='text-start'><strong>저자 그래프 구성</strong></p>
+                                            <hr className='mt-0' />
+                                            <ul>
+                                            <li className='text-start'>각 노드는 <span style={{color:'orange'}}>선택한 저자</span>와 함께 작업한 이력이 있는 다른 저자들의 정보를 나타냅니다.</li>
+                                                <li className='text-start'>노드의 크기는 해당 저자의 영향력 지수를 나타냅니다.</li>
+                                            </ul>
+                                            <p>이 그래프를 통해 선택한 저자와의 협력 관계를 시각적으로 파악할 수 있으며, 각 저자의 영향력을 크기로 비교할 수 있습니다. </p>
+                                        </div>
                                     )}
-                                </div>
+                                    <svg className='text-success' width="34" height="34" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+                                    </svg>
+                                </span><br/>
+                                <div style={{marginTop:5}}></div>
+                                <span className='text-success' id="centerButton2" onClick={handleResetZoom} style={{paddingBottom:'20px'}}>
+                                    <svg className='text-success' width="38" height="38" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16" >
+                                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
+                                        <path fillRule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
+                                    </svg>
+                                </span>
                             </div>
                         </div>
                         <div className="tab-pane fade" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">

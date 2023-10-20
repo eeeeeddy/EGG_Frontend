@@ -623,7 +623,7 @@ function Detail() {
                                         return (
                                             <div className="articleList" key={node.article_id} style={articleStyle}>
                                                 <p className='mt-3'>
-                                                    <b>■ <span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
+                                                    <b>◼ <span dangerouslySetInnerHTML={{ __html: titleWithHighlight }}></span></b><br />
                                                     <span className='mt-2' id='left-page-author' dangerouslySetInnerHTML={{ __html: authorWithHighlight }}></span>
                                                     <span className='mt-2' id='left-page-year' dangerouslySetInnerHTML={{ __html: yearWithHighlight }}></span><br />
                                                     <span className='mt-3' id='paperbox-abs' dangerouslySetInnerHTML={{ __html: abstractWithHighlight }}></span>

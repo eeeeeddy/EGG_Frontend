@@ -20,6 +20,7 @@
 }
 
 .MainBody h1{
+    margin-top: 10px;
     color: white; /* 투명도를 1로 설정하여 불투명하게 함 */
     text-shadow: 4px 4px 6px rgba(78, 41, 20);
     opacity: 1;
@@ -45,20 +46,31 @@
     display: flex;
     max-width: 100%;
 }
-
-.searchInput {
+/* .searchInput {
     width: 600px;
     display: flex;
     float: left;
     align-items: center;
     padding: 5px;
-    /* border: 1px solid #ccc; */
     border-radius: 45px;
     align-items: center;
     justify-content: center;
+} */
+
+.searchInput {
+    width: 500px;
+    display: flex;
+    align-items: center;
+    border: 1px solid white;
+    border-radius: 45px;
+    justify-content: center;
+    background-color: white;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    border: 1px solid #4d724c;
 }
 
-.searchButton {
+/* .searchButton {
     margin: 4px 8px;
     background-color: #588157;
     color: #fff;
@@ -68,6 +80,21 @@
     width: 100px;
     height: 47px;
     border-radius: 45px;
+} */
+
+.searchButton {
+    background-color: white;
+    margin: 1px;
+    color: #4d724c;
+    border: none;
+    /* border: 1px solid #4d724c; */
+    cursor: pointer;
+    float: right;
+    width: 100px;
+    height: 47px;
+    border-radius: 45px;
+    font-size: medium;
+    text-shadow:1px 1px 1px rgba(194, 192, 192, 0.872);
 }
 
 .searchIcon {

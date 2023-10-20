@@ -24,12 +24,12 @@
     padding: 5px 15px 5px 15px;
     /* 가로 세로 흐림반경 색 투명도*/
     /* box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.184);  */
-    transition: border-color 0.3s;
+    transition: background-color 0.3s;
 }
 
 .articleList:hover{
-    border: 2px solid  orange
-    /* border-color: rgba(85, 107, 47, 0.612); */
+    /* border: 2px solid  orange */
+    background-color: rgba(163, 177, 138, 0.15);
 }
 
 .abstract {

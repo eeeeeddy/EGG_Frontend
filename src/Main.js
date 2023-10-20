@@ -74,8 +74,8 @@ function Main() {
                             onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
                             style={{borderRadius: "45px", textAlign:"center"}}
                         />
+                        <button className='searchButton' type='button' onClick={handleSearchClick}><b>Search</b></button>
                     </div>
-                    <button className='searchButton' type='button' onClick={handleSearchClick}><b>Search</b></button>
                 </div>
                 <div style={{ height: "30px" }}></div>
             </div>

@@ -54,6 +54,7 @@
     background-color: transparent;
     border: none;
     color: #60925f;
+    text-shadow: 1px 1px 1px rgba(190, 189, 189, 0.84);
 }
 
 .paperbox-author {
