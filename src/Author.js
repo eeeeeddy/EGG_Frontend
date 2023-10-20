@@ -364,15 +364,15 @@ function Author() {
     }
 
     return (
-        <div className="authorBody" style={{ fontFamily: 'MaruBuri-Regular',maxHeight:'90vh',maxWidth:'110%' }}>
-            <div className='Navbar' style={{maxWidth:'100%',maxHeight:'100vh'}}>
+        <div className="authorBody" style={{ fontFamily: 'MaruBuri-Regular',Height:'90vh',maxWidth:'110%' }}>
+            <div className='Navbar' style={{maxWidth:'100%',zIndex:3}}>
                 <EggNavbar />
             </div>
 
             <div className='row mt-5' id='body'>
                 {/* left section */}
-                <div className='col-md-4 mt-4 border-end pl-5 pr-5' style={{ maxHeight: '100vh', overflowY: 'auto',maxWidth:'100%' }}>
-                    <div className="ms-3" style={{ overflow: 'scroll',height:'95vh'}}>
+                <div className='col-md-4 mt-4 border-end pl-5 pr-5' style={{ maxHeight: '90vh', overflowY: 'auto',maxWidth:'100%',zIndex:2 }}>
+                    <div className="ms-3" style={{ overflow: 'scroll',height:'90vh'}}>
                         <button className='btn btn-success btn-sm ms-1' onClick={handleExportToPDF}>Export to PDF</button>
                         <button className='btn btn-success btn-sm ms-1' onClick={() => ClickOpenKCI(params.authorId)}>Open KCI</button>
                         <hr />
@@ -432,7 +432,7 @@ function Author() {
                     </div>
                 </div>
 
-                <div className="col-md-8 mt-4" style={{maxHeight:'100vh',maxWidth:'100%'}}>
+                <div className="col-md-8 mt-4" style={{maxHeight:'90vh',maxWidth:'100%'}}>
                     <ul className="nav nav-tabs" id="myTab" role="tablist">
                         <li className="nav-item" role="presentation">
                             <button className="nav-link active" id="graph-tab" data-bs-toggle="tab" data-bs-target="#graph" type="button" role="tab" aria-controls="graph" aria-selected="true">Graph</button>
@@ -441,22 +441,22 @@ function Author() {
                             <button className="nav-link" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</button>
                         </li>
                     </ul>
-                    <div className="tab-content" id="myTabContent"style={{height:'100vh'}}>
+                    <div className="tab-content" id="myTabContent"style={{height:'100vh',width:'100%'}}>
                         <div className="tab-pane fade show active" id="graph" role="tabpanel" 
-                        aria-labelledby="graph-tab" style={{maxHeight:'100vh'}}>
+                        aria-labelledby="graph-tab" style={{maxHeight:'90vh',Width:'120%',zIndex:2}}>
                             {isLoading ? (
                                     <div className="spinner-border text-success mt-5" role="status"></div>
                                 ) : (
-                                    <svg style={{maxHeight:'95vh',maxWidth:'120vh',marginTop:0, position:'relative', zIndex:0}} ref={svgRef}></svg>
+                                    <svg style={{maxHeight:'85vh',Width:'120%',marginTop:0, position:'relative', zIndex:0}} ref={svgRef}></svg>
                                 )}
-                            <div className="text-center" style={{ position: 'absolute',zIndex: 0, left: 0, bottom: 0, right: 420 ,top:700}}>
+                            <div className="text-center" style={{ position: 'absolute',zIndex: 1, left: 0, bottom: 0, right: 420 ,top:700}}>
                                 <span className="position-relative" id="helpButton2" onClick={clickHelp}>
                                     {isShowHelp && (
                                         <div className='card card-body position-absolute' id="helpModal" style={{height:210,width:400,paddingLeft:'5px'}}>
-                                            <p className='text-start'><strong>저자 그래프 구성</strong></p>
+                                            <p className='text-start'style={{paddingLeft:'15px'}}><strong>저자 그래프 구성</strong></p>
                                             <hr className='mt-0' />
                                             <ul>
-                                            <li className='text-start'>각 노드는 <span style={{color:'orange'}}>선택한 저자</span>와 함께 작업한 이력이 있는 다른 저자들의 정보를 나타냅니다.</li>
+                                            <li className='text-start' >각 노드는 <span style={{color:'orange'}}>선택한 저자</span>와 함께 작업한 이력이 있는 다른 저자들의 정보를 나타냅니다.</li>
                                                 <li className='text-start'>노드의 크기는 해당 저자의 영향력 지수를 나타냅니다.</li>
                                             </ul>
                                             <p>이 그래프를 통해 선택한 저자와의 협력 관계를 시각적으로 파악할 수 있으며, 각 저자의 영향력을 크기로 비교할 수 있습니다. </p>
