@@ -10,7 +10,7 @@ app.get("/ping", (req, res) => {
     res.send("pong");
 });
 
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/*", (req, res) => {
     res.set({
@@ -18,9 +18,10 @@ app.get("/*", (req, res) => {
         Pragma: "no-cache",
         Date: Date.now()
     });
-    res.sendFile(path.join(__dirname, "build", "index.html"));
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 http.createServer(app).listen(port, () => {
     console.log(`app listening at ${port}`);
+    console.log(__dirname)
 });
