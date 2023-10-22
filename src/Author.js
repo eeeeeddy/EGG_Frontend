@@ -7,7 +7,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import EggNavbar from './Navbar';
 import * as d3 from 'd3';
 import Chart from 'chart.js/auto';
-import DisabledContext from 'antd/es/config-provider/DisabledContext';
 
 function Author() {
     const [isLoading, setIsLoading] = useState(true);
@@ -364,14 +363,14 @@ function Author() {
     }
 
     return (
-        <div className="authorBody" style={{ fontFamily: 'MaruBuri-Regular',Height:'90vh',maxWidth:'100%'}}>
-            <div className='Navbar' style={{maxWidth:'100%',position:'fixed',zIndex:7}}>
+        <div className="authorBody" style={{ fontFamily: 'MaruBuri-Regular', Height:'90vh', maxWidth:'100%' }}>
+            <div className='Navbar' style={{ maxWidth:'100%', position:'fixed', zIndex: 7 }}>
                 <EggNavbar />
             </div>
 
             <div className='row mt-5' id='body' style={{backgroundColor:'white'}}>
                 {/* left section */}
-                <div className='col-md-4 mt-4 border-end pl-5 pr-5' style={{ maxHeight: '90vh', overflowY: 'auto',maxWidth:'100%',backgroundColor:'white',position:'relative',zIndex:3}}>
+                <div className='col-md-4 mt-4 border-end pl-5 pr-5' style={{ maxHeight: '90vh', overflowY: 'auto', maxWidth:'100%', backgroundColor:'white', position:'relative', zIndex:3}}>
                     <div className="ms-3" style={{ overflow: 'scroll'}}>
                         <button className='btn btn-success btn-sm ms-1' onClick={handleExportToPDF}>Export to PDF</button>
                         <button className='btn btn-success btn-sm ms-1' onClick={() => ClickOpenKCI(params.authorId)}>Open KCI</button>
@@ -432,8 +431,8 @@ function Author() {
                     </div>
                 </div>
 
-                <div className="col-md-8 mt-4" style={{maxHeight:'80vh',maxWidth:'100%',}}>
-                    <ul className="nav nav-tabs" id="myTab" role="tablist" style={{position:'relative' ,zIndex:5,backgroundColor:'white'}}>
+                <div className="col-md-8 mt-4" style={{ maxHeight:'80vh', maxWidth:'100%' }}>
+                    <ul className="nav nav-tabs" id="myTab" role="tablist" style={{ position:'relative' , zIndex:5, backgroundColor:'white' }}>
                         <li className="nav-item" role="presentation">
                             <button className="nav-link active" id="graph-tab" data-bs-toggle="tab" data-bs-target="#graph" type="button" role="tab" aria-controls="graph" aria-selected="true">Graph</button>
                         </li>
@@ -441,23 +440,22 @@ function Author() {
                             <button className="nav-link" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</button>
                         </li>
                     </ul>
-                    <div className="tab-content" id="myTabContent"style={{maxheight:'100%',width:'100%'}}>
+                    <div className="tab-content" id="myTabContent"style={{ maxheight:'100%', width:'100%' }}>
                         <div className="tab-pane fade show active" id="graph" role="tabpanel" 
                         aria-labelledby="graph-tab" >
                             {isLoading ? (
-                                    <div className="spinner-border text-success mt-5" role="status"></div>
+                                    <div className="spinner-border text-success mt-5" role="status" style={{ marginLeft: "450px" }}></div>
                                 ) : (
-                                    <svg style={{marginTop:0, position:'fixed', zIndex:0
-                                        , height:'85vh', width:'100%'}} ref={svgRef}></svg>
+                                    <svg style={{ marginTop:0, position:'fixed', zIndex:0, height:'85vh', width:'100%' }} ref={svgRef}></svg>
                                 )}
-                            <div className="text-center" style={{ position: 'absolute',zIndex: 5, left: 0, bottom: 0, right: 420 ,top:700}}>
-                                <span className="position-relative" id="helpButton2" onClick={clickHelp}>
+                            <div className="text-center" style={{ position: 'absolute', zIndex: 5, left: 0, bottom: 0, right: 420 ,top:700 }}>
+                                <span className="position-relative" id="helpButton2" onClick={ clickHelp }>
                                     {isShowHelp && (
-                                        <div className='card card-body position-absolute' id="helpModal" style={{height:210,width:400,paddingLeft:'5px'}}>
+                                        <div className='card card-body position-absolute' id="helpModal" style={{ height:210, width:400, paddingLeft:'5px' }}>
                                             <p className='text-start'style={{paddingLeft:'15px'}}><strong>저자 그래프 구성</strong></p>
-                                            <hr className='mt-0' />
+                                            <hr className='mt-0 ms-1' />
                                             <ul>
-                                            <li className='text-start' >각 노드는 <span style={{color:'orange'}}>선택한 저자</span>와 함께 작업한 이력이 있는 다른 저자들의 정보를 나타냅니다.</li>
+                                            <li className='text-start' >각 노드는 <strong style={{color:'orange'}}>선택한 저자</strong>와 함께 작업한 이력이 있는 다른 저자들의 정보를 나타냅니다.</li>
                                                 <li className='text-start'>노드의 크기는 해당 저자의 영향력 지수를 나타냅니다.</li>
                                             </ul>
                                             <p>이 그래프를 통해 선택한 저자와의 협력 관계를 시각적으로 파악할 수 있으며, 각 저자의 영향력을 크기로 비교할 수 있습니다. </p>
@@ -468,8 +466,8 @@ function Author() {
                                         <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
                                     </svg>
                                 </span><br/>
-                                <div style={{marginTop:5}}></div>
-                                <span className='text-success' id="centerButton2" onClick={handleResetZoom} style={{paddingBottom:'20px', paddingRight:'10px'}}>
+                                <div style={{ marginTop:5 }}></div>
+                                <span className='text-success' id="centerButton2" onClick={handleResetZoom} style={{ paddingBottom:'20px', paddingRight:'10px' }}>
                                     <svg className='text-success' width="34" height="34" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16" >
                                         <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
                                         <path fillRule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z" />
