@@ -364,15 +364,15 @@ function Author() {
     }
 
     return (
-        <div className="authorBody" style={{ fontFamily: 'MaruBuri-Regular',Height:'90vh',maxWidth:'110%' }}>
-            <div className='Navbar' style={{maxWidth:'100%',zIndex:3}}>
+        <div className="authorBody" style={{ fontFamily: 'MaruBuri-Regular',Height:'90vh',maxWidth:'100%'}}>
+            <div className='Navbar' style={{maxWidth:'100%',position:'fixed',zIndex:7}}>
                 <EggNavbar />
             </div>
 
-            <div className='row mt-5' id='body'>
+            <div className='row mt-5' id='body' style={{backgroundColor:'white'}}>
                 {/* left section */}
-                <div className='col-md-4 mt-4 border-end pl-5 pr-5' style={{ maxHeight: '90vh', overflowY: 'auto',maxWidth:'100%',zIndex:2 }}>
-                    <div className="ms-3" style={{ overflow: 'scroll',height:'90vh'}}>
+                <div className='col-md-4 mt-4 border-end pl-5 pr-5' style={{ maxHeight: '90vh', overflowY: 'auto',maxWidth:'100%',backgroundColor:'white',position:'relative',zIndex:3}}>
+                    <div className="ms-3" style={{ overflow: 'scroll'}}>
                         <button className='btn btn-success btn-sm ms-1' onClick={handleExportToPDF}>Export to PDF</button>
                         <button className='btn btn-success btn-sm ms-1' onClick={() => ClickOpenKCI(params.authorId)}>Open KCI</button>
                         <hr />
@@ -432,24 +432,25 @@ function Author() {
                     </div>
                 </div>
 
-                <div className="col-md-8 mt-4" style={{maxHeight:'90vh',maxWidth:'100%'}}>
-                    <ul className="nav nav-tabs" id="myTab" role="tablist">
+                <div className="col-md-8 mt-4" style={{maxHeight:'80vh',maxWidth:'100%',}}>
+                    <ul className="nav nav-tabs" id="myTab" role="tablist" style={{position:'relative' ,zIndex:5,backgroundColor:'white'}}>
                         <li className="nav-item" role="presentation">
                             <button className="nav-link active" id="graph-tab" data-bs-toggle="tab" data-bs-target="#graph" type="button" role="tab" aria-controls="graph" aria-selected="true">Graph</button>
                         </li>
-                        <li className="nav-item" role="presentation">
+                        <li className="nav-item" role="presentation" >
                             <button className="nav-link" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</button>
                         </li>
                     </ul>
-                    <div className="tab-content" id="myTabContent"style={{height:'100vh',width:'100%'}}>
+                    <div className="tab-content" id="myTabContent"style={{maxheight:'100%',width:'100%'}}>
                         <div className="tab-pane fade show active" id="graph" role="tabpanel" 
-                        aria-labelledby="graph-tab" style={{maxHeight:'90vh',Width:'120%',zIndex:2}}>
+                        aria-labelledby="graph-tab" >
                             {isLoading ? (
                                     <div className="spinner-border text-success mt-5" role="status"></div>
                                 ) : (
-                                    <svg style={{maxHeight:'85vh',Width:'120%',marginTop:0, position:'relative', zIndex:0}} ref={svgRef}></svg>
+                                    <svg style={{marginTop:0, position:'fixed', zIndex:0
+                                        , height:'85vh', width:'100%'}} ref={svgRef}></svg>
                                 )}
-                            <div className="text-center" style={{ position: 'absolute',zIndex: 1, left: 0, bottom: 0, right: 420 ,top:700}}>
+                            <div className="text-center" style={{ position: 'absolute',zIndex: 5, left: 0, bottom: 0, right: 420 ,top:700}}>
                                 <span className="position-relative" id="helpButton2" onClick={clickHelp}>
                                     {isShowHelp && (
                                         <div className='card card-body position-absolute' id="helpModal" style={{height:210,width:400,paddingLeft:'5px'}}>
@@ -494,19 +495,6 @@ function Author() {
                         </div>
                     </div>
                 </div>
-
-                {/* Graph section */}
-                {/* <div className='col-md-8' id='element2'>
-                    <div className="svg-container">
-                        <div className='graph' style={{ marginTop: "100px" }}>
-                            {isLoading ? (
-                                <div className="spinner-border text-success mt-5" role="status"></div>
-                            ) : (
-                                <svg ref={svgRef}></svg>
-                            )}
-                        </div>
-                    </div>
-                </div> */}
             </div>
         </div>
     );
