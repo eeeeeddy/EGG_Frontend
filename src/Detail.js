@@ -236,6 +236,7 @@ function Detail() {
 
         // 노드 위에 마우스를 올렸을 때 hover 효과 및 노드 정보 표시
         node.on('mouseover', (event, d) => {
+            setFixedNode(null)
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', (d.citation + 5) * 3 + 5) // 노드 크기를 키워 hover 효과 표시
@@ -433,6 +434,7 @@ function Detail() {
 
         // 노드 위에 마우스를 올렸을 때 hover 효과 및 노드 정보 표시
         node.on('mouseover', (event, d) => {
+            setFixedNode(null)
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', (d.citation + 5) * 3 + 5) // 노드 크기를 키워 hover 효과 표시

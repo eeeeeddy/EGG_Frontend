@@ -4,20 +4,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import EggNavbar from './Navbar';
 import * as d3 from 'd3';
 import data from './data.json';
+import { useNavigate } from 'react-router-dom';
 
 function Detail_FilterTest() {
+    const [selectedAuthorId, setSelectedAuthorId] = useState([]);
     const svgRef = useRef(null);
     const [selectedNode, setSelectedNode] = useState(null); // 선택한 노드 정보를 저장할 상태 변수
     const [fixedNode, setFixedNode] = useState(null); // 고정된 노드 정보를 저장할 상태 변수
-    const initialScale = 1; // 초기 스크롤 배율
+    const navigate = useNavigate();
+    const [selectedPaper, setSelectedPaper] = useState(null);
     const graphData = data; // graph JSON 데이터
     const nodes = graphData.nodes;
     const links = graphData.links;
     const [publishYear, setPublishYear] = useState(2024);
-    const [category, setCategory] = useState("default");
     const [mainAuthor, setMainAuthor] = useState("default");
-    const [citation, setCitation] = useState(-1);
+    const [category, setCategory] = useState("default");
     const [journalName, setjournalName] = useState("default");
+    const [citation, setCitation] = useState(-1);
+    const [sortedNode, setSortedNode] = useState([]);
 
     // 그래프 색상 관련 변수
     const defaultEdgeColor = 'rgba(0, 0, 0, 0.2)';
@@ -27,8 +31,6 @@ function Detail_FilterTest() {
     const hoverSelectedNodeColor = 'rgba(232, 93, 4, 0.8)';
     const filteredNodeColor = 'rgba(255, 51, 51, 0.7)';
     const yearColor = ['rgba(88, 129, 87, 0.1)', 'rgba(88, 129, 87, 0.3)', 'rgba(88, 129, 87, 0.5)', 'rgba(58, 90, 64, 0.6)', 'rgba(58, 90, 64, 0.9)'];
-
-
     const handlePublishYear = (event) => {
         const temp = event.target.value;
         setPublishYear(parseInt(temp));
@@ -52,6 +54,15 @@ function Detail_FilterTest() {
     const handleCitation = (event) => {
         const temp = event.target.value;
         setCitation(parseInt(temp));
+    }
+
+    const AuthorClick = (authorId) => {
+        if (authorId !== 'None') {
+            setSelectedAuthorId(authorId);
+            navigate(`/Author/${authorId}`);
+        } else {
+            alert("KCI 내에 등록된 저자 아이디가 없습니다.")
+        }
     }
 
     const handleResetZoom = () => {
@@ -221,10 +232,6 @@ function Detail_FilterTest() {
         console.log("필터링 적용")
     }
 
-    function createGraph() {
-
-    }
-
     // graph 생성
     useEffect(() => {
         const width = 1500;
@@ -314,6 +321,7 @@ function Detail_FilterTest() {
 
         // 노드 위에 마우스를 올렸을 때 hover 효과 및 노드 정보 표시
         node.on('mouseover', (event, d) => {
+            setFixedNode(null)
             setSelectedNode(d);
             d3.select(event.currentTarget)
                 .attr('r', (d.citation + 5) * 3 + 5) // 노드 크기를 키워 hover 효과 표시
@@ -397,7 +405,7 @@ function Detail_FilterTest() {
             <div style={{ height: "40px" }}></div>
             <div className='row'>
                 {/* graph-section */}
-                <div className='col-md-12'>
+                <div className='col-md-9'>
                     {/* filter */}
                     <div className='col-md-9 mt-4' id="filterBar" style={{ marginLeft: "12rem" }}> {/* 마진 부여 수정 필요 */}
                         <div className='row g-2'>
@@ -478,11 +486,89 @@ function Detail_FilterTest() {
                             </div>
                         </div>
                     </div>
+                    {/* graph */}
+                    <div className="svg-container" style={{ overflow: "hidden" }}>
+                        <div className='graph'>
+                            <svg ref={svgRef}></svg>
+                        </div>
+                    </div>
                 </div>
-                {/* graph */}
-                <div className="svg-container" style={{ overflow: "hidden" }}>
-                    <div className='graph'>
-                        <svg ref={svgRef}></svg>
+
+
+                {/* right-section */}
+                <div className='col-md-2 mt-4 bg-white border-start' style={{ maxHeight: '700px', overflowY: 'auto' }}>
+                    <div className="d-flex justify-content-center me-3">
+                        {fixedNode || selectedNode ? (
+                            <div className='' style={{ width: '450px' }}>
+                                <h5 style={{ textAlign: 'left' }}><strong>{(fixedNode || selectedNode).title_ko}</strong></h5>
+                                <a style={{ textAlign: 'left' }}>
+                                    {(fixedNode || selectedNode).author_name.split(',').map((author, index) => (
+                                        <button className="btn btn-outline-dark btn-sm mb-2 me-1" key={index} onClick={() => AuthorClick((fixedNode || selectedNode).author_id.split(',')[index])} style={{ cursor: 'pointer' }}>{author.trim()} </button>
+                                    ))}
+                                    {(fixedNode || selectedNode).author2_name.map((author, index) => (
+                                        <button className="btn btn-outline-dark btn-sm mb-2 me-1" key={index} onClick={() => AuthorClick((fixedNode || selectedNode).author2_id[index])} style={{ cursor: 'pointer' }}>{author.trim()} </button>
+                                    ))}
+                                </a>
+                                <br />
+                                <a style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).pub_year} {(fixedNode || selectedNode).journal_name}</a>
+                                <br />
+                                <a style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).citation} citation</a>
+                                <br />
+                                <div className="d-flex mt-3 mb-3">
+                                    <button className='btn btn-success btn-sm me-2' type='button' >Open in KCI</button>
+                                    <button className='btn btn-warning btn-sm me-2' type='button' >+ Add Origin</button>
+                                    <button className='btn btn-outline-danger btn-sm' type='button'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
+                                            <path fillRule="evenodd"
+                                                d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
+                                        </svg> Save
+                                    </button>
+                                </div>
+                                <p className="abstract" style={{ textAlign: 'left' }}>{(fixedNode || selectedNode).abstract_ko}</p>
+                                <hr />
+                                <p>Keyword</p>
+                                <p>{(fixedNode || selectedNode).keys.map((key, index) => (
+                                    <button className='btn btn-primary btn-sm me-1 mt-1' style={{ backgroundColor: "#A3B18A", borderColor: "#A3B18A" }} key={index}>{key}</button>
+                                ))}
+                                </p>
+                            </div>
+                        ) : (sortedNode.length > 0 ? (
+                            <div className='' style={{ width: '450px' }}>
+                                <h5 style={{ textAlign: 'left' }}><strong>{sortedNode[0].title_ko}</strong></h5>
+                                <a style={{ textAlign: 'left' }}>
+                                    {sortedNode[0].author_name.split(',').map((author, index) => (
+                                        <button className="btn btn-outline-dark btn-sm mb-2 me-1" key={index} onClick={() => AuthorClick(sortedNode[0].author_id.split(',')[index])} style={{ cursor: 'pointer' }}>
+                                            {author.trim()}
+                                        </button>
+                                    ))}
+                                    {sortedNode[0].author2_name.map((author, index) => (
+                                        <button className="btn btn-outline-dark btn-sm mb-2 me-1" key={index} onClick={() => AuthorClick(sortedNode[0].author2_id[index])} style={{ cursor: 'pointer' }}>
+                                            {author.trim()}
+                                        </button>
+                                    ))}
+                                </a>
+                                <br />
+                                <a style={{ textAlign: 'left' }}>{sortedNode[0].pub_year} {sortedNode[0].journal_name}</a>
+                                <br />
+                                <a style={{ textAlign: 'left' }}>{sortedNode[0].citation} citation</a>
+                                <div className="d-flex mt-3 mb-3">
+                                    <button className='btn btn-success btn-sm me-2' type='button' >Open in KCI</button>
+                                    <button className='btn btn-outline-danger btn-sm' type='button' >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
+                                            <path fillRule="evenodd"
+                                                d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm8.854-9.646a.5.5 0 0 0-.708-.708L7.5 7.793 6.354 6.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
+                                        </svg> Save
+                                    </button>
+                                </div>
+                                <p className="abstract" style={{ textAlign: 'left' }}>{sortedNode[0].abstract_ko}</p>
+                                <hr />
+                                <p>Keyword</p>
+                                <p>{sortedNode[0].keys.map((key, index) => (
+                                    <button className='btn btn-primary btn-sm me-1 mt-1' style={{ backgroundColor: "#A3B18A", borderColor: "#A3B18A" }} key={index}>{key}</button>
+                                ))}
+                                </p>
+                            </div>
+                        ) : null)}
                     </div>
                 </div>
             </div>
