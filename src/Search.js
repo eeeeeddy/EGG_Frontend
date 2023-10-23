@@ -10,13 +10,14 @@ function Search() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const TextStyle = { textAlign: 'center' };
 
     useEffect(() => {
         // URL 파라미터로부터 검색어를 가져옵니다.
         const { searchQuery } = params;
 
         if (searchQuery === 'loading') {
-            setIsLoading(true);
+            setIsLoading(false);
             return; // 데이터를 불러오지 않고 로딩 상태로 남김
         }
         setIsLoading(true);
@@ -34,18 +35,7 @@ function Search() {
                 setIsLoading(false);
                 console.error('API 요청 중 오류 발생:', error);
             });
-    }, [setSearchResult, searchQuery, setIsLoading, params]);
-
-    // 예시 - 데이터가 로드된 후에 컴포넌트 상태를 업데이트
-    useEffect(() => {
-        fetchDataFromElasticSearch().then((searchResult) => {
-            setSearchResult(searchResult);
-        });
-    }, []);
-
-    const TextStyle = {
-        textAlign: 'center'
-    };
+    }, [setSearchResult, params]);
 
     // paper-box를 클릭했을 때 detail 페이지로 이동하는 함수
     const handlePaperBoxClick = (articleId) => {
