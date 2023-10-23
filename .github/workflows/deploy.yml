@@ -9,7 +9,7 @@ env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: ditto-github-actions-s3-bucket
   CODE_DEPLOY_APPLICATION_NAME: ditto-codedeploy-react-app
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: ditto-codedeploy-react-app
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: my-codedeploy-deployment-react-group
 
 jobs:
   build:
