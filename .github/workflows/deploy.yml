@@ -22,7 +22,7 @@ jobs:
       - name: Install Dependencies
         run: npm install --frozen-lockfile
       - name: Build
-        run: npm run build
+        run: CI='false' npm run build
       - name: zip create
         run: zip -qq -r ./build.zip .
         shell: bash
