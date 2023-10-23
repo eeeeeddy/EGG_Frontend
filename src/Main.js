@@ -57,7 +57,7 @@ function Main() {
 
             <div className='MainBody'>
                 <div style={{height:"20px"}}></div>
-                <h1>Explore Genealogy for Graph</h1><br />
+                <h1>Explore Research Tree In a Visual Graph</h1><br />
                 <h3>To start, enter a paper identifier</h3><br />
 
                 {/* 검색창 */}
