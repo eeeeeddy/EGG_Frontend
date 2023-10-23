@@ -9,7 +9,6 @@ function Search() {
     const params = useParams();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
-    const [searchQuery, setSearchQuery] = useState('');
     const TextStyle = { textAlign: 'center' };
 
     useEffect(() => {
