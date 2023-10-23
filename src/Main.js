@@ -80,7 +80,7 @@ function Main() {
                 <div style={{ height: "30px" }}></div>
             </div>
             <div className='d-flex justify-content-center mt-3 mb-0'>
-                <p>10,000 articles in Korean</p>
+                <p>9,762 articles in Korean</p>
             </div>
             <div className='d-flex justify-content-center'>
                 <a href="/About" style={{color: "#588157", textDecoration: "None"}}>How to Use it</a>

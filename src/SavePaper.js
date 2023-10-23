@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from './AxiosConfig';
 import EggNavbar from './Navbar';
 import './css/SavePaper.css';
+import { useNavigate } from 'react-router-dom';
 
 function SavePaper() {
     const [savedPapers, setSavedPapers] = useState([]);
     const [category, setCategory] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         // 서버에서 저장된 논문을 가져오기 위해 HTTP GET 요청을 수행합니다.
@@ -75,6 +77,10 @@ function SavePaper() {
         }
     }
 
+    const handleDetailPaper = (articleId) => {
+        navigate(`/Detail/${articleId}`)
+    }
+
     const ClickOpenKCI = (article_id) => {
         const kciUrl = `https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=` + article_id;
         console.log(kciUrl);
@@ -121,7 +127,8 @@ function SavePaper() {
                                     </div>
                                     <p className="save-item-author">{paper.author_name}</p>
                                     <p className="save-item-abstract">{paper.abstract_ko}</p>
-                                    <button className="btn btn-outline-success rounded-pill" type="submit" onClick={() => handleDeletePaper(paper.articleId)}>Delete</button>
+                                    <button className='btn btn-outline-success rounded-pill me-2' type="submit" onClick={() => handleDetailPaper(paper.articleId)}>Detail</button>
+                                    <button className="btn btn-outline-danger rounded-pill" type="submit" onClick={() => handleDeletePaper(paper.articleId)}>Delete</button>
                                 </li>
                             ))}
                     </ul>

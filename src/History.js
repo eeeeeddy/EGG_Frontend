@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './css/History.css';
 import EggNavbar from './Navbar';
+import { useNavigate } from 'react-router-dom';
 
 function History() {
     const [userHistory, setUserHistory] = useState([]);
     const [category, setCategory] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         // 로컬 스토리지에서 저장된 논문 히스토리 가져오기
@@ -80,6 +82,11 @@ function History() {
         setCategory(event.target.value);
     };
 
+    const handleDetailPaper = (articleId) => {
+        console.log(articleId)
+        // navigate(`/Detail/${articleId}`)
+    }
+
     return (
         <div style={{ fontFamily: 'MaruBuri-Regular' }}>
             <div className='App'>
@@ -116,6 +123,7 @@ function History() {
                                 </div>
                                 <p className="history-item-author">{item.author_name}</p>
                                 <p className="history-item-abstract">{formatAbstract(item.abstract_ko)}</p>
+                                <button className='btn btn-outline-success rounded-pill me-2' type="submit" onClick={() => handleDetailPaper(item.articleId)}>Detail</button>
                             </li>
                         ))}
                 </ul>
