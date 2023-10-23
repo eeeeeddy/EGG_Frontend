@@ -36,6 +36,13 @@ function Search() {
             });
     }, [setSearchResult, searchQuery, setIsLoading, params]);
 
+    // 예시 - 데이터가 로드된 후에 컴포넌트 상태를 업데이트
+    useEffect(() => {
+        fetchDataFromElasticSearch().then((searchResult) => {
+            setSearchResult(searchResult);
+        });
+    }, []);
+
     const TextStyle = {
         textAlign: 'center'
     };
@@ -93,7 +100,7 @@ function Search() {
                                             ) : (
                                                 <span className={`paperbox-p ${result.abstractKor.length > 130 ? 'faded' : ''}`}>
                                                     "{result.abstractKor.slice(0, 200)}...
-                                                </span>                                            )}
+                                                </span>)}
                                             {/* 요약이 3줄 이상인 경우 "더 읽기" 버튼을 표시합니다. */}
                                             {result.abstractKor.length > 3 && (
                                                 <button className='abstracKorbutton' onClick={() => toggleAbstract(result.articleID)}>
