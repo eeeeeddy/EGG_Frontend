@@ -12,6 +12,10 @@ env:
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: my-codedeploy-deployment-react-group
 
 jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
   build:
     runs-on: ubuntu-20.04
     steps:
