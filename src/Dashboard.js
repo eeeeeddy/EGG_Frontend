@@ -7,13 +7,13 @@ import RISON from 'rison';
 
 const Dashboard = () => {
     const [instName, setInstName] = useState('ALL');
-    const kibanaArticleDashboardURL = 'http://3.35.150.101:5601/goto/5694c120-6e5c-11ee-bb86-7d90f481f2a7';
+    const kibanaArticleDashboardURL = 'http://localhost:5601/goto/2ef16a20-77c5-11ee-bf73-033f3701a3aa';
 
-    const baseURL1 = 'http://3.35.150.101:5601/app/dashboards#/view/41bea4f0-6ca9-11ee-bcc4-15d4aa6898f0?embed=true&';
-    const baseURL2 = 'http://3.35.150.101:5601/app/dashboards#/view/c5b7c800-6d93-11ee-8210-1d8145a90f2e?embed=true&';
-
-    const [kibanaInstDashboardURL1, setKibanaInstDashboardURL1] = useState('http://3.35.150.101:5601/app/dashboards#/view/41bea4f0-6ca9-11ee-bcc4-15d4aa6898f0?embed=true&');
-    const [kibanaInstDashboardURL2, setKibanaInstDashboardURL2] = useState('http://3.35.150.101:5601/app/dashboards#/view/c5b7c800-6d93-11ee-8210-1d8145a90f2e?embed=true&');
+    const baseURL1 = 'http://localhost:5601/app/dashboards#/view/16578f40-77bf-11ee-bf73-033f3701a3aa?embed=true&';
+    const baseURL2 = 'http://localhost:5601/app/dashboards#/view/40e98a10-77bf-11ee-bf73-033f3701a3aa?embed=true&';
+    
+    const [kibanaInstDashboardURL1, setKibanaInstDashboardURL1] = useState('http://localhost:5601/app/dashboards#/view/16578f40-77bf-11ee-bf73-033f3701a3aa?embed=true&');
+    const [kibanaInstDashboardURL2, setKibanaInstDashboardURL2] = useState('http://localhost:5601/app/dashboards#/view/40e98a10-77bf-11ee-bf73-033f3701a3aa?embed=true&');
 
     const risonParams = {
         filters: [
@@ -24,8 +24,8 @@ const Dashboard = () => {
                 meta: {
                     alias: false,
                     disabled: false,
-                    index: '2bcd7090-6c0e-11ee-994a-19c632230212',
-                    key: 'cInst',
+                    index: '701f23b0-77bc-11ee-bf73-033f3701a3aa',
+                    key: 'c1Inst',
                     negate: false,
                     params: {
                         query: encodeURIComponent(instName),
@@ -34,7 +34,7 @@ const Dashboard = () => {
                 },
                 query: {
                     match_phrase: {
-                        cInst: encodeURIComponent(instName),
+                        c1Inst: encodeURIComponent(instName),
                     },
                 },
             },
@@ -45,7 +45,7 @@ const Dashboard = () => {
                 meta: {
                     alias: false,
                     disabled: false,
-                    index: '2bcd7090-6c0e-11ee-994a-19c632230212',
+                    index: '701f23b0-77bc-11ee-bf73-033f3701a3aa',
                     key: 'c2Inst',
                     negate: true,
                     params: {
@@ -79,7 +79,7 @@ const Dashboard = () => {
                 meta: {
                     alias: false,
                     disabled: false,
-                    index: '2bcd7090-6c0e-11ee-994a-19c632230212',
+                    index: '701f23b0-77bc-11ee-bf73-033f3701a3aa',
                     key: 'c2Inst',
                     negate: false,
                     params: {
@@ -100,8 +100,8 @@ const Dashboard = () => {
                 meta: {
                     alias: false,
                     disabled: false,
-                    index: '2bcd7090-6c0e-11ee-994a-19c632230212',
-                    key: 'cInst',
+                    index: '701f23b0-77bc-11ee-bf73-033f3701a3aa',
+                    key: 'c1Inst',
                     negate: true,
                     params: {
                         query: encodeURIComponent(instName),
@@ -110,7 +110,7 @@ const Dashboard = () => {
                 },
                 query: {
                     match_phrase: {
-                        cInst: encodeURIComponent(instName),
+                        c1Inst: encodeURIComponent(instName),
                     },
                 },
             },
