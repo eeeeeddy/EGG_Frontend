@@ -3,7 +3,7 @@ import './css/Detail.css';
 import React, { useState, useEffect, useRef } from 'react';
 import EggNavbar from './Navbar';
 import * as d3 from 'd3';
-import data from './data.json';
+import data from '.data/data.json';
 import { useNavigate } from 'react-router-dom';
 
 function Detail_FilterTest() {
