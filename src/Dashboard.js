@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import EggNavbar from './Navbar';
 import Select from 'react-select';
 import './css/Dashboard.css';
-import InstData from '.data/Institution.json';
+import InstData from '../src/data/Institution.json';
 import RISON from 'rison';
 
 const Dashboard = () => {
