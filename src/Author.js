@@ -88,7 +88,7 @@ function Author() {
         setIsLoading(true);
 
         // Fast API 엔드포인트에 GET 요청을 보냅니다.
-        axios.get(`http://15.165.247.85/Author/${params.authorId}`)
+        axios.get(`http://localhost:8000/Author/${params.authorId}`)
             .then((response) => {
                 setIsLoading(false);
                 console.log("서버에서 받아온 결과", response.data);

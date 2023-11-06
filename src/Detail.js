@@ -55,7 +55,7 @@ function Detail() {
         const articleIds = Array.isArray(params.article_id) ? params.article_id.join('+') : params.article_id;
 
         // Fast API 엔드포인트에 GET 요청을 보냅니다.
-        axios.get(`http://15.165.247.85/Detail/${articleIds}`)
+        axios.get(`http://localhost:8000/Detail/${articleIds}`)
             .then((response) => {
                 // 데이터 불러오기 완료 후 로딩 상태 변경
                 setIsLoading(false);
