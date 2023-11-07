@@ -22,15 +22,20 @@
 
 ### 2. WireFrame
 
-- Main 페이지 <br>
+- **Main 페이지** <br>
 
-    ![Main](https://github.com/eeeeeddy/Final_Frontend/assets/71869717/573d3c0c-08a4-40d8-8b64-fcf00b8e1cb1)
+    <img src="https://github.com/eeeeeddy/Final_Frontend/assets/71869717/573d3c0c-08a4-40d8-8b64-fcf00b8e1cb1" width="600" height="300"/>
+    <br>
 
-- Search 페이지 <br>
-    ![Search](https://github.com/eeeeeddy/Final_Frontend/assets/71869717/c83e4c93-ce24-4001-85e8-d8ccf9e2f952)
+- **Search 페이지** <br>
+    
+    <img src="https://github.com/eeeeeddy/Final_Frontend/assets/71869717/c83e4c93-ce24-4001-85e8-d8ccf9e2f952" width="600" height="400">
+    <br>
 
-- Detail 페이지 <br>
-    ![Search](https://github.com/eeeeeddy/Final_Frontend/assets/71869717/c83e4c93-ce24-4001-85e8-d8ccf9e2f952)
+- **Detail** 페이지 <br>
+
+    <img src="https://github.com/eeeeeddy/Final_Frontend/assets/71869717/c83e4c93-ce24-4001-85e8-d8ccf9e2f952" width="600" height="400">
+    <br>
 
 ### 3. Project Architecture
 
