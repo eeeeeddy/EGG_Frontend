@@ -116,4 +116,30 @@
 
 ### 5. Detail
 
-페이지 별 사진 및 상세 사진 추가 예정
+- #### 논문
+
+    - 단일 논문 그래프 <br><br>
+    ![단일논문그래프](https://github.com/eeeeeddy/Final_Frontend/assets/71869717/8a677224-4939-465c-bdc6-32389bcb236e)
+
+    - 복수 논문 그래프 <br><br>
+    ![복수논문그래프](https://github.com/eeeeeddy/Final_Frontend/assets/71869717/da8ca138-8283-467d-993b-40739664f6ee)
+
+    - 그래프 필터링 <br><br>
+    ![필터링](https://github.com/eeeeeddy/Final_Frontend/assets/71869717/8927f259-84bc-48e5-80a0-3c49ed73b506)
+
+    - 논문 대시보드 <br><br>
+    ![논문대시보드](https://github.com/eeeeeddy/Final_Frontend/assets/71869717/636aa5f4-5c9b-4de4-bf3b-5689a30166ba)
+
+- #### 저자
+
+    - 저자 그래프 <br><br>
+    ![저자그래프](https://github.com/eeeeeddy/Final_Frontend/assets/71869717/44a7704c-b461-41ed-83e6-38e0c89c0920)
+
+    - 저자 대시보드 <br><br>
+    ![저자대시보드](https://github.com/eeeeeddy/Final_Frontend/assets/71869717/d669a370-efda-4cd8-9074-21ba6d180ed6)
+
+
+- #### 연구기관
+
+    - 연구기관 대시보드 <br><br>
+    ![연구기관대시보드](https://github.com/eeeeeddy/Final_Frontend/assets/71869717/51f86f17-dfce-4ef4-919f-2b426fb6d4b2)
