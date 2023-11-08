@@ -1,4 +1,4 @@
-# EGG Frontend
+# EGG - Frontend
 
 ### 1. Stack
 
